@@ -19,6 +19,7 @@ import KelolaPermohonanSurat from "./Pages/KelolaPermohonanSurat";
 import KelolaInformasiPosyandu from "./Pages/KelolaInformasiPosyandu";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import TambahPenduduk from "./Pages/TambahPenduduk";
+import VerifikasiPembayaran from "./Pages/VerifikasiPembayaran";
 
 function DashBoard() {
   const { Header, Footer, Sider, Content } = Layout;
@@ -84,6 +85,10 @@ function DashBoard() {
       path: "/TambahPenduduk",
       main: () => <TambahPenduduk />,
     },
+    {
+      path: "/VerifikasiPembayaran",
+      main: () => <VerifikasiPembayaran />,
+    },
   ];
   // state
   const [collapsed, setCollapsed] = useState(false);
@@ -111,8 +116,7 @@ function DashBoard() {
           onCollapse={(value) => setCollapsed(value)}
         >
           <div className="demo-logo-vertical" />
-          <Menu 
-       
+          <Menu
             theme="dark"
             defaultSelectedKeys={["1"]}
             mode="inline"
@@ -125,12 +129,6 @@ function DashBoard() {
             marginLeft: 200,
           }}
         >
-          {/* <Header
-            style={{
-              padding: 0,
-              background: colorBgContainer,
-            }}
-          /> */}
           <Content
             style={{
               margin: "0 16px",

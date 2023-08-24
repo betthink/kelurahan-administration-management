@@ -6,7 +6,7 @@ function KelolaPermohonanSurat() {
     token: { colorBgContainer },
   } = theme.useToken();
   return (
-    <div>
+    <div className="mx-20">
       <Breadcrumb
         style={{
           margin: "16px 0",

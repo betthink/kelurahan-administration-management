@@ -2,21 +2,16 @@
 import React, { useEffect, useState } from "react";
 import {
   Breadcrumb,
-  theme,
   Button,
   DatePicker,
   Form,
   Input,
-  Radio,
+  Modal,
   Select,
-  Switch,
 } from "antd";
 import { Link } from "react-router-dom";
 // components
 function TambahPenduduk() {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
   //   atribute form
   // data entry
   const [dataEntry, setdataEntry] = useState({
@@ -31,25 +26,53 @@ function TambahPenduduk() {
     status: "",
     statusPenduduk: "",
   });
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setdataEntry((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  const onFinish = (e) => {
+    const {
+      nama,
+      nik,
+      noKK,
+      alamat,
+      nomorTelp,
+      tanggalLahir,
+      darah,
+      jenisKelamin,
+      status,
+      statusPenduduk,
+    } = e;
+    const date = `${tanggalLahir.$d.getDate()}-${
+      tanggalLahir.$d.getMonth() + 1
+    }-${tanggalLahir.$d.getFullYear()}`;
+    setdataEntry({
+      ...dataEntry,
+      nama,
+      nik,
+      noKK,
+      alamat,
+      nomorTelp,
+      tanggalLahir: date,
+      darah,
+      jenisKelamin,
+      status,
+      statusPenduduk,
+    });
+    // console.log(tanggalLahir.$d);
   };
-  const onChange = (date, dateString) => {
-    console.log({ dateString });
-    // setdataEntry((prevData) => ({
-    //   ...prevData,
-    //   tanggalLahir: dateString,
-    // }));
+  // modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
   };
   useEffect(() => {
     console.log(dataEntry);
   }, [dataEntry]);
   return (
-    <div>
+    <div className="mx-20">
       {/* path */}
       <Breadcrumb
         items={[
@@ -61,64 +84,59 @@ function TambahPenduduk() {
           margin: "16px 0",
         }}
       ></Breadcrumb>
-      <div className="h-full p-6 bg-white">
+      <div className="h-full self-center flex  p-6 bg-white">
         {/* form */}
         <Form
+          onFinish={onFinish}
           layout="vertical"
-          size={"large"}
+          size={"medium"}
           className="w-full justify-center flex  flex-col "
         >
           <div className="  lg:grid lg:grid-cols-2   w-full flex flex-col justify-center px-10 gap-10">
             <div className="w-full ">
-              <Form.Item label="Nama">
+              <Form.Item name="nama" label="Nama">
                 <Input
-                  name="nama"
+                  placeholder="Masukan Nama Penduduk"
                   value={dataEntry.nama}
-                  onChange={handleChange}
                 />
               </Form.Item>
-              <Form.Item label="NIK">
+              <Form.Item name="nik" label="NIK">
                 <Input
-                  name="nik"
+                  placeholder="Masukan NIK Penduduk"
                   value={dataEntry.nik}
-                  onChange={handleChange}
                 />
               </Form.Item>
-
-              <Form.Item label="No. KK">
+              <Form.Item name="noKK" label="No. KK">
                 <Input
-                  name="noKK"
+                  placeholder="Masukan Nomor KK Penduduk"
                   value={dataEntry.noKK}
-                  onChange={handleChange}
                 />
               </Form.Item>
-              <Form.Item label="Alamat">
+              <Form.Item name="alamat" label="Alamat">
                 <Input
-                  name="alamat"
+                  placeholder="Masukan Alamat Penduduk"
                   value={dataEntry.alamat}
-                  onChange={handleChange}
                 />
               </Form.Item>
-              <Form.Item label="Nomor Telp">
+              <Form.Item name="nomorTelp" label="Nomor Telp">
                 <Input
-                  name="nomorTelp"
+                  placeholder="Masukan Npmor Telp Penduduk"
                   value={dataEntry.nomorTelp}
-                  onChange={handleChange}
-                />
-              </Form.Item>
-              <Form.Item label="Tanggal Lahir">
-                <DatePicker
-                  name="tanggalLahir"
-                  onChange={onChange}
-                  value={dataEntry.tanggalLahir}
                 />
               </Form.Item>
             </div>
             <div className="w-full">
-              <Form.Item label="Jenis Kelamin">
+              <Form.Item name="tanggalLahir" label="Tanggal Lahir">
+                <DatePicker
+                  placeholder="Pilih Kelahiran Tanggal"
+                  style={{ width: "100%" }}
+                  value={dataEntry.tanggalLahir}
+                />
+              </Form.Item>
+
+              <Form.Item name="jenisKelamin" label="Jenis Kelamin">
                 <Select
-                  name="jenisKelamin"
-                  onChange={handleChange}
+                  placeholder="Pilih Jenis Kelamin"
                   value={dataEntry.jenisKelamin}
                 >
                   <Select.Option value="Laki-Laki">Laki-Laki</Select.Option>
@@ -126,31 +144,59 @@ function TambahPenduduk() {
                 </Select>
               </Form.Item>
 
-              <Form.Item label="Golongan darah">
-                <Input
-                  name="darah"
+              <Form.Item name="darah" label="Golongan darah">
+                <Select
+                  placeholder="Pilih Golongan Darah"
                   value={dataEntry.darah}
-                  onChange={handleChange}
-                />
+                >
+                  {["A", "B", "AB", "O"].map((item, i) => (
+                    <Select.Option key={i} value={item}>
+                      {item}
+                    </Select.Option>
+                  ))}
+                </Select>
               </Form.Item>
-              <Form.Item label="Status">
-                <Select>
+              <Form.Item name="status" label="Status">
+                <Select placeholder="Pilih Status Diri Penduduk">
                   <Select.Option value="Menikah">Menikah</Select.Option>
                   <Select.Option value="Lajang">Lajang</Select.Option>
                 </Select>
               </Form.Item>
-              <Form.Item label="Status Penduduk">
-                <Select>
+              <Form.Item name={"statusPenduduk"} label="Status Penduduk">
+                <Select placeholder="Pilih Status Tinggal Penduduk">
                   <Select.Option value="Tetap">Tetap</Select.Option>
                   <Select.Option value="Sementara">Sementara</Select.Option>
                 </Select>
               </Form.Item>
             </div>
-            <Form.Item className="self-center">
-              <Button>Tambahkan</Button>
-            </Form.Item>
           </div>
+          <Form.Item className="bg-purp">
+            <Button onClick={showModal} block type="primary" htmlType="submit">
+              Tambahkan
+            </Button>
+          </Form.Item>
         </Form>
+        <>
+          <Modal
+            title="Basic Modal"
+            open={isModalOpen}
+            bodyStyle={{}}
+            onOk={handleOk}
+            onCancel={handleCancel}
+          >
+            <p>nama: {dataEntry.nama}</p>
+            <p>nik: {dataEntry.nik}</p>
+            <p>noKK: {dataEntry.noKK}</p>
+            <p>alamat: {dataEntry.alamat}</p>
+            <p>nomorTelp: {dataEntry.nomorTelp}</p>
+            {/* <p>nama: {dataEntry.darah}</p>
+            <p>nama: {dataEntry.tanggalLahir}</p>
+            <p>nama: {dataEntry.darah}</p>
+            <p>nama: {dataEntry.jenisKelamin}</p>
+            <p>nama: {dataEntry.status}</p>
+            <p>nama: {dataEntry.statusPenduduk}</p> */}
+          </Modal>
+        </>
       </div>
     </div>
   );

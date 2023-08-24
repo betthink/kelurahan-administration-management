@@ -1,24 +1,25 @@
 import React from "react";
 import { Breadcrumb, theme, Table, Button } from "antd";
 import { Link } from "react-router-dom";
+import { Content, Header } from "antd/es/layout/layout";
 function KelolaIPL() {
   const columns = [
     {
       title: "Id",
-      width: 50,
+      width: 8,
       dataIndex: "Id",
       key: "Id",
       fixed: "left",
     },
     {
       title: "Nama Kepala Keluarga",
-      width: 100,
+      width: 30,
       dataIndex: "nama",
       key: "nama",
     },
     {
       title: "NIK",
-      width: 100,
+      width: 50,
       dataIndex: "NIK",
       key: "NIK",
     },
@@ -26,27 +27,27 @@ function KelolaIPL() {
       title: "Status",
       dataIndex: "Status",
       key: "Status",
-      width: 150,
+      width: 30,
     },
     {
       title: "Status Pembayaran",
       dataIndex: "StatusPembayaran",
       key: "StatusPembayaran",
-      width: 150,
+      width: 20,
     },
 
     {
       title: "Action",
       key: "operation",
       fixed: "right",
-      width: 80,
+      width: 30,
       render: () => (
         <div className="flex text-white gap-3">
           <Button className="bg-manggo">
             <Link>detail</Link>
           </Button>
           <Button className="bg-darksky text-white " type="default">
-            <Link className="">verifikasi</Link>
+            <Link to={"/VerifikasiPembayaran"} className="">verifikasi</Link>
           </Button>
         </div>
       ),
@@ -58,32 +59,45 @@ function KelolaIPL() {
       key: i,
       Id: i + 1,
       nama: `Edward ${i}`,
-      NIK: `32 ${i}`,
-      Status: `Edward ${i}`,
-      StatusPembayaran: `Edward ${i}`,
-      StatusPembayaran: `London Park no. ${i}`,
+      NIK: `  ${Math.random()}`,
+      Status: `Tetap`,
+      StatusPembayaran: `Lunas `,
     });
   }
   return (
-    <div>
-      <Breadcrumb
+    <div className="mx-20">
+      <Header
         style={{
+          backgroundColor: "white",
           margin: "16px 0",
+          position: "sticky",
+          top: 20,
+          zIndex: 99,
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
-        items={[
-          { title: "Admin" },
-          { title: <Link to={"/KelolaIPL"}>Kelola IPL</Link> },
-        ]}
-      ></Breadcrumb>
-      <div className="p-6 bg-white min-h-[800px]">
+      >
+        <Breadcrumb
+          items={[
+            { title: "Admin" },
+            { title: <Link to={"/KelolaIPL"}>Kelola IPL</Link> },
+          ]}
+        ></Breadcrumb>
+      </Header>
+      <Content className="p-6 bg-white min-h-[800px]">
         <Table
+          columns={columns}
+          dataSource={data}
+          // loading={setTimeout}
           scroll={{
             x: 1500,
           }}
-          dataSource={data}
-          columns={columns}
+          summary={() => <Table.Summary fixed={"top"} />}
+          sticky
         />
-      </div>
+      </Content>
     </div>
   );
 }

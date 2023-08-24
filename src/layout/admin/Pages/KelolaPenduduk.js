@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import { Breadcrumb, theme, Space, Table, Tag, Switch, Button } from "antd";
+import { Breadcrumb, theme, Modal, Table, Button, Space } from "antd";
 import { Link } from "react-router-dom";
+import { PlusOutlined } from "@ant-design/icons";
+import TambahPenduduk from "./TambahPenduduk";
+import { Header, Content } from "antd/es/layout/layout";
 function KelolaPenduduk() {
   const columns = [
     {
@@ -78,8 +81,6 @@ function KelolaPenduduk() {
           <Button className="bg-darksky text-white " type="default">
             <Link className="">Hapus</Link>
           </Button>
-       
-        
         </div>
       ),
     },
@@ -94,28 +95,66 @@ function KelolaPenduduk() {
       address: `London Park no. ${i}`,
     });
   }
+  // modal atribute
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   return (
-    <div>
+    <div className="mx-20">
       {/* path */}
-      <Breadcrumb
+      <Header
         style={{
+          backgroundColor: "white",
           margin: "16px 0",
+          position: "sticky",
+          top: 20,
+          zIndex: 99,
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
-        items={[
-          { title: "Admin" },
-          { title: <Link to={"/KelolaPenduduk"}>Kelola Penduduk</Link> },
-        ]}
-      ></Breadcrumb>
-      <div className="p-6 bg-white min-h-[460px]">
-        <Space>
-          <Button
-            className="flex flex-row  self-end mb-6 cursor-pointer hover:bg-blusky hover:text-white"
-            type="default"
-          >
-            <Link to={"/TambahPenduduk"}>Tambah</Link>
-          </Button>
-        </Space>
+      >
+        <Breadcrumb
+        
+          items={[
+            { title: "Admin" },
+            { title: <Link to={"/KelolaPenduduk"}>Kelola Penduduk</Link> },
+          ]}
+        ></Breadcrumb>
+        <Button
+          // onClick={showModal}
+          className="flex flex-row   cursor-pointer bg-blusky text-white items-center "
+          type="default"
+        >
+          <Link className="pr-1" to={"/TambahPenduduk"}>
+            Tambah Penduduk
+          </Link>
+          <PlusOutlined />
+        </Button>
+      </Header>
+      <Content style={{position: 'sticky', top: 400}} className="p-6 bg-white min-h-[460px]">
+        {/* modall */}
+
+        <Modal
+          width={1600}
+          bodyStyle={{ height: 700 }}
+          title="Basic Modal"
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
+          <TambahPenduduk />
+        </Modal>
+
         {/* tabel */}
         <Table
           columns={columns}
@@ -124,10 +163,10 @@ function KelolaPenduduk() {
           scroll={{
             x: 1500,
           }}
-          summary={() => <Table.Summary fixed={"top" ? "top" : "bottom"} />}
+          summary={() => <Table.Summary fixed={"top"} />}
           sticky
         />
-      </div>
+      </Content>
     </div>
   );
 }

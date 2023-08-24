@@ -1,12 +1,12 @@
 import React from "react";
-import { Breadcrumb , theme} from "antd";
+import { Breadcrumb, theme } from "antd";
 import { Link } from "react-router-dom";
 function KelolaInformasiPosyandu() {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   return (
-    <div>
+    <div className="mx-20">
       <Breadcrumb
         style={{
           margin: "16px 0",
@@ -19,15 +19,7 @@ function KelolaInformasiPosyandu() {
         <Breadcrumb.Item>Admin</Breadcrumb.Item>
         <Breadcrumb.Item>Kelola Posyandu</Breadcrumb.Item>
       </Breadcrumb>
-      <div
-        style={{
-          padding: 24,
-          minHeight: 460,
-          background: colorBgContainer,
-        }}
-      >
-        Bill is a cat.
-      </div>
+      <div className="p-6 min-h-[800px] bg-white">Posyandu</div>
     </div>
   );
 }
