@@ -10,12 +10,12 @@ module.exports = {
     extend: {
       colors: {
         purp: "#475BE8",
-        theme: '#E9E9E9',
-        brown: '#808191',
-        manggo: '#F29A2E',
-        darksky: '#263287',
-        blusky: '#1677FF',
-
+        galaxy: "#001529",
+        theme: "#E9E9E9",
+        brown: "#808191",
+        manggo: "#F29A2E",
+        darksky: "#263287",
+        blusky: "#1677FF",
       },
     },
   },

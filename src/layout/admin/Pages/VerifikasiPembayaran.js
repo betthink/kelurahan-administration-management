@@ -1,27 +1,75 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Breadcrumb, Layout, Space, Anchor, Col, Row } from "antd";
+import {
+  Breadcrumb,
+  Layout,
+  Form,
+  Input,
+  DatePicker,
+  Select,
+  Button,
+  Space,
+} from "antd";
 import { Link } from "react-router-dom";
 const { Header, Content } = Layout;
 function VerifikasiPembayaran() {
-    const topRef = useRef(null);
+  const topRef = useRef(null);
+  const bulan = [
+    "January",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ];
+  const onFinish = (e) => {
+    const {
+      tanggalPembayaran,
+      bulanPembayaran,
+      jumlahPembayaran,
+      metodePembayaran,
+      nik,
+      verifikator,
+    } = e;
+    const date = `${tanggalPembayaran.$d.getDate()}-${
+      tanggalPembayaran.$d.getMonth() + 1
+    }-${tanggalPembayaran.$d.getFullYear()}`;
+    console.log(
+      bulanPembayaran,
+      jumlahPembayaran,
+      metodePembayaran,
+      nik,
+      verifikator
+    );
+  };
   const [targetOffset, setTargetOffset] = useState();
   useEffect(() => {
     setTargetOffset(topRef.current?.clientHeight);
   }, []);
   return (
-    <div className="mx-20">
-      <Header   style={{
-        // 
-     
-          position: 'sticky',
+    <div className=" md:mx-20">
+      <Header
+        style={{
+          //
+
+          position: "sticky",
           top: 20,
-          width: '75%',
+          zIndex: 99,
+          // width: "75%",
         }}
-        ref={topRef} className="bg-white items-center flex mt-5 ">
+        ref={topRef}
+        className="hidden  bg-white items-center md:flex mt-5 "
+      >
         <Breadcrumb
           items={[
             { title: "Admin" },
             { title: <Link to={"/KelolaIPL"}>Kelola IPL</Link> },
+
             {
               title: (
                 <Link to={"/VerifikasiPembayaran"}>Verifikasi Pembayaran</Link>
@@ -33,56 +81,68 @@ function VerifikasiPembayaran() {
           }}
         />
       </Header>
-      <Content>
-        <div className="">
-          <Row>
-            <Col span={16}>
-              <div
-                id="part-1"
-                style={{
-                  height: "100vh",
-                  background: "rgba(255,0,0,0.02)",
-                }}
+      <Content className="mt-5 bg-white p-10">
+        <Form 
+          onFinish={onFinish}
+          layout="vertical" 
+          size={"medium"}
+          className="w-full"
+        >
+          <Space direction="vertical" className="w-full grid md:grid-cols-2 ">
+            <Form.Item required name="nama" label="Nama">
+              <Input placeholder="Masukan Nama" />
+            </Form.Item>
+
+            <Form.Item required name="nik" label="NIK">
+              <Input placeholder="Masukan NIK" />
+            </Form.Item>
+
+            <Form.Item
+              required
+              name="jumlahPembayaran"
+              label="Jumlah Pembayaran"
+            >
+              <Input placeholder="Masukan Jumlah Pembayaran" />
+            </Form.Item>
+
+            <Form.Item required name="verifikator" label="Verifikator">
+              <Input placeholder="Masukan Nama Verifikator" />
+            </Form.Item>
+            <Form.Item
+              required
+              name="tanggalPembayaran"
+              label="Tanggal Pembayaran"
+            >
+              <DatePicker
+                className="w-full"
+                placeholder="Pilih Tanggal Pembayaran"
               />
-              <div
-                id="part-2"
-                style={{
-                  height: "100vh",
-                  background: "rgba(0,255,0,0.02)",
-                }}
-              />
-              <div
-                id="part-3"
-                style={{
-                  height: "100vh",
-                  background: "rgba(0,0,255,0.02)",
-                }}
-              />
-            </Col>
-            <Col span={8}>
-              <Anchor
-                replace
-                items={[
-                  {
-                    key: "part-1",
-                    href: "#part-1",
-                    title: "Part 1",
-                  },
-                  {
-                    key: "part-2",
-                    href: "#part-2",
-                    title: "Part 2",
-                  },
-                  {
-                    key: "part-3",
-                    href: "#part-3",
-                    title: "Part 3",
-                  },
-                ]}
-              />
-            </Col>
-          </Row>
-        </div>
+            </Form.Item>
+            <Form.Item required name="bulanPembayaran" label="Bulan Pembayaran">
+              <Select placeholder="Pilih Bulan Pembayaran">
+                {bulan.map((item, i) => (
+                  <Select.Option key={i}>{item}</Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              required
+              name="metodePembayaran"
+              label="metode Pembayaran"
+            >
+              <Select placeholder="Pilih Metode Pembayaran">
+                {["Cash", "Transfer"].map((item, i) => (
+                  <Select.Option key={i}>{item}</Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Space>
+          <Form.Item>
+            <Button type="primary" className="bg-purp" block htmlType="submit">
+              Verifikasi
+            </Button>
+          </Form.Item>
+        </Form>
       </Content>
     </div>
   );

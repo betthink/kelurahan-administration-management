@@ -2,6 +2,7 @@ import React from "react";
 import { Breadcrumb, theme, Table, Button } from "antd";
 import { Link } from "react-router-dom";
 import { Content, Header } from "antd/es/layout/layout";
+
 function KelolaIPL() {
   const columns = [
     {
@@ -13,13 +14,13 @@ function KelolaIPL() {
     },
     {
       title: "Nama Kepala Keluarga",
-      width: 30,
+      width: 20,
       dataIndex: "nama",
       key: "nama",
     },
     {
       title: "NIK",
-      width: 50,
+      width: 20,
       dataIndex: "NIK",
       key: "NIK",
     },
@@ -27,27 +28,36 @@ function KelolaIPL() {
       title: "Status",
       dataIndex: "Status",
       key: "Status",
-      width: 30,
+      width: 20,
     },
     {
       title: "Status Pembayaran",
       dataIndex: "StatusPembayaran",
       key: "StatusPembayaran",
       width: 20,
+      filters: [
+        { text: "Lunas", value: true },
+        { text: "Belum", value: false },
+      ],
+      onFilter: (value, record) => {
+        return record.StatusPembayaran === value;
+      },
     },
 
     {
       title: "Action",
-      key: "operation",
+      key: "action",
       fixed: "right",
-      width: 30,
+      width: 14,
       render: () => (
         <div className="flex text-white gap-3">
           <Button className="bg-manggo">
-            <Link>detail</Link>
+            <Link to={"/VerifikasiPembayaran"}>detail</Link>
           </Button>
           <Button className="bg-darksky text-white " type="default">
-            <Link to={"/VerifikasiPembayaran"} className="">verifikasi</Link>
+            <Link to={"/VerifikasiPembayaran"} className="">
+              verifikasi
+            </Link>
           </Button>
         </div>
       ),
@@ -55,13 +65,16 @@ function KelolaIPL() {
   ];
   const data = [];
   for (let i = 0; i < 20; i++) {
+    const status = [true, false];
+    const randomIndex = Math.floor(Math.random() * status.length);
+    const randomStatus = status[randomIndex];
     data.push({
       key: i,
       Id: i + 1,
       nama: `Edward ${i}`,
       NIK: `  ${Math.random()}`,
       Status: `Tetap`,
-      StatusPembayaran: `Lunas `,
+      StatusPembayaran: randomStatus ? "Lunas" : "Belum",
     });
   }
   return (
@@ -80,14 +93,16 @@ function KelolaIPL() {
         }}
       >
         <Breadcrumb
+          className=""
           items={[
-            { title: "Admin" },
+            { title: "Home" },
             { title: <Link to={"/KelolaIPL"}>Kelola IPL</Link> },
           ]}
-        ></Breadcrumb>
+        />
       </Header>
-      <Content className="p-6 bg-white min-h-[800px]">
+      <Content className="p-6 bg-white ">
         <Table
+          pagination={{ pageSize: 5 }}
           columns={columns}
           dataSource={data}
           // loading={setTimeout}

@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import {
   DesktopOutlined,
-  FileOutlined,
+
   PieChartOutlined,
   TeamOutlined,
   UserOutlined,
@@ -17,12 +17,12 @@ import KelolaPenduduk from "./Pages/KelolaPenduduk";
 import KelolaIPL from "./Pages/KelolaIPL";
 import KelolaPermohonanSurat from "./Pages/KelolaPermohonanSurat";
 import KelolaInformasiPosyandu from "./Pages/KelolaInformasiPosyandu";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
+import {  Layout, Menu } from "antd";
 import TambahPenduduk from "./Pages/TambahPenduduk";
 import VerifikasiPembayaran from "./Pages/VerifikasiPembayaran";
 
 function DashBoard() {
-  const { Header, Footer, Sider, Content } = Layout;
+  const { Sider, Content } = Layout;
   const getItem = (label, key, icon, path) => {
     return {
       label,
@@ -36,19 +36,19 @@ function DashBoard() {
     getItem(<Link to={"/"}>Dashboard</Link>, "1", <PieChartOutlined />),
     getItem(
       <Link to={"/KelolaPenduduk"}>Kelola Penduduk</Link>,
-      "10",
+      "2",
       <TeamOutlined />
     ),
     getItem(
       <Link to={"/KelolaIPL"}>Kelola IPL</Link>,
-      "2",
+      "3",
       <DesktopOutlined />
     ),
     getItem(
       <Link to={"/KelolaSurat"}>Kelola Surat</Link>,
       "sub1",
       <UserOutlined />,
-      [getItem("Tom", "3"), getItem("Bill", "4")]
+      [getItem("Tom", "4"), getItem("Bill", "4")]
     ),
     getItem(
       <Link to={"/KelolaPosyandu"}>Kelola Posyandu</Link>,
@@ -92,9 +92,7 @@ function DashBoard() {
   ];
   // state
   const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+
   return (
     <Router>
       <Layout
@@ -118,18 +116,17 @@ function DashBoard() {
           <div className="demo-logo-vertical" />
           <Menu
             theme="dark"
-            defaultSelectedKeys={["1"]}
+            defaultSelectedKeys={["2"]}
             mode="inline"
             items={menuItems}
           />
         </Sider>
         <Layout
-          className="site-layout"
-          style={{
-            marginLeft: 200,
-          }}
+          className={` site-layout transition-transform duration-300 ease-in-out`}
+          style={!collapsed ? { marginLeft: "200px" } : { marginLeft: "0" }}
         >
-          <Content
+          <Content 
+            className={` site-layout transition-transform duration-1000 ease-in-out`}
             style={{
               margin: "0 16px",
             }}
@@ -145,13 +142,14 @@ function DashBoard() {
               ))}
             </Routes>
           </Content>
-          <Footer
+          {/* <Footer
             style={{
+         
               textAlign: "center",
             }}
           >
             Mantap corp 😁 ©2023 Created by Robetsn
-          </Footer>
+          </Footer> */}
         </Layout>
       </Layout>
     </Router>
