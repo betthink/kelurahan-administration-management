@@ -7,34 +7,39 @@ function KelolaIPL() {
   const columns = [
     {
       title: "Id",
-      width: 8,
+      render: (text) => (
+        <div className=" p-2 justify-self-center  self-center">{text}</div>
+      ),
       dataIndex: "Id",
       key: "Id",
       fixed: "left",
+      width: 20,
     },
     {
       title: "Nama Kepala Keluarga",
-      width: 20,
       dataIndex: "nama",
       key: "nama",
+      width: 100,
     },
     {
       title: "NIK",
-      width: 20,
+
       dataIndex: "NIK",
       key: "NIK",
+      width: 100,
     },
     {
       title: "Status",
       dataIndex: "Status",
       key: "Status",
-      width: 20,
+      width: 50,
     },
     {
       title: "Status Pembayaran",
       dataIndex: "StatusPembayaran",
       key: "StatusPembayaran",
-      width: 20,
+      width: 100,
+
       filters: [
         { text: "Lunas", value: true },
         { text: "Belum", value: false },
@@ -48,7 +53,7 @@ function KelolaIPL() {
       title: "Action",
       key: "action",
       fixed: "right",
-      width: 14,
+      width: 70,
       render: () => (
         <div className="flex text-white gap-3">
           <Button className="bg-manggo">
@@ -77,21 +82,10 @@ function KelolaIPL() {
       StatusPembayaran: randomStatus ? "Lunas" : "Belum",
     });
   }
+
   return (
     <div className="mx-20">
-      <Header
-        style={{
-          backgroundColor: "white",
-          margin: "16px 0",
-          position: "sticky",
-          top: 20,
-          zIndex: 99,
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+      <Header className="header-breadcrump">
         <Breadcrumb
           className=""
           items={[

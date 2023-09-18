@@ -16,6 +16,7 @@ module.exports = {
         manggo: "#F29A2E",
         darksky: "#263287",
         blusky: "#1677FF",
+        darkgreen: "#002e41",
       },
     },
   },

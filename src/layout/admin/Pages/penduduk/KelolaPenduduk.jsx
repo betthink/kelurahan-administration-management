@@ -1,14 +1,15 @@
+// lib
 import React, { useEffect, useState } from "react";
-import { Breadcrumb, Table, Button, Space } from "antd";
-// import { StyleSheet } from "@react-pdf/renderer";
+import { Breadcrumb, Table, Button, Space, Input } from "antd";
 import { Link } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
-// import TambahPenduduk from "./TambahPenduduk";
 import { Header, Content } from "antd/es/layout/layout";
-// import html2canvas from "html2canvas";
-// import jsPDF from "jspdf";
-import { axiosInstance } from "../../../lib/axios";
+import { axiosInstance } from "../../../../utils/axiosInstance";
+// components
+
 function KelolaPenduduk() {
+  // variables --
+  const { Search } = Input;
   const columns = [
     {
       title: "Id",
@@ -32,13 +33,13 @@ function KelolaPenduduk() {
     {
       title: "NO. KK",
       dataIndex: "no_kk",
-      key: "3",
+      key: "no_kk",
       width: 150,
     },
     {
       title: "Alamat",
       dataIndex: "alamat",
-      key: "1",
+      key: "alamat",
       width: 150,
     },
     {
@@ -50,37 +51,37 @@ function KelolaPenduduk() {
     {
       title: "Nomor Telp",
       dataIndex: "nomor_telp",
-      key: "2",
+      key: "nomor_telp",
       width: 150,
     },
     {
       title: "Tanggal Lahir",
       dataIndex: "tanggal_lahir",
-      key: "4",
+      key: "tanggal_lahir",
       width: 150,
     },
     {
       title: "Tempat Lahir",
       dataIndex: "tempat_lahir",
-      key: "8",
+      key: "tempat_lahir",
       width: 150,
     },
     {
       title: "Darah",
       dataIndex: "darah",
-      key: "5",
+      key: "darah",
       width: 70,
     },
     {
       title: "Status Tinggal",
       dataIndex: "status_tinggal",
-      key: "6",
+      key: "status_tinggal",
       width: 130,
     },
     {
       title: "Status Penduduk",
       dataIndex: "status_diri",
-      key: "7",
+      key: "status_diri",
       width: 150,
     },
 
@@ -89,83 +90,85 @@ function KelolaPenduduk() {
       key: "operation",
       fixed: "right",
       width: 200,
-      render: () => (
+      render: (data) => (
         <div className="flex text-white gap-3">
           <Button className="bg-manggo">
-            <Link>Edit</Link>
+            <Link state={{ data }} to={"/UpdatePenduduk"}>
+              Edit
+            </Link>
           </Button>
-          <Button className="bg-darksky text-white " type="default">
-            <Link className="">Hapus</Link>
+          <Button
+            onClick={() => handleDeletePenduduk(data.id_penduduk)}
+            className="bg-darksky text-white "
+            type="default"
+          >
+            Hapus
           </Button>
         </div>
       ),
     },
   ];
   const [dataPenduduk, setdataPenduduk] = useState([]);
-
+  // functions --
   const handleGetDataPenduduk = async () => {
     try {
       const response = await axiosInstance.get(
         `/administrasikelurahan/src/api/fetchDataPenduduk.php`
       );
-      setdataPenduduk(response.data);
-      console.log(response.data);
+      setdataPenduduk(
+        response.data.map((item, index) => {
+          return { ...item, key: index.toString() };
+        })
+      );
     } catch (error) {
       console.log(error);
     }
   };
-
-  // download page as pdf atribute
-  // const pdfRef = useRef();
-  // const handleDownloadPage = () => {
-  //   const input = pdfRef.current;
-  //   html2canvas(input).then((canvas) => {
-  //     const imgData = canvas.toDataURL("image/png");
-  //     const pdf = new jsPDF("l", "px", "a4", true);
-  //     const pdfWidth = pdf.internal.pageSize.getWidth();
-  //     const pdfHeight = pdf.internal.pageSize.getHeight();
-  //     const imgWidth = canvas.width;
-  //     const imgHeight = canvas.height;
-  //     const ratio = Math.min(pdfWidth / imgWidth / pdfHeight / imgHeight);
-  //     const imgX = (pdfWidth - imgWidth * ratio) / 2;
-  //     const imgY = 30;
-  //     pdf.addImage(
-  //       imgData,
-  //       "PNG",
-  //       imgX,
-  //       imgY,
-  //       imgWidth * ratio,
-  //       imgHeight * ratio
-  //     );
-  //     pdf.save("Data Penduduk.pdf");
-  //   });
-  // };
-
+  const onSearch = (value) => console.log(value);
+  const handleDeletePenduduk = async (id) => {
+    console.log(id);
+    const res = await axiosInstance(
+      "/administrasikelurahan/src/delete/delDataPenduduk.php",
+      {
+        method: "post",
+        data: {
+          id_penduduk: id,
+        },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    const { value, message } = res.data;
+    if (value === 1) {
+      alert(message);
+      window.location.reload();
+    } else {
+      alert(message);
+    }
+  };
   useEffect(() => {
     handleGetDataPenduduk();
   }, []);
   return (
     <div className="mx-20">
       {/* path */}
-      <Header
-        style={{
-          backgroundColor: "white",
-          margin: "16px 0",
-          position: "sticky",
-          top: 20,
-          zIndex: 99,
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Breadcrumb
-          items={[
-            { title: "Admin" },
-            { title: <Link to={"/KelolaPenduduk"}>Kelola Penduduk</Link> },
-          ]}
-        ></Breadcrumb>
+      <Header className="header-breadcrump">
+        <div className="flex flex-row  justify-between items-center">
+          <Breadcrumb
+            className="w-full"
+            items={[
+              { title: "Admin" },
+              { title: <Link to={"/KelolaPenduduk"}>Kelola Penduduk</Link> },
+            ]}
+          />
+          <Search
+            placeholder="Cari penduduk ..."
+            onSearch={onSearch}
+            // enterButton
+          />
+        </div>
+
         <Button
           // onClick={showModal}
           className="flex flex-row   cursor-pointer bg-blusky text-white items-center "
@@ -183,7 +186,7 @@ function KelolaPenduduk() {
       >
         {/* tabel */}
         <Table
-          // ref={tableRef}
+          key={dataPenduduk.id_penduduk}
           columns={columns}
           dataSource={dataPenduduk}
           pagination={{ pageSize: 5 }}

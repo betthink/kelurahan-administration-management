@@ -10,26 +10,29 @@ import {
   Select,
   Space,
 } from "antd";
-import { Link } from "react-router-dom";
-import { axiosInstance } from "../../../lib/axios";
+import { Link, useNavigate } from "react-router-dom";
 // components
+import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
 function TambahPenduduk() {
+  // variables
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
   //   atribute form
-  // data entry
   const [dataEntry, setdataEntry] = useState({
     nama: "",
     nik: "",
-    noKK: "",
+    no_kk: "",
+    tanggal_lahir: "",
+    tempat_lahir: "",
     alamat: "",
-    nomorTelp: "",
-    tanggalLahir: "",
     darah: "",
-    jenisKelamin: "",
-    status: "",
-    statusPenduduk: "",
-    tempatLahir: "",
-    kepalaKeluarga: "",
+    kepala_keluarga: "",
+    status_tinggal: "",
+    status_diri: "",
+    nomor_telp: "",
+    jenis_kelamin: "",
   });
+  // functions
   const onFinish = (e) => {
     const {
       nama,
@@ -45,53 +48,48 @@ function TambahPenduduk() {
       tempatLahir,
       kepalaKeluarga,
     } = e;
-    const date = `${tanggalLahir.$d.getDate()}-${
+    const date = `${tanggalLahir.$d.getFullYear()}-${
       tanggalLahir.$d.getMonth() + 1
-    }-${tanggalLahir.$d.getFullYear()}`;
+    }-${tanggalLahir.$d.getDate()}`;
     setdataEntry({
       ...dataEntry,
+
       nama,
       nik,
-      noKK,
+      no_kk: noKK,
+      tanggal_lahir: date,
+      tempat_lahir: tempatLahir,
       alamat,
-      nomorTelp,
-      tanggalLahir: date,
       darah,
-      jenisKelamin,
-      status,
-      statusPenduduk,
-      tempatLahir,
-      kepalaKeluarga,
+      kepala_keluarga: kepalaKeluarga,
+      status_tinggal: statusPenduduk,
+      status_diri: status,
+      nomor_telp: nomorTelp,
+      jenis_kelamin: jenisKelamin,
     });
-    // console.log(tanggalLahir.$d);
   };
   const handleAddPenduduk = async () => {
     try {
-      const response = await axiosInstance.post(
+      const response = await axiosWithMultipart(
         "/administrasikelurahan/src/post/addDataPenduduk.php",
         {
-          nama: "akuuu",
-          nik: dataEntry.nik,
-          no_kk: dataEntry.noKK,
-          tanggal_lahir: dataEntry.tanggalLahir,
-          tempat_lahir: dataEntry.tempatLahir,
-          alamat: dataEntry.alamat,
-          jenis_kelamin: dataEntry.jenisKelamin,
-          nomor_telp: dataEntry.nomorTelp,
-          darah: dataEntry.darah,
-          kepala_keluarga: dataEntry.kepalaKeluarga,
-          status_tinggal: dataEntry.statusPenduduk,
-          status_diri: dataEntry.status,
+          method: "post",
+          data: dataEntry,
         }
       );
-      console.log({ dataEntry });
-      console.log({ response });
+      console.log(response.data);
+      const { value, message } = response.data;
+      if (value === 1) {
+        alert(message);
+        navigate("/KelolaPenduduk");
+      } else {
+        alert(message);
+      }
     } catch (error) {
       console.log(error);
     }
   };
   // modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -102,9 +100,7 @@ function TambahPenduduk() {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  useEffect(() => {
-    // console.log(dataEntry);
-  }, []);
+  useEffect(() => {}, []);
   return (
     <div className="mx-20">
       {/* path */}
@@ -117,7 +113,7 @@ function TambahPenduduk() {
         style={{
           margin: "16px 0",
         }}
-      ></Breadcrumb>
+      />
       <div className="h-full self-center flex  p-6 bg-white">
         {/* form */}
         <Form
@@ -142,7 +138,7 @@ function TambahPenduduk() {
             <Form.Item name="noKK" label="No. KK">
               <Input
                 placeholder="Masukan Nomor KK Penduduk"
-                value={dataEntry.noKK}
+                value={dataEntry.no_kk}
               />
             </Form.Item>
             <Form.Item name="alamat" label="Alamat">
@@ -154,7 +150,7 @@ function TambahPenduduk() {
             <Form.Item name="nomorTelp" label="Nomor Telp">
               <Input
                 placeholder="Masukan Npmor Telp Penduduk"
-                value={dataEntry.nomorTelp}
+                value={dataEntry.nomor_telp}
               />
             </Form.Item>
 
@@ -162,21 +158,21 @@ function TambahPenduduk() {
               <DatePicker
                 placeholder="Pilih Kelahiran Tanggal"
                 style={{ width: "100%" }}
-                value={dataEntry.tanggalLahir}
+                value={dataEntry.tanggal_lahir}
               />
             </Form.Item>
 
             <Form.Item name="tempatLahir" label="Tempat Lahir">
               <Input
                 placeholder="Masukan Tempat Lahir Sesuai KTP"
-                value={dataEntry.tempatLahir}
+                value={dataEntry.tempat_lahir}
               />
             </Form.Item>
 
             <Form.Item name="jenisKelamin" label="Jenis Kelamin">
               <Select
                 placeholder="Pilih Jenis Kelamin"
-                value={dataEntry.jenisKelamin}
+                value={dataEntry.jenis_kelamin}
               >
                 <Select.Option value="Laki-Laki">Laki-Laki</Select.Option>
                 <Select.Option value="Perempuan">Perempuan</Select.Option>
@@ -210,7 +206,7 @@ function TambahPenduduk() {
             <Form.Item name="kepalaKeluarga" label="kepala Keluarga?">
               <Select
                 placeholder="Pilih Status kepala keluarga"
-                value={dataEntry.kepalaKeluarga}
+                value={dataEntry.kepala_keluarga}
               >
                 <Select.Option value={1}>Benar</Select.Option>
                 <Select.Option value={0}>Tidak</Select.Option>
@@ -225,7 +221,7 @@ function TambahPenduduk() {
         </Form>
         <>
           <Modal
-            title="Basic Modal"
+            title="Apakah Data Sudah Benar?"
             open={isModalOpen}
             bodyStyle={{}}
             onOk={handleOk}
@@ -233,17 +229,16 @@ function TambahPenduduk() {
           >
             <p>nama: {dataEntry.nama}</p>
             <p>nik: {dataEntry.nik}</p>
-            <p>noKK: {dataEntry.noKK}</p>
+            <p>noKK: {dataEntry.no_kk}</p>
             <p>alamat: {dataEntry.alamat}</p>
-            <p>nomorTelp: {dataEntry.nomorTelp}</p>
-            <p>tempat_lahir: {dataEntry.tempatLahir}</p>
-            <p>kepala Keluarga: {dataEntry.kepalaKeluarga}</p>
-            {/* <p>nama: {dataEntry.darah}</p>
-            <p>nama: {dataEntry.tanggalLahir}</p>
-            <p>nama: {dataEntry.darah}</p>
-            <p>nama: {dataEntry.jenisKelamin}</p>
-            <p>nama: {dataEntry.status}</p>
-            <p>nama: {dataEntry.statusPenduduk}</p> */}
+            <p>nomorTelp: {dataEntry.nomor_telp}</p>
+            <p>tempat_lahir: {dataEntry.tempat_lahir}</p>
+            <p>kepala Keluarga: {dataEntry.kepala_keluarga}</p>
+            <p>darah: {dataEntry.darah}</p>
+            <p>tangga lLahir: {dataEntry.tanggal_lahir}</p>
+            <p>jenis Kelamin: {dataEntry.jenis_kelamin}</p>
+            <p>status: {dataEntry.status}</p>
+            <p>status Penduduk: {dataEntry.statusPenduduk}</p>
           </Modal>
         </>
       </div>

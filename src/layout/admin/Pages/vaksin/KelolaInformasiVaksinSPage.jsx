@@ -1,0 +1,187 @@
+import React, { useEffect, useState } from "react";
+import { Breadcrumb, Button, Form, Modal, Select, Table } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { Content, Header } from "antd/es/layout/layout";
+import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
+import { axiosInstance } from "../../../../utils/axiosInstance";
+
+function KelolaInformasiVaksinSPage() {
+  // variables
+  const navigate = useNavigate();
+  const [idVaccine, setIdVaccine] = useState(null);
+  const columnVaksin = [
+    {
+      title: "Id",
+      width: 100,
+      dataIndex: "id_vaksin",
+      key: "id_vaksin",
+    },
+    {
+      title: "Jenis Vaksin",
+      width: 100,
+      dataIndex: "jenis_vaksin",
+      key: "jenis_vaksin",
+    },
+    {
+      title: "Status",
+      width: 100,
+      dataIndex: "status",
+      key: "status",
+    },
+    {
+      title: "Action",
+      key: "operation",
+      dataIndex: "id_vaksin",
+      fixed: "right",
+      width: 160,
+      render: (id) => (
+        <div className="flex text-white gap-3">
+          <Button onClick={() => handleOnchange(id)} className="bg-manggo">
+            Edit
+          </Button>
+          <Button
+            onClick={() => handleDeleteVaksin(id)}
+            className="bg-darksky text-white "
+            type="default"
+          >
+            Hapus
+          </Button>
+        </div>
+      ),
+    },
+  ];
+  const [dataVaksin, setdataVaksin] = useState([]);
+  // functions
+  // const updatedDataVaksin = dataVaksin.map((item, index) => {
+  //   return { ...item, key: index.toString() };
+  // });
+  const [isValiable, setisValiable] = useState(null);
+  const handleGetDataVaksin = async () => {
+    const response = await axiosInstance.get(
+      `administrasikelurahan/src/api/fetchDataVaksin.php`
+    );
+
+    setdataVaksin(
+      response.data.map((item, index) => {
+        return { ...item, key: index.toString() };
+      })
+    );
+  };
+  const handleDeleteVaksin = async (id) => {
+    try {
+      const res = await axiosWithMultipart(
+        "/administrasikelurahan/src/delete/delDataVaksin.php",
+        {
+          method: "post",
+          data: { id_vaksin: id },
+        }
+      );
+      const { value, message } = res.data;
+      if (value === 1) {
+        alert(message);
+        window.location.reload();
+      } else {
+        window.alert(message);
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+  const handleUpdateVaksin = async () => {
+    // console.log({ idVaccine });
+    // console.log({ isValiable });
+    const res = await axiosWithMultipart(
+      "/administrasikelurahan/src/update/updateVaksin.php",
+      {
+        method: "post",
+        data: {
+          id_vaksin: idVaccine,
+          status: isValiable,
+        },
+      }
+    );
+    // console.log(res.data);
+    const { value, message } = res.data;
+    if (value === 1) {
+      alert(message);
+      window.location.reload();
+    } else {
+      alert(message);
+    }
+  };
+  const handleOnchange = (id) => {
+    setIsModalOpen(true);
+    console.log(id);
+    setIdVaccine(id);
+  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    handleGetDataVaksin();
+  }, []);
+  // useEffect(() => {
+  //   console.log(isValiable);
+  // }, [isValiable]);
+  return (
+    <div className="mx-20">
+      <Header className="header-breadcrump">
+        <Breadcrumb
+          items={[
+            { title: "Admin" },
+            { title: <Link to={"/kelolaPosyandu"}>Kelola Posyandu</Link> },
+          ]}
+        >
+          <Breadcrumb.Item>Admin</Breadcrumb.Item>
+          <Breadcrumb.Item>Kelola Posyandu</Breadcrumb.Item>
+        </Breadcrumb>
+        <Button
+          onClick={() => navigate("/TambahVaksinPage")}
+          className="flex flex-row   cursor-pointer bg-blusky text-white items-center "
+          type="default"
+        >
+          Tambah Vaksin
+        </Button>
+      </Header>
+      <Content>
+        <Table
+          dataSource={dataVaksin}
+          columns={columnVaksin}
+          pagination={{ pageSize: 7 }}
+          // loading={setTimeout}
+          // scroll={{
+          //   x: 1000,
+          // }}
+          sticky
+        />
+      </Content>
+      {/* modal */}
+      <>
+        <Modal
+          footer={null}
+          title="Apakah Vaksin Tersedia?"
+          open={isModalOpen}
+          onCancel={() => setIsModalOpen(false)}
+        >
+          <Form onFinish={handleUpdateVaksin}>
+            <Form.Item name="vaccineValiable">
+              <Select
+                onChange={(e) => setisValiable(e)}
+                placeholder="Status Ketersediaan Vaksin?"
+                value={isValiable ? "Tersedia" : "Tidak Tersedia"}
+              >
+                <Select.Option value={1}>Benar</Select.Option>
+                <Select.Option value={0}>Tidak</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item>
+              <Button htmlType="submit">Simpan</Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+      </>
+    </div>
+  );
+}
+
+export default KelolaInformasiVaksinSPage;

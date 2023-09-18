@@ -1,12 +1,11 @@
 // libb
 import React, { useEffect, useState } from "react";
-import { Breadcrumb, Button, Table, } from "antd";
+import { Breadcrumb, Button, Table } from "antd";
 import { Link } from "react-router-dom";
 import { Content, Header } from "antd/es/layout/layout";
+import { axiosInstance } from "../../../../utils/axiosInstance";
 // components
-import { axiosInstance } from "../../../lib/axios";
 function KelolaPermohonanSurat() {
-
   const columnPermohonanSurat = [
     {
       title: "Id",
@@ -67,8 +66,11 @@ function KelolaPermohonanSurat() {
       const response = await axiosInstance.get(
         `/administrasikelurahan/src/api/fetchDataPermohonanSurat.php`
       );
-      console.log({ data: response.data });
-      setdataPemohonSurat(response.data);
+      setdataPemohonSurat(
+        response.data.map((item, index) => {
+          return { ...item, key: index.toString() };
+        })
+      );
     } catch (error) {}
   };
   useEffect(() => {
@@ -76,20 +78,8 @@ function KelolaPermohonanSurat() {
   }, []);
   return (
     <div className="mx-20">
-      <Header
-        style={{
-          backgroundColor: "white",
-          position: "sticky",
-          top: 20,
-          margin: "16px 0",
-          zIndex: 99,
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Breadcrumb      
+      <Header className="header-breadcrump">
+        <Breadcrumb
           items={[
             { title: "Admin" },
             { title: <Link to={"/kelolaSurat"}>Kelola Permohonan Surat</Link> },
@@ -102,6 +92,7 @@ function KelolaPermohonanSurat() {
 
       <Content>
         <Table
+          key={dataPemohonSurat?.id_pemohon}
           dataSource={dataPemohonSurat}
           columns={columnPermohonanSurat}
           pagination={{ pageSize: 5 }}

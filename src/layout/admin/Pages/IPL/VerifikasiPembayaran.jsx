@@ -27,25 +27,9 @@ function VerifikasiPembayaran() {
     "November",
     "Desember",
   ];
-  const onFinish = (e) => {
-    const {
-      tanggalPembayaran,
-      bulanPembayaran,
-      jumlahPembayaran,
-      metodePembayaran,
-      nik,
-      verifikator,
-    } = e;
-    const date = `${tanggalPembayaran.$d.getDate()}-${
-      tanggalPembayaran.$d.getMonth() + 1
-    }-${tanggalPembayaran.$d.getFullYear()}`;
-    console.log(
-      bulanPembayaran,
-      jumlahPembayaran,
-      metodePembayaran,
-      nik,
-      verifikator
-    );
+
+  const handleonFinish = (e) => {
+    console.log(e);
   };
   const [targetOffset, setTargetOffset] = useState();
   useEffect(() => {
@@ -82,9 +66,9 @@ function VerifikasiPembayaran() {
         />
       </Header>
       <Content className="mt-5 bg-white p-10">
-        <Form 
-          onFinish={onFinish}
-          layout="vertical" 
+        <Form
+          onFinish={handleonFinish}
+          layout="vertical"
           size={"medium"}
           className="w-full"
         >
