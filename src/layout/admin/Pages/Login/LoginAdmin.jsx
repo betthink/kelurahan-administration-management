@@ -1,8 +1,8 @@
 import React from "react";
 import * as yup from "yup";
-import { Button, Form, Input, Layout } from "antd";
+import { Button, Form, Input, Layout, message as mes } from "antd";
 import { Content } from "antd/es/layout/layout";
-import {  useFormik } from "formik";
+import { useFormik } from "formik";
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
 import { useNavigate } from "react-router-dom";
 
@@ -25,10 +25,10 @@ const LoginAdmin = () => {
       );
       const { data, message, value } = res.data;
       if (value === 1) {
-        alert(message);
+        mes.success(message);
         navigate("/Dashboard", { state: { data } });
       } else {
-        alert(message);
+        mes.error(message);
       }
     } catch (error) {
       console.log(error);

@@ -12,6 +12,7 @@ import { Header } from "antd/es/layout/layout";
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
+import { axiosInstance } from "../../../../utils/axiosInstance";
 
 const UpdatePendudukPage = () => {
   // variables
@@ -21,22 +22,14 @@ const UpdatePendudukPage = () => {
   const location = useLocation();
   const dataPenduduk = location.state.data;
   const [dataEntry, setdataEntry] = useState(dataPenduduk);
+  const [isLoading, setisLoading] = useState(true);
+  const dateFormat = "YYYY-MM-DD";
   // functions
   const onFinish = (e) => {
-    const {
-      nama,
-      nik,
-      noKK,
-      alamat,
-      nomorTelp,
-      tanggalLahir,
-      darah,
-      jenisKelamin,
-      status,
-      statusPenduduk,
-      tempatLahir,
-      kepalaKeluarga,
-    } = e;
+    // const {
+
+    // } = e;
+    console.log(e);
     const date = `${tanggalLahir.$d.getFullYear()}-${
       tanggalLahir.$d.getMonth() + 1
     }-${tanggalLahir.$d.getDate()}`;
@@ -57,26 +50,15 @@ const UpdatePendudukPage = () => {
       jenis_kelamin: jenisKelamin,
     });
   };
-  const handleAddPenduduk = async () => {
-    try {
-      const response = await axiosWithMultipart(
-        "/administrasikelurahan/src/post/addDataPenduduk.php",
-        {
-          method: "post",
-          data: dataEntry,
-        }
-      );
-      console.log(response.data);
-      const { value, message } = response.data;
-      if (value === 1) {
-        alert(message);
-        navigate("/KelolaPenduduk");
-      } else {
-        alert(message);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+
+  const handleUpdatePenduduk = async (e) => {
+    // const res = await axiosWithMultipart(
+    //   `/administrasikelurahan/src/update/updateDataP.php`,
+    //   {
+    //     method: "post",
+    //     data: ,
+    //   }
+    // );
   };
   // modal
   const showModal = () => {
@@ -91,12 +73,13 @@ const UpdatePendudukPage = () => {
   };
 
   useEffect(() => {
-    console.log({ dataEntry });
-  }, []);
+    // handleGetDataById(id_penduduk);
+    console.log(dataPenduduk);
+  }, [isLoading]);
   return (
     <div className="mx-20">
       {/* path */}
-      <Header>
+      <Header className="header-breadcrump">
         <Breadcrumb
           items={[
             { title: "Admin" },
@@ -111,6 +94,7 @@ const UpdatePendudukPage = () => {
       <div className="h-full self-center flex  p-6 bg-white">
         {/* form */}
         <Form
+          initialValues={dataPenduduk}
           onFinish={onFinish}
           layout="vertical"
           size={"medium"}
@@ -121,63 +105,43 @@ const UpdatePendudukPage = () => {
             className="grid md:grid-cols-2 grid-cols-1"
           >
             <Form.Item name="nama" label="Nama">
-              <Input
-                placeholder="Masukan Nama Penduduk"
-                value={dataEntry.nama}
-              />
+              <Input placeholder="Masukan Nama Penduduk" />
             </Form.Item>
             <Form.Item name="nik" label="NIK">
-              <Input placeholder="Masukan NIK Penduduk" value={dataEntry.nik} />
+              <Input placeholder="Masukan NIK Penduduk" />
             </Form.Item>
-            <Form.Item name="noKK" label="No. KK">
-              <Input
-                placeholder="Masukan Nomor KK Penduduk"
-                value={dataEntry.no_kk}
-              />
+            <Form.Item name="no_kk" label="No. KK">
+              <Input placeholder="Masukan Nomor KK Penduduk" />
             </Form.Item>
             <Form.Item name="alamat" label="Alamat">
-              <Input
-                placeholder="Masukan Alamat Penduduk"
-                value={dataEntry.alamat}
-              />
+              <Input placeholder="Masukan Alamat Penduduk" />
             </Form.Item>
-            <Form.Item name="nomorTelp" label="Nomor Telp">
-              <Input
-                placeholder="Masukan Npmor Telp Penduduk"
-                value={dataEntry.nomor_telp}
-              />
+            <Form.Item name="nomor_telp" label="Nomor Telp">
+              <Input placeholder="Masukan Npmor Telp Penduduk" />
             </Form.Item>
 
-            <Form.Item name="tanggalLahir" label="Tanggal Lahir">
+            <Form.Item name="tanggal_lahirr" label="Tanggal Lahir">
               <DatePicker
+                // format="YYYY-MM-DD HH:mm:ss"
+                // defaultValue='2015-01-01'
                 placeholder="Pilih Kelahiran Tanggal"
                 style={{ width: "100%" }}
-                value={dataEntry.tanggal_lahir}
               />
             </Form.Item>
 
-            <Form.Item name="tempatLahir" label="Tempat Lahir">
-              <Input
-                placeholder="Masukan Tempat Lahir Sesuai KTP"
-                value={dataEntry.tempat_lahir}
-              />
+            <Form.Item name="tempat_lahir" label="Tempat Lahir">
+              <Input placeholder="Masukan Tempat Lahir Sesuai KTP" />
             </Form.Item>
 
-            <Form.Item name="jenisKelamin" label="Jenis Kelamin">
-              <Select
-                placeholder="Pilih Jenis Kelamin"
-                value={dataEntry.jenis_kelamin}
-              >
+            <Form.Item name="jenis_kelamin" label="Jenis Kelamin">
+              <Select placeholder="Pilih Jenis Kelamin">
                 <Select.Option value="Laki-Laki">Laki-Laki</Select.Option>
                 <Select.Option value="Perempuan">Perempuan</Select.Option>
               </Select>
             </Form.Item>
 
             <Form.Item name="darah" label="Golongan darah">
-              <Select
-                placeholder="Pilih Golongan Darah"
-                value={dataEntry.darah}
-              >
+              <Select placeholder="Pilih Golongan Darah">
                 {["A", "B", "AB", "O"].map((item, i) => (
                   <Select.Option key={i} value={item}>
                     {item}
@@ -185,23 +149,20 @@ const UpdatePendudukPage = () => {
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item name="status" label="Status">
+            <Form.Item name="status_diri" label="Status">
               <Select placeholder="Pilih Status Diri Penduduk">
                 <Select.Option value="Menikah">Menikah</Select.Option>
                 <Select.Option value="Lajang">Lajang</Select.Option>
               </Select>
             </Form.Item>
-            <Form.Item name={"statusPenduduk"} label="Status Penduduk">
+            <Form.Item name="status_tinggal" label="Status Penduduk">
               <Select placeholder="Pilih Status Tinggal Penduduk">
                 <Select.Option value="Tetap">Tetap</Select.Option>
                 <Select.Option value="Sementara">Sementara</Select.Option>
               </Select>
             </Form.Item>
-            <Form.Item name="kepalaKeluarga" label="kepala Keluarga?">
-              <Select
-                placeholder="Pilih Status kepala keluarga"
-                value={dataEntry.kepala_keluarga}
-              >
+            <Form.Item name="kepala_keluarga" label="kepala Keluarga?">
+              <Select placeholder="Pilih Status kepala keluarga">
                 <Select.Option value={1}>Benar</Select.Option>
                 <Select.Option value={0}>Tidak</Select.Option>
               </Select>
@@ -209,7 +170,7 @@ const UpdatePendudukPage = () => {
           </Space>
           <Form.Item className="bg-purp">
             <Button onClick={showModal} block type="primary" htmlType="submit">
-              Edit
+              Simpan
             </Button>
           </Form.Item>
         </Form>

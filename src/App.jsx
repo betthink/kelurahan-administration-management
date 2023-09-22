@@ -26,7 +26,7 @@ const App = () => {
         <Route path="Landingpage" element={<LandingPage />} />
         <Route path="Homepage" element={<HomePage />} />
         <Route path="Informasi-Iuran" element={<InformasiIuran />} />
-        <Route path="Permohonan-Surat" element={<PermohonanSurat />} />
+        <Route path="Homepage/Permohonan-Surat" element={<PermohonanSurat />} />
         <Route path="login-admin" element={<LoginAdmin />} />
         {/* Cms */}
         <Route path="Dashboard" element={<CmsLayouts />}>

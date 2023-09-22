@@ -1,6 +1,6 @@
 // lib
 import React, { useEffect, useState } from "react";
-import { Breadcrumb, Table, Button, Space, Input } from "antd";
+import { Breadcrumb, Table, Button, Space, Input, message as mes } from "antd";
 import { Link } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import { Header, Content } from "antd/es/layout/layout";
@@ -93,7 +93,7 @@ function KelolaPenduduk() {
       render: (data) => (
         <div className="flex text-white gap-3">
           <Button className="bg-manggo">
-            <Link state={{ data }} to={"/UpdatePenduduk"}>
+            <Link state={{ data }} to={"/Dashboard/Update-Penduduk"}>
               Edit
             </Link>
           </Button>
@@ -141,10 +141,10 @@ function KelolaPenduduk() {
     );
     const { value, message } = res.data;
     if (value === 1) {
-      alert(message);
+      mes.success(message);
       window.location.reload();
     } else {
-      alert(message);
+      mes.error(message);
     }
   };
   useEffect(() => {
@@ -174,7 +174,7 @@ function KelolaPenduduk() {
           className="flex flex-row   cursor-pointer bg-blusky text-white items-center "
           type="default"
         >
-          <Link className="pr-1" to={"/TambahPenduduk"}>
+          <Link className="pr-1" to={"/Dashboard/Tambah-Penduduk"}>
             Tambah Penduduk
           </Link>
           <PlusOutlined />

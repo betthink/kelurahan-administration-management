@@ -2,9 +2,7 @@
 import React from "react";
 import { Layout } from "antd";
 import { Outlet, Routes } from "react-router-dom";
-
 const { Header, Content } = Layout;
-
 const PublicLayout = () => {
   return (
     <Layout className="h-screen bg-darkgreen ">

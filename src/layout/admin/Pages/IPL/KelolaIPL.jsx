@@ -1,42 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Breadcrumb, theme, Table, Button } from "antd";
 import { Link } from "react-router-dom";
 import { Content, Header } from "antd/es/layout/layout";
+import { axiosInstance } from "../../../../utils/axiosInstance";
 
 function KelolaIPL() {
+  const [data, setdata] = useState([]);
   const columns = [
     {
       title: "Id",
       render: (text) => (
         <div className=" p-2 justify-self-center  self-center">{text}</div>
       ),
-      dataIndex: "Id",
-      key: "Id",
+      dataIndex: "id_ipl",
+      key: "id_ipl",
       fixed: "left",
       width: 20,
     },
     {
       title: "Nama Kepala Keluarga",
-      dataIndex: "nama",
+      dataIndex: "nama_kepala_keluarga",
       key: "nama",
       width: 100,
     },
     {
       title: "NIK",
 
-      dataIndex: "NIK",
+      dataIndex: "nik",
       key: "NIK",
       width: 100,
     },
     {
       title: "Status",
-      dataIndex: "Status",
+      dataIndex: "status_tinggal",
       key: "Status",
       width: 50,
     },
     {
       title: "Status Pembayaran",
-      dataIndex: "StatusPembayaran",
+      dataIndex: "status_ipl",
       key: "StatusPembayaran",
       width: 100,
 
@@ -68,21 +70,17 @@ function KelolaIPL() {
       ),
     },
   ];
-  const data = [];
-  for (let i = 0; i < 20; i++) {
-    const status = [true, false];
-    const randomIndex = Math.floor(Math.random() * status.length);
-    const randomStatus = status[randomIndex];
-    data.push({
-      key: i,
-      Id: i + 1,
-      nama: `Edward ${i}`,
-      NIK: `  ${Math.random()}`,
-      Status: `Tetap`,
-      StatusPembayaran: randomStatus ? "Lunas" : "Belum",
-    });
-  }
 
+  const handleGetDataIPL = async () => {
+    const res = await axiosInstance.get(
+      "/administrasikelurahan/src/api/fetchDataVerifikasiPembayaran.php"
+    );
+    setdata(res.data);
+  };
+
+  useEffect(() => {
+    handleGetDataIPL();
+  }, []);
   return (
     <div className="mx-20">
       <Header className="header-breadcrump">
@@ -90,7 +88,7 @@ function KelolaIPL() {
           className=""
           items={[
             { title: "Home" },
-            { title: <Link to={"/KelolaIPL"}>Kelola IPL</Link> },
+            { title: <Link to={"KelolaIPL"}>Kelola IPL</Link> },
           ]}
         />
       </Header>

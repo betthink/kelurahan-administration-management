@@ -1,11 +1,10 @@
 import React from "react";
 import * as yup from "yup";
-import { Button, Form, Input, Layout } from "antd";
+import { Button, Form, Input, Layout, message as mes } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { useFormik } from "formik";
 import { axiosWithMultipart } from "../../utils/axioswithmultipart";
 import { useNavigate } from "react-router-dom";
-
 function LandingPage() {
   // variables
   const navigate = useNavigate();
@@ -25,10 +24,10 @@ function LandingPage() {
       );
       const { data, message, value } = res.data;
       if (value === 1) {
-        alert(message);
+        mes.success(message);
         navigate("/HomePage", { state: { data } });
       } else {
-        alert(message);
+        mes.error(message);
       }
     } catch (error) {
       console.log(error);
@@ -60,9 +59,7 @@ function LandingPage() {
     <Layout className="h-screen w-full bg-darkgreen ">
       <Content className="mx-auto  w-1/2 h-screen flex justify-center items-center flex-col py-20 text-white">
         <div className="">Log in</div>
-        <div className="">
-          Masuk Sebagai warga
-        </div>
+        <div className="">Masuk Sebagai warga</div>
         <Form onFinish={formik.handleSubmit} className="w-1/2 py-10">
           <Form.Item
             name="nama"
@@ -116,11 +113,13 @@ function LandingPage() {
             </Button>
           </Form.Item>
         </Form>
-       
-          <Button className="border-none self-end hover:cursor-pointer hover:underline" onClick={() => navigate("/login-admin")}>
-            Masuk sebagai admin
-          </Button>
-      
+
+        <Button
+          className="border-none self-end hover:cursor-pointer hover:underline"
+          onClick={() => navigate("/login-admin")}
+        >
+          Masuk sebagai admin
+        </Button>
       </Content>
     </Layout>
   );
