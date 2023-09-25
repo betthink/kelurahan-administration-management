@@ -37,7 +37,7 @@ const HomePage = () => {
       <div className="site-card-wrapper container justify-between  py-20 flex-row">
         <Row className="justify-around " gutter={16}>
           <Col span={8}>
-            <Link to={"Informasi-Iuran"}>
+            <Link to={"/Informasi-Iuran"}>
               <Card title="Informasi Iuran" bordered={false}>
                 Berikut informasi iuran yang dapat anda akses
               </Card>

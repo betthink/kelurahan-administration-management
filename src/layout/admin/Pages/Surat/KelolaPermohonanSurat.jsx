@@ -90,7 +90,7 @@ function KelolaPermohonanSurat() {
         </Breadcrumb>
       </Header>
 
-      <Content>
+      <Content className="p-6 bg-white min-h-[40rem]">
         <Table
           key={dataPemohonSurat?.id_pemohon}
           dataSource={dataPemohonSurat}

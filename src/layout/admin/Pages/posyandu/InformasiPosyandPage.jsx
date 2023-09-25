@@ -19,12 +19,12 @@ const InformasiPosyandPage = () => {
       </Header>
       <Content className=" items-center flex flex-row justify-around">
         <Space className="bg-purp p-6 text-white">
-          <Link to={"/KelolaInformasiVaksinSPage"}>
+          <Link to={"/Dashboard/KelolaInformasiVaksinSPage"}>
             Infromasi Pengguna posyandu
           </Link>
         </Space>
         <Space className="bg-purp p-6 text-white">
-          <Link to={"/KelolaInformasiVaksinSPage"}>
+          <Link to={"/Dashboard/Informasi-vaksin"}>
             Infromasi vaksin Vaksin
           </Link>
         </Space>

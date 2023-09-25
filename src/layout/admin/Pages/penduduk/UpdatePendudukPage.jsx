@@ -30,25 +30,25 @@ const UpdatePendudukPage = () => {
 
     // } = e;
     console.log(e);
-    const date = `${tanggalLahir.$d.getFullYear()}-${
-      tanggalLahir.$d.getMonth() + 1
-    }-${tanggalLahir.$d.getDate()}`;
-    setdataEntry({
-      ...dataEntry,
+    // const date = `${tanggalLahir.$d.getFullYear()}-${
+    //   tanggalLahir.$d.getMonth() + 1
+    // }-${tanggalLahir.$d.getDate()}`;
+    // setdataEntry({
+    //   ...dataEntry,
 
-      nama,
-      nik,
-      no_kk: noKK,
-      tanggal_lahir: date,
-      tempat_lahir: tempatLahir,
-      alamat,
-      darah,
-      kepala_keluarga: kepalaKeluarga,
-      status_tinggal: statusPenduduk,
-      status_diri: status,
-      nomor_telp: nomorTelp,
-      jenis_kelamin: jenisKelamin,
-    });
+    //   nama,
+    //   nik,
+    //   no_kk: noKK,
+    //   tanggal_lahir: date,
+    //   tempat_lahir: tempatLahir,
+    //   alamat,
+    //   darah,
+    //   kepala_keluarga: kepalaKeluarga,
+    //   status_tinggal: statusPenduduk,
+    //   status_diri: status,
+    //   nomor_telp: nomorTelp,
+    //   jenis_kelamin: jenisKelamin,
+    // });
   };
 
   const handleUpdatePenduduk = async (e) => {
@@ -65,7 +65,7 @@ const UpdatePendudukPage = () => {
     setIsModalOpen(true);
   };
   const handleOk = async () => {
-    await handleAddPenduduk();
+    handleUpdatePenduduk();
     setIsModalOpen(false);
   };
   const handleCancel = () => {
@@ -169,7 +169,12 @@ const UpdatePendudukPage = () => {
             </Form.Item>
           </Space>
           <Form.Item className="bg-purp">
-            <Button onClick={showModal} block type="primary" htmlType="submit">
+            <Button
+              onClick={showModal}
+              block
+              type="primary"
+              htmlType="submit"
+            >
               Simpan
             </Button>
           </Form.Item>

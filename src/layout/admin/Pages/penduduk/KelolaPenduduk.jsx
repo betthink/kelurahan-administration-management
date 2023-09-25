@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import { Header, Content } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
+import ButtonGroup from "antd/es/button/button-group";
 // components
 
 function KelolaPenduduk() {
@@ -91,7 +92,7 @@ function KelolaPenduduk() {
       fixed: "right",
       width: 200,
       render: (data) => (
-        <div className="flex text-white gap-3">
+        <ButtonGroup>
           <Button className="bg-manggo">
             <Link state={{ data }} to={"/Dashboard/Update-Penduduk"}>
               Edit
@@ -104,7 +105,7 @@ function KelolaPenduduk() {
           >
             Hapus
           </Button>
-        </div>
+        </ButtonGroup>
       ),
     },
   ];
@@ -182,7 +183,7 @@ function KelolaPenduduk() {
       </Header>
       <Content
         style={{ position: "sticky", top: 400 }}
-        className="p-6 bg-white min-h-[460px]"
+        className="p-6 bg-white min-h-[40rem]"
       >
         {/* tabel */}
         <Table

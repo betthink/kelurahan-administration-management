@@ -25,9 +25,9 @@ const App = () => {
         <Route path="/" element={<Navigate to={"Landingpage"} />} />
         <Route path="Landingpage" element={<LandingPage />} />
         <Route path="Homepage" element={<HomePage />} />
-        <Route path="Informasi-Iuran" element={<InformasiIuran />} />
         <Route path="Homepage/Permohonan-Surat" element={<PermohonanSurat />} />
         <Route path="login-admin" element={<LoginAdmin />} />
+        <Route path="/Informasi-Iuran" element={<InformasiIuran />} />
         {/* Cms */}
         <Route path="Dashboard" element={<CmsLayouts />}>
           <Route path="Landingpage" element={<Dashboard />} />

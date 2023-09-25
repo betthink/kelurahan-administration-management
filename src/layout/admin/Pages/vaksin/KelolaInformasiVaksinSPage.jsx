@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Content, Header } from "antd/es/layout/layout";
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
 import { axiosInstance } from "../../../../utils/axiosInstance";
+import ButtonGroup from "antd/es/button/button-group";
 
 function KelolaInformasiVaksinSPage() {
   // variables
@@ -35,7 +36,7 @@ function KelolaInformasiVaksinSPage() {
       fixed: "right",
       width: 160,
       render: (id) => (
-        <div className="flex text-white gap-3">
+        <ButtonGroup>
           <Button onClick={() => handleOnchange(id)} className="bg-manggo">
             Edit
           </Button>
@@ -46,7 +47,7 @@ function KelolaInformasiVaksinSPage() {
           >
             Hapus
           </Button>
-        </div>
+        </ButtonGroup>
       ),
     },
   ];
@@ -120,9 +121,7 @@ function KelolaInformasiVaksinSPage() {
   useEffect(() => {
     handleGetDataVaksin();
   }, []);
-  // useEffect(() => {
-  //   console.log(isValiable);
-  // }, [isValiable]);
+
   return (
     <div className="mx-20">
       <Header className="header-breadcrump">
@@ -136,7 +135,7 @@ function KelolaInformasiVaksinSPage() {
           <Breadcrumb.Item>Kelola Posyandu</Breadcrumb.Item>
         </Breadcrumb>
         <Button
-          onClick={() => navigate("/TambahVaksinPage")}
+          onClick={() => navigate("/Dashboard/Tambah-VaksinPage")}
           className="flex flex-row   cursor-pointer bg-blusky text-white items-center "
           type="default"
         >
@@ -148,10 +147,6 @@ function KelolaInformasiVaksinSPage() {
           dataSource={dataVaksin}
           columns={columnVaksin}
           pagination={{ pageSize: 7 }}
-          // loading={setTimeout}
-          // scroll={{
-          //   x: 1000,
-          // }}
           sticky
         />
       </Content>

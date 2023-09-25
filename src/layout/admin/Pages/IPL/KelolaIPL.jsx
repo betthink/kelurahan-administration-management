@@ -3,9 +3,11 @@ import { Breadcrumb, theme, Table, Button } from "antd";
 import { Link } from "react-router-dom";
 import { Content, Header } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
+import ButtonGroup from "antd/es/button/button-group";
 
 function KelolaIPL() {
   const [data, setdata] = useState([]);
+  const [isLoading, setisLoading] = useState(true);
   const columns = [
     {
       title: "Id",
@@ -57,8 +59,8 @@ function KelolaIPL() {
       fixed: "right",
       width: 70,
       render: () => (
-        <div className="flex text-white gap-3">
-          <Button className="bg-manggo">
+        <ButtonGroup>
+          <Button className="bg-manggo text-white">
             <Link to={"/VerifikasiPembayaran"}>detail</Link>
           </Button>
           <Button className="bg-darksky text-white " type="default">
@@ -66,16 +68,21 @@ function KelolaIPL() {
               verifikasi
             </Link>
           </Button>
-        </div>
+        </ButtonGroup>
       ),
     },
   ];
 
   const handleGetDataIPL = async () => {
-    const res = await axiosInstance.get(
-      "/administrasikelurahan/src/api/fetchDataVerifikasiPembayaran.php"
-    );
-    setdata(res.data);
+    try {
+      const res = await axiosInstance.get(
+        "/administrasikelurahan/src/api/fetchDataVerifikasiPembayaran.php"
+      );
+      setdata(res.data);
+      setisLoading(false);
+    } catch (error) {
+      throw error;
+    }
   };
 
   useEffect(() => {
@@ -92,15 +99,15 @@ function KelolaIPL() {
           ]}
         />
       </Header>
-      <Content className="p-6 bg-white ">
+      <Content className="p-6 bg-white min-h-[40rem]">
         <Table
           pagination={{ pageSize: 5 }}
           columns={columns}
           dataSource={data}
-          // loading={setTimeout}
-          scroll={{
-            x: 1500,
-          }}
+          loading={isLoading}
+          // scroll={{
+          //   x: 1500,
+          // }}
           summary={() => <Table.Summary fixed={"top"} />}
           sticky
         />
