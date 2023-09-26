@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Breadcrumb, theme, Table, Button } from "antd";
+import { Breadcrumb, Table, Button } from "antd";
 import { Link } from "react-router-dom";
 import { Content, Header } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
@@ -27,7 +27,6 @@ function KelolaIPL() {
     },
     {
       title: "NIK",
-
       dataIndex: "nik",
       key: "NIK",
       width: 100,
@@ -43,13 +42,17 @@ function KelolaIPL() {
       dataIndex: "status_ipl",
       key: "StatusPembayaran",
       width: 100,
+      render: (status) => {
+        return <p>{status ? "Lunas" : "Terhutang"}</p>;
+      },
 
       filters: [
-        { text: "Lunas", value: true },
-        { text: "Belum", value: false },
+        { text: "Lunas", value: 1 },
+        { text: "Terhutang", value: 0 },
       ],
       onFilter: (value, record) => {
-        return record.StatusPembayaran === value;
+        console.log(record);
+        return parseInt(record.status_ipl) === value;
       },
     },
 
@@ -78,7 +81,11 @@ function KelolaIPL() {
       const res = await axiosInstance.get(
         "/administrasikelurahan/src/api/fetchDataVerifikasiPembayaran.php"
       );
-      setdata(res.data);
+      setdata(
+        res.data.map((item, index) => {
+          return { ...item, key: index.toString() };
+        })
+      );
       setisLoading(false);
     } catch (error) {
       throw error;
@@ -105,9 +112,6 @@ function KelolaIPL() {
           columns={columns}
           dataSource={data}
           loading={isLoading}
-          // scroll={{
-          //   x: 1500,
-          // }}
           summary={() => <Table.Summary fixed={"top"} />}
           sticky
         />

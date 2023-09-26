@@ -6,6 +6,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Header, Content } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import ButtonGroup from "antd/es/button/button-group";
+import { useDebounce } from "use-debounce";
 // components
 
 function KelolaPenduduk() {
@@ -110,6 +111,18 @@ function KelolaPenduduk() {
     },
   ];
   const [dataPenduduk, setdataPenduduk] = useState([]);
+  // filter data penduduk
+  const [dataSearch, setdataSearch] = useState(null);
+  const [debouncedValue] = useDebounce(dataSearch, 500);
+  const filterItem =
+  debouncedValue !== null
+      ? dataPenduduk.filter((item) => {
+          return (
+            item.nama.toLowerCase().includes(debouncedValue.toLowerCase()) ||
+            item.nik.includes(debouncedValue.toLowerCase())
+          );
+        })
+      : dataPenduduk;
   // functions --
   const handleGetDataPenduduk = async () => {
     try {
@@ -125,7 +138,12 @@ function KelolaPenduduk() {
       console.log(error);
     }
   };
-  const onSearch = (value) => console.log(value);
+  const handleSearch = (event) => {
+    setdataSearch(event);
+  };
+  const handleChange = (event) => {
+    setdataSearch(event.target.value);
+  };
   const handleDeletePenduduk = async (id) => {
     console.log(id);
     const res = await axiosInstance(
@@ -164,8 +182,9 @@ function KelolaPenduduk() {
             ]}
           />
           <Search
+            onChange={handleChange}
             placeholder="Cari penduduk ..."
-            onSearch={onSearch}
+            onSearch={handleSearch}
             // enterButton
           />
         </div>
@@ -189,7 +208,7 @@ function KelolaPenduduk() {
         <Table
           key={dataPenduduk.id_penduduk}
           columns={columns}
-          dataSource={dataPenduduk}
+          dataSource={filterItem}
           pagination={{ pageSize: 5 }}
           // loading={setTimeout}
           scroll={{

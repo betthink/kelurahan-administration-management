@@ -1,8 +1,8 @@
 import { Button, Card, Col, Row, message } from "antd";
 import { Header } from "antd/es/layout/layout";
 import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import lib, { UserOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import  { UserOutlined } from "@ant-design/icons";
 const HomePage = () => {
   // const location = useLocation();
   // const { nama } = location.state.data[0];

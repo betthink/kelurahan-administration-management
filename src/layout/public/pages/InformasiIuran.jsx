@@ -1,8 +1,7 @@
-import { Breadcrumb, Table } from "antd";
+import {  Table } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
-import { Link } from "react-router-dom";
 
 export default function InformasiIuran() {
   // variables
