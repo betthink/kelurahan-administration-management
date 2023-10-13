@@ -43,7 +43,7 @@ function KelolaIPL() {
       key: "StatusPembayaran",
       width: 100,
       render: (status) => {
-        return <p>{status ? "Lunas" : "Terhutang"}</p>;
+        return <p>{parseInt(status) === 1 ? "Lunas" : "Terhutang"}</p>;
       },
 
       filters: [

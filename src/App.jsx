@@ -16,13 +16,30 @@ import InformasiIuran from "./layout/public/pages/InformasiIuran";
 import PermohonanSurat from "./layout/public/pages/PermohonanSurat";
 import Dashboard from "./layout/admin/Pages/Dashboard";
 import LoginAdmin from "./layout/admin/Pages/Login/LoginAdmin";
+import KelolaAdminRT from "./layout/admin/Pages/admin/KelolaAdminRT";
+import { useSelector } from "react-redux";
 
 const App = () => {
+  const user = useSelector((state) => state.value);
+
   return (
     <>
       <Routes>
         {/* public */}
-        <Route path="/" element={<Navigate to={"Landingpage"} />} />
+
+        <Route
+          path="/"
+          element={
+            <Navigate
+              to={
+                user.isLoggin
+                  ? user.role == "admin" ||
+                    ("super_admin" && "Dashboard/Landingpage")
+                  : "Landingpage"
+              }
+            />
+          }
+        />
         <Route path="Landingpage" element={<LandingPage />} />
         <Route path="Homepage" element={<HomePage />} />
         <Route path="Homepage/Permohonan-Surat" element={<PermohonanSurat />} />
@@ -42,6 +59,7 @@ const App = () => {
             path="Informasi-PosyandPage"
             element={<InformasiPosyandPage />}
           />
+          <Route path="Kelola-Admin" element={<KelolaAdminRT />} />
           <Route path="Update-Penduduk" element={<UpdatePendudukPage />} />
           <Route path="Tambah-Penduduk" element={<TambahPenduduk />} />
           <Route path="Tambah-VaksinPage" element={<TambahVaksinPage />} />

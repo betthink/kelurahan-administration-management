@@ -7,6 +7,7 @@ import { Header, Content } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import ButtonGroup from "antd/es/button/button-group";
 import { useDebounce } from "use-debounce";
+import { useSelector } from "react-redux";
 // components
 
 function KelolaPenduduk() {
@@ -22,7 +23,7 @@ function KelolaPenduduk() {
     },
     {
       title: "Nama",
-      width: 100,
+      width: 200,
       dataIndex: "nama",
       key: "nama",
     },
@@ -86,6 +87,18 @@ function KelolaPenduduk() {
       key: "status_diri",
       width: 150,
     },
+    {
+      title: "RT",
+      dataIndex: "rt",
+      key: "rt",
+      width: 150,
+    },
+    {
+      title: "RW",
+      dataIndex: "rw",
+      key: "rw",
+      width: 150,
+    },
 
     {
       title: "Action",
@@ -112,10 +125,12 @@ function KelolaPenduduk() {
   ];
   const [dataPenduduk, setdataPenduduk] = useState([]);
   // filter data penduduk
+  const user = useSelector((state) => state.value);
+  // console.log(user);
   const [dataSearch, setdataSearch] = useState(null);
   const [debouncedValue] = useDebounce(dataSearch, 500);
   const filterItem =
-  debouncedValue !== null
+    debouncedValue !== null
       ? dataPenduduk.filter((item) => {
           return (
             item.nama.toLowerCase().includes(debouncedValue.toLowerCase()) ||
@@ -125,10 +140,12 @@ function KelolaPenduduk() {
       : dataPenduduk;
   // functions --
   const handleGetDataPenduduk = async () => {
+    const url =
+      user.role === "admin"
+        ? `/administrasikelurahan/src/api/fetchDataPendudukByRT.php?rt=${user.rt}&rw=${user.rw}`
+        : `/administrasikelurahan/src/api/fetchDataPenduduk.php`;
     try {
-      const response = await axiosInstance.get(
-        `/administrasikelurahan/src/api/fetchDataPenduduk.php`
-      );
+      const response = await axiosInstance.get(url);
       setdataPenduduk(
         response.data.map((item, index) => {
           return { ...item, key: index.toString() };

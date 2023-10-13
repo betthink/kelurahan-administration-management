@@ -5,9 +5,12 @@ import { Content } from "antd/es/layout/layout";
 import { useFormik } from "formik";
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logIn } from "../../../../app/feature/user/userSlice";
 
 const LoginAdmin = () => {
   // variables
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   // functions
   const handleLogin = async () => {
@@ -25,8 +28,18 @@ const LoginAdmin = () => {
       );
       const { data, message, value } = res.data;
       if (value === 1) {
+        dispatch(
+          logIn({
+            username: data[0].username,
+            nik: data[0].nik,
+            role: data[0].role,
+            isLoggin: true,
+            rt: data[0].rt,
+            rw: data[0].rw,
+          })
+        );
         mes.success(message);
-        navigate("/Dashboard", { state: { data } });
+        navigate("/Dashboard/Landingpage", { state: { data } });
       } else {
         mes.error(message);
       }
