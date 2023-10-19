@@ -2,22 +2,26 @@ import { Button, Card, Col, Row, message } from "antd";
 import { Header } from "antd/es/layout/layout";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import  { UserOutlined } from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../../../app/feature/user/userSlice";
 const HomePage = () => {
-  // const location = useLocation();
-  // const { nama } = location.state.data[0];
+  const user = useSelector((state) => state.userReducer.value);
+  const dispatch = useDispatch();
   const [openBar, setopenBar] = useState(false);
   const navigate = useNavigate();
+
   const handleLogout = () => {
-    message.info("Anda sudah log out");
+    dispatch(logOut());
     navigate("/");
+    message.info("Anda sudah log out");
   };
   return (
     <div className=" h-screen bg-darkgreen text-lg w-full flex flex-col text-white overflow-hidden ">
       <Header className="relative justify-between flex text-white">
         <span>Logo</span>
         <div className="flex  items-center justify-center gap-6">
-          <span>Nama</span>
+          <span>WELCOM {user.username}</span>
           <Button
             className="border-none text-white"
             onClick={() => setopenBar(!openBar)}

@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 
 const CmsLayouts = () => {
   const { Sider, Content } = Layout;
-  const user = useSelector((state) => state.value);
+  const user = useSelector((state) => state.userReducer.value);
   const getItem = (label, key, icon, path) => {
     return {
       label,
@@ -57,12 +57,7 @@ const CmsLayouts = () => {
     ),
     user.role === "super_admin"
       ? getItem(
-          <Link
-           
-            to={"/Dashboard/Kelola-Admin"}
-          >
-            Kelola Admin
-          </Link>,
+          <Link to={"/Dashboard/Kelola-Admin"}>Kelola Admin</Link>,
           "sub3",
           <TeamOutlined />,
           [getItem("a", "7"), getItem("b", "9")]

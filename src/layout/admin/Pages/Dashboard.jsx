@@ -4,7 +4,7 @@ import { logOut } from "../../../app/feature/user/userSlice";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  const user = useSelector((state) => state.value);
+  const user = useSelector((state) => state.userReducer.value);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogOut = () => {

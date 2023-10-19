@@ -1,63 +1,33 @@
 // libb
-import React, { useEffect, useState, Component } from "react";
-import { Breadcrumb, Button, Table } from "antd";
+import React, { useEffect, useState } from "react";
+import { Breadcrumb, Button, Table, message } from "antd";
 import { Link } from "react-router-dom";
 import { Content, Header } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import Docxtemplater from "docxtemplater";
 import PizZip from "pizzip";
 import { saveAs } from "file-saver";
-import templatePath from "../../../../assets/docx/simple.docx";
-let resume = {
-  name: {
-    first: "Robet",
-    last: "son",
-  },
-  personalSummary:
-    "Hi i'm John, a software engineer passionate about building well...software",
-  jobTitle: "Software Engineer",
-  contact: {
-    address: "Lagos, Nigeria",
-    phone: "08123456789",
-    email: "johndoe@gmail.com",
-  },
-  meta_details: {
-    dateOfBirth: "24th June, 1995",
-    stateOfOrigin: "Enugu",
-    lga: "Oji-River",
-    gender: "Male",
-    maritalStatus: "Single",
-    religion: "Christian",
-  },
-  workExperience: [
-    {
-      nameOfOrg: "Acme Inc.",
-      position: "Software Developer",
-      from: "July, 2022",
-      to: "Present",
-    },
-  ],
-  education: [
-    {
-      name: "Creation Academy",
-      location: "Earth",
-      type: "Primary",
-      qualificationObtained: "Elementary School Certificate",
-      started: "18th Feb, 2017",
-      finished: "6th July, 2022",
-    },
-  ],
-  referees: [
-    {
-      name: "Big man",
-      nameOfOrg: "Big man Inc",
-      position: "Big man position",
-      contact: "bigman@verybig.com",
-    },
-  ],
-};
+import templatePath from "../../../../assets/docx/templete.docx";
+
 // components
 function KelolaPermohonanSurat() {
+  const [valueSurat, setvalueSurat] = useState({});
+  let value = {
+    namaLengkap: "Robetson",
+    tempatLahir: "kediri",
+    tanggalLahir: "18 - mei - 1999",
+    jenisKelamin: "Laki-Laki",
+    statusPerkawinan: "Lajang",
+    NIK: "6214141414535",
+    KK: "547548",
+    agama: "Katholik",
+    pekerjaan: "software developer",
+    alamatTinggal: "JL. Temanggung Tilung ",
+    jenisSurat: "surat rekomendasi kerja",
+    RT: "001",
+    RW: "002",
+    currentTime: "18 - mei - 2023",
+  };
   const columnPermohonanSurat = [
     {
       title: "Id",
@@ -104,7 +74,7 @@ function KelolaPermohonanSurat() {
       render: () => (
         <div className="flex text-white gap-3">
           <Button
-            onClick={() => generateDocument(resume, templatePath)}
+            onClick={() => generateDocument(value, templatePath)}
             className="bg-darksky text-white "
             type="default"
           >
@@ -131,24 +101,19 @@ function KelolaPermohonanSurat() {
     } catch (error) {}
   };
 
-  // generate file docx
-  // in src/index.js
-
-  async function generateDocument(resume, templatePath) {
-    // load the document template into docxtemplater
+  async function generateDocument(value, templatePath) {
     try {
       let response = await fetch(templatePath);
       let data = await response.arrayBuffer();
-
       let zip = PizZip(data);
-
       let templateDoc = new Docxtemplater(zip, {
         paragraphLoop: true,
         linebreaks: true,
+        syntax: {
+          allowUnopenedTag: true,
+        },
       });
-
-      templateDoc.render(resume);
-
+      templateDoc.render(value);
       let generatedDoc = templateDoc.getZip().generate({
         type: "blob",
         mimeType:
@@ -156,8 +121,10 @@ function KelolaPermohonanSurat() {
         compression: "DEFLATE",
       });
 
-      saveAs(generatedDoc, `${resume.name.first}'s resume.docx`);
+      saveAs(generatedDoc, `Surat Pengantar ${value.namaLengkap}.docx`);
+      message.success("Berhasil mengunduh surat");
     } catch (error) {
+      message.error("Error", JSON.stringify(error));
       console.log("Error: " + error);
     }
   }
@@ -178,7 +145,6 @@ function KelolaPermohonanSurat() {
           <Breadcrumb.Item>Kelola Permohonan Surat</Breadcrumb.Item>
         </Breadcrumb>
       </Header>
-
       <Content className="p-6 bg-white min-h-[40rem]">
         <Table
           key={dataPemohonSurat?.id_pemohon}

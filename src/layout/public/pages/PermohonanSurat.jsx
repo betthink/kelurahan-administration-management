@@ -1,38 +1,42 @@
 import { Button, Form, Input, Select, message as mes } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { axiosWithMultipart } from "../../../utils/axioswithmultipart";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { axiosInstance } from "../../../utils/axiosInstance";
 
 const PermohonanSurat = () => {
-  const selectSurat = [
-    {
-      nama: "SKTM",
-    },
-    {
-      nama: "kematian",
-    },
-    {
-      nama: "pindah",
-    },
-  ];
+  const [jenisSurat, setjenisSurat] = useState([]);
+  const user = useSelector((state) => state.userReducer.value);
+  const handleGetJenisSurat = async () => {
+    try {
+      const res = await axiosInstance.get(
+        "/administrasikelurahan/src/api/fetchDataJenisSurat.php"
+      );
+      res.status === 200
+        ? setjenisSurat(res.data)
+        : console.log("Network Error");
+    } catch (error) {}
+  };
+
   const navigate = useNavigate();
   const handlePermohonanPembuatanSurat = async (event) => {
-    // console.log(event);
-    const { nama, nik, surat } = event;
+    const { surat } = event;
     try {
       const res = await axiosWithMultipart(
         "/administrasikelurahan/src/post/addDataPermohonanSurat.php",
         {
           method: "post",
           data: {
-            nama_pemohon: nama,
-            nik,
+            nik: user.nik,
+            id_penduduk: user.id,
             jenis_surat: surat,
           },
         }
       );
       const { message, value } = res.data;
+      console.log(res.data);
       if (value === 1) {
         mes.success(message);
         navigate("/HomePage");
@@ -44,6 +48,9 @@ const PermohonanSurat = () => {
       throw error;
     }
   };
+  useEffect(() => {
+    handleGetJenisSurat();
+  }, []);
   return (
     <div className="  w-full  text-white">
       <Header className="text-white">Permohonan Pembuatan Surat</Header>
@@ -54,38 +61,14 @@ const PermohonanSurat = () => {
           className="w-1/2 border container py-12 mt-10 bg-darksky "
         >
           <Form.Item
-            label={<label style={{ color: "#fff" }}>Nama</label>}
-            rules={[{ required: true }]}
-            name="nama"
-          >
-            <Input className="py-3" placeholder="Nama pemohon" />
-          </Form.Item>
-          <Form.Item
-            label={<label style={{ color: "#fff" }}>NIK</label>}
-            rules={[
-              { required: true },
-              {
-                min: 16,
-                message: "Karakter yang anda masukkan kurang dari 16",
-              },
-              {
-                pattern: /^[0-9]+$/,
-                message: "NIK hanya boleh berisi angka",
-              },
-            ]}
-            name="nik"
-          >
-            <Input className="py-3" placeholder="NIK pemohon" />
-          </Form.Item>
-          <Form.Item
             rules={[{ required: true }]}
             label={<label style={{ color: "#fff" }}>Jenis Surat</label>}
             name="surat"
           >
             <Select placeholder="Pilih jenis permohonan surat">
-              {selectSurat.map((item, i) => (
-                <Select.Option className="py-3" key={i} value={item.nama}>
-                  {item.nama}
+              {jenisSurat.map((item, i) => (
+                <Select.Option className="py-3" key={i} value={item.nama_surat}>
+                  {item.nama_surat}
                 </Select.Option>
               ))}
             </Select>

@@ -5,8 +5,11 @@ import { Content } from "antd/es/layout/layout";
 import { useFormik } from "formik";
 import { axiosWithMultipart } from "../../utils/axioswithmultipart";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logIn } from "../../app/feature/user/userSlice";
 function LandingPage() {
   // variables
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogin = async () => {
     const { nama, nik } = formik.values;
@@ -25,6 +28,15 @@ function LandingPage() {
       const { data, message, value } = res.data;
       if (value === 1) {
         mes.success(message);
+        dispatch(
+          logIn({
+            id: data[0].id_penduduk,
+            username: data[0].nama,
+            nik: data[0].nik,
+            role: "penduduk",
+            isLoggin: true,
+          })
+        );
         navigate("/HomePage", { state: { data } });
       } else {
         mes.error(message);

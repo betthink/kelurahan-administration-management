@@ -20,21 +20,21 @@ import KelolaAdminRT from "./layout/admin/Pages/admin/KelolaAdminRT";
 import { useSelector } from "react-redux";
 
 const App = () => {
-  const user = useSelector((state) => state.value);
+  const user = useSelector((state) => state.userReducer.value);
 
   return (
     <>
       <Routes>
         {/* public */}
-
         <Route
           path="/"
           element={
             <Navigate
               to={
-                user.isLoggin
-                  ? user.role == "admin" ||
-                    ("super_admin" && "Dashboard/Landingpage")
+                user?.isLoggin
+                  ? user?.role === "penduduk"
+                    ? "HomePage"
+                    : "Dashboard/Landingpage"
                   : "Landingpage"
               }
             />
