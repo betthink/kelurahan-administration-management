@@ -14,10 +14,13 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 // components
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
+import { useSelector } from "react-redux";
 function TambahPenduduk() {
   // variables
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const user = useSelector((state) => state.userReducer.value);
+
   //   atribute form
   const [dataEntry, setdataEntry] = useState({
     nama: "",
@@ -26,6 +29,8 @@ function TambahPenduduk() {
     tanggal_lahir: "",
     tempat_lahir: "",
     alamat: "",
+    pekerjaan: "",
+    agama: "",
     darah: "",
     kepala_keluarga: "",
     status_tinggal: "",
@@ -40,6 +45,8 @@ function TambahPenduduk() {
       nik,
       noKK,
       alamat,
+      pekerjaan,
+      agama,
       nomorTelp,
       tanggalLahir,
       darah,
@@ -61,6 +68,8 @@ function TambahPenduduk() {
       tanggal_lahir: date,
       tempat_lahir: tempatLahir,
       alamat,
+      pekerjaan,
+      agama,
       darah,
       kepala_keluarga: kepalaKeluarga,
       status_tinggal: statusPenduduk,
@@ -69,13 +78,21 @@ function TambahPenduduk() {
       jenis_kelamin: jenisKelamin,
     });
   };
+  const agamaOption = [
+    "Islam",
+    "Kristen",
+    "Katholik",
+    "Hindu",
+    "Budha",
+    "Lain-Lain",
+  ];
   const handleAddPenduduk = async () => {
     try {
       const response = await axiosWithMultipart(
         "/administrasikelurahan/src/post/addDataPenduduk.php",
         {
           method: "post",
-          data: dataEntry,
+          data: { ...dataEntry, rt: user.rt, rw: user.rw },
         }
       );
       const { value, message } = response.data;
@@ -102,7 +119,9 @@ function TambahPenduduk() {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log(user);
+  }, []);
   return (
     <div className="mx-20">
       {/* path */}
@@ -190,6 +209,24 @@ function TambahPenduduk() {
                 placeholder="Masukan Alamat Penduduk"
                 value={dataEntry.alamat}
               />
+            </Form.Item>
+            <Form.Item name="pekerjaan" label="Pekerjaan" required>
+              <Input
+                placeholder="Masukan Pekerjaan Penduduk"
+                value={dataEntry.pekerjaan}
+              />
+            </Form.Item>
+            <Form.Item name="agama" label="Agama" required>
+              <Select
+                placeholder="Pilih Agama Penduduk"
+                value={dataEntry.agama}
+              >
+                {agamaOption.map((item, i) => (
+                  <Select.Option key={i} value={item}>
+                    {item}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
             <Form.Item
               name="nomorTelp"

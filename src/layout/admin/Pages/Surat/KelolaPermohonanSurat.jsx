@@ -67,8 +67,8 @@ function KelolaPermohonanSurat() {
       key: "rw",
     },
     {
-      title: "Status Permohonan",
-      width: 50,
+      title: "Status",
+      width: 100,
       dataIndex: "status_permohonan",
       key: "status_permohonan",
       render: (status) => (

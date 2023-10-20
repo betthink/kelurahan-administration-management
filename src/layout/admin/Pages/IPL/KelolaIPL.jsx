@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 import { Content, Header } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import ButtonGroup from "antd/es/button/button-group";
+import { useSelector } from "react-redux";
 
 function KelolaIPL() {
   const [data, setdata] = useState([]);
   const [isLoading, setisLoading] = useState(true);
+  const user = useSelector((state) => state.userReducer.value);
   const columns = [
     {
       title: "Id",
@@ -37,6 +39,7 @@ function KelolaIPL() {
       key: "Status",
       width: 50,
     },
+
     {
       title: "Status Pembayaran",
       dataIndex: "status_ipl",
@@ -55,25 +58,28 @@ function KelolaIPL() {
         return parseInt(record.status_ipl) === value;
       },
     },
-
-    {
-      title: "Action",
-      key: "action",
-      fixed: "right",
-      width: 70,
-      render: () => (
-        <ButtonGroup>
-          <Button className="bg-manggo text-white">
-            <Link to={"/VerifikasiPembayaran"}>detail</Link>
-          </Button>
-          <Button className="bg-darksky text-white " type="default">
-            <Link to={"/VerifikasiPembayaran"} className="">
-              verifikasi
-            </Link>
-          </Button>
-        </ButtonGroup>
-      ),
-    },
+    ...(user.role === "admin"
+      ? [
+          {
+            title: "Action",
+            key: "action",
+            fixed: "right",
+            width: 70,
+            render: () => (
+              <ButtonGroup>
+                <Button className="bg-manggo text-white">
+                  <Link to={"/VerifikasiPembayaran"}>detail</Link>
+                </Button>
+                <Button className="bg-darksky text-white " type="default">
+                  <Link to={"/VerifikasiPembayaran"} className="">
+                    verifikasi
+                  </Link>
+                </Button>
+              </ButtonGroup>
+            ),
+          },
+        ]
+      : []),
   ];
 
   const handleGetDataIPL = async () => {

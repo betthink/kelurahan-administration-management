@@ -18,6 +18,7 @@ import Dashboard from "./layout/admin/Pages/Dashboard";
 import LoginAdmin from "./layout/admin/Pages/Login/LoginAdmin";
 import KelolaAdminRT from "./layout/admin/Pages/admin/KelolaAdminRT";
 import { useSelector } from "react-redux";
+import TambahAdmin from "./layout/admin/Pages/admin/TambahAdmin";
 
 const App = () => {
   const user = useSelector((state) => state.userReducer.value);
@@ -60,6 +61,7 @@ const App = () => {
             element={<InformasiPosyandPage />}
           />
           <Route path="Kelola-Admin" element={<KelolaAdminRT />} />
+          <Route path="Kelola-Admin/Tambah-Admin" element={<TambahAdmin />} />
           <Route path="Update-Penduduk" element={<UpdatePendudukPage />} />
           <Route path="Tambah-Penduduk" element={<TambahPenduduk />} />
           <Route path="Tambah-VaksinPage" element={<TambahVaksinPage />} />

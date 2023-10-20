@@ -1,29 +1,34 @@
-import { Breadcrumb, Form, Space } from "antd";
-import React, { useState } from "react";
+import { Breadcrumb, Button, Form, Input, Space, Select, Modal } from "antd";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 export default function TambahAdmin() {
-  const [dataAdmin, setdataAdmin] = useState({
-    username: "",
-    password: "",
-    nik: "",
-    rt: "",
-    rw: "",
-  });
-  const handleOnchange = (event) => {
-    const { name, value } = event.target;
-    setdataAdmin((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    console.log(dataAdmin);
+  const [dataNewAdmin, setdataNewAdmin] = useState({});
+  const handleAddAdmin = (event) => {
+    setdataNewAdmin(event);
   };
+  // modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    console.log(dataNewAdmin);
+  }, [dataNewAdmin]);
   return (
     <div className="mx-20">
       {/* path */}
       <Breadcrumb
         items={[
           { title: "Admin" },
-          { title: <Link to={"/KelolaPenduduk"}>Kelola Penduduk</Link> },
-          { title: <Link to={"/KelolaPenduduk"}>Tambah Penduduk</Link> },
+          { title: <Link to={"/Dashboard/Kelola-Admin"}>Kelola Admin</Link> },
+          { title: <Link to={"/Dashboard/Kelola-Admin/"}>Tambah Admin</Link> },
         ]}
         style={{
           margin: "16px 0",
@@ -32,7 +37,7 @@ export default function TambahAdmin() {
       <div className="h-full self-center flex  p-6 bg-white">
         {/* form */}
         <Form
-          //   onFinish={onFinish}
+          onFinish={handleAddAdmin}
           layout="vertical"
           size={"medium"}
           className="w-full justify-center flex  flex-col "
@@ -51,8 +56,8 @@ export default function TambahAdmin() {
               label="username"
             >
               <Input
-                placeholder="Masukan Nama Penduduk"
-                value={dataEntry.nama}
+                placeholder="Masukan Nama Admin"
+                value={dataNewAdmin.nama}
               />
             </Form.Item>
             <Form.Item
@@ -65,8 +70,8 @@ export default function TambahAdmin() {
               label="password"
             >
               <Input
-                placeholder="Masukan Nama Penduduk"
-                value={dataEntry.nama}
+                placeholder="Masukan Nama Admin"
+                value={dataNewAdmin.nama}
               />
             </Form.Item>
             <Form.Item
@@ -87,7 +92,7 @@ export default function TambahAdmin() {
                 },
               ]}
             >
-              <Input placeholder="Masukan NIK Penduduk" value={dataEntry.nik} />
+              <Input placeholder="Masukan NIK Admin" value={dataNewAdmin.nik} />
             </Form.Item>
             <Form.Item
               name="RT"
@@ -95,27 +100,44 @@ export default function TambahAdmin() {
               rules={[
                 {
                   required: true,
-                  message: "Nomor KK tidak boleh kosong",
+                  message: "Nomor RT tidak boleh kosong",
                 },
                 {
-                  min: 16,
-                  message: "Nomor KK minimal setidaknya 16 karakter",
+                  min: 3,
+                  message: "RT minimal setidaknya 3 karakter",
                 },
                 {
                   pattern: /^[0-9]+$/,
-                  message: "Nomor KK hanya boleh berisi angka",
+                  message: "RT hanya boleh berisi angka",
                 },
               ]}
             >
               <Input
-                placeholder="Masukan Nomor KK Penduduk"
-                value={dataEntry.no_kk}
+                placeholder="Masukan Nomor KK Admin"
+                value={dataNewAdmin.rt}
               />
             </Form.Item>
-            <Form.Item name="RW" label="RW" required>
+            <Form.Item
+              name="RW"
+              label="RW"
+              rules={[
+                {
+                  required: true,
+                  message: "Nomor RW tidak boleh kosong",
+                },
+                {
+                  min: 3,
+                  message: "RW minimal setidaknya 3 karakter",
+                },
+                {
+                  pattern: /^[0-9]+$/,
+                  message: "RW hanya boleh berisi angka",
+                },
+              ]}
+            >
               <Input
-                placeholder="Masukan RW Penduduk"
-                value={dataEntry.alamat}
+                placeholder="Masukan RW Admin"
+                value={dataNewAdmin.alamat}
               />
             </Form.Item>
             <Form.Item
@@ -130,30 +152,15 @@ export default function TambahAdmin() {
               ]}
             >
               <Input
-                placeholder="Masukan Npmor Telp Penduduk"
-                value={dataEntry.nomor_telp}
-              />
-            </Form.Item>
-
-            <Form.Item name="tanggalLahir" label="Tanggal Lahir" required>
-              <DatePicker
-                placeholder="Pilih Kelahiran Tanggal"
-                style={{ width: "100%" }}
-                value={dataEntry.tanggal_lahir}
-              />
-            </Form.Item>
-
-            <Form.Item name="tempatLahir" label="Tempat Lahir" required>
-              <Input
-                placeholder="Masukan Tempat Lahir Sesuai KTP"
-                value={dataEntry.tempat_lahir}
+                placeholder="Masukan Nomor Telp Admin"
+                value={dataNewAdmin.nomor_telp}
               />
             </Form.Item>
 
             <Form.Item name="jenisKelamin" label="Jenis Kelamin" required>
               <Select
                 placeholder="Pilih Jenis Kelamin"
-                value={dataEntry.jenis_kelamin}
+                value={dataNewAdmin.jenis_kelamin}
               >
                 <Select.Option value="Laki-Laki">Laki-Laki</Select.Option>
                 <Select.Option value="Perempuan">Perempuan</Select.Option>
@@ -167,26 +174,21 @@ export default function TambahAdmin() {
           </Form.Item>
         </Form>
         <>
-          {/* <Modal
-            title="Apakah Data Sudah Benar?"
+          <Modal
+            title="Basic Modal"
             open={isModalOpen}
-            bodyStyle={{}}
             onOk={handleOk}
             onCancel={handleCancel}
+            footer={(_, { OkBtn, CancelBtn }) => (
+              <>
+                <CancelBtn />
+                <OkBtn />
+              </>
+            )}
           >
-            <p>nama: {dataEntry.nama}</p>
-            <p>nik: {dataEntry.nik}</p>
-            <p>noKK: {dataEntry.no_kk}</p>
-            <p>alamat: {dataEntry.alamat}</p>
-            <p>nomorTelp: {dataEntry.nomor_telp}</p>
-            <p>tempat_lahir: {dataEntry.tempat_lahir}</p>
-            <p>kepala Keluarga: {dataEntry.kepala_keluarga}</p>
-            <p>darah: {dataEntry.darah}</p>
-            <p>tangga lLahir: {dataEntry.tanggal_lahir}</p>
-            <p>jenis Kelamin: {dataEntry.jenis_kelamin}</p>
-            <p>status: {dataEntry.status}</p>
-            <p>status Penduduk: {dataEntry.statusPenduduk}</p>
-          </Modal> */}
+            <p> {dataNewAdmin.username}</p>
+            <p>{dataNewAdmin.password}</p>
+          </Modal>
         </>
       </div>
     </div>

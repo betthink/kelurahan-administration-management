@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 // components
 function KelolaPenduduk() {
   // variables --
+  const user = useSelector((state) => state.userReducer.value);
   const { Search } = Input;
   const columns = [
     {
@@ -111,32 +112,35 @@ function KelolaPenduduk() {
       width: 150,
     },
 
-    {
-      title: "Action",
-      key: "operation",
-      fixed: "right",
-      width: 200,
-      render: (data) => (
-        <ButtonGroup>
-          <Button className="bg-manggo">
-            <Link state={{ data }} to={"/Dashboard/Update-Penduduk"}>
-              Edit
-            </Link>
-          </Button>
-          <Button
-            onClick={() => handleDeletePenduduk(data.id_penduduk)}
-            className="bg-darksky text-white "
-            type="default"
-          >
-            Hapus
-          </Button>
-        </ButtonGroup>
-      ),
-    },
+    ...(user.role === "admin"
+      ? [
+          {
+            title: "Action",
+            key: "operation",
+            fixed: "right",
+            width: 200,
+            render: (data) => (
+              <ButtonGroup>
+                <Button className="bg-manggo">
+                  <Link state={{ data }} to={"/Dashboard/Update-Penduduk"}>
+                    Edit
+                  </Link>
+                </Button>
+                <Button
+                  onClick={() => handleDeletePenduduk(data.id_penduduk)}
+                  className="bg-darksky text-white "
+                  type="default"
+                >
+                  Hapus
+                </Button>
+              </ButtonGroup>
+            ),
+          },
+        ]
+      : []),
   ];
   const [dataPenduduk, setdataPenduduk] = useState([]);
   // filter data penduduk
-  const user = useSelector((state) => state.userReducer.value);
   // console.log(user);
   const [dataSearch, setdataSearch] = useState(null);
   const [debouncedValue] = useDebounce(dataSearch, 500);
@@ -217,17 +221,17 @@ function KelolaPenduduk() {
             // enterButton
           />
         </div>
-
-        <Button
-          // onClick={showModal}
-          className="flex flex-row   cursor-pointer bg-blusky text-white items-center "
-          type="default"
-        >
-          <Link className="pr-1" to={"/Dashboard/Tambah-Penduduk"}>
-            Tambah Penduduk
-          </Link>
-          <PlusOutlined />
-        </Button>
+        {user.role === "admin" ? (
+          <Button
+            className="flex flex-row   cursor-pointer bg-blusky text-white items-center "
+            type="default"
+          >
+            <Link className="pr-1" to={"/Dashboard/Tambah-Penduduk"}>
+              Tambah Penduduk
+            </Link>
+            <PlusOutlined />
+          </Button>
+        ) : null}
       </Header>
       <Content
         style={{ position: "sticky", top: 400 }}
@@ -235,7 +239,7 @@ function KelolaPenduduk() {
       >
         {/* tabel */}
         <Table
-          key={dataPenduduk.id_penduduk}
+          // key={dataPenduduk.id_penduduk}
           columns={columns}
           dataSource={filterItem}
           pagination={{ pageSize: 5 }}
