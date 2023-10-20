@@ -8,26 +8,13 @@ import Docxtemplater from "docxtemplater";
 import PizZip from "pizzip";
 import { saveAs } from "file-saver";
 import templatePath from "../../../../assets/docx/templete.docx";
+import { useSelector } from "react-redux";
 
 // components
 function KelolaPermohonanSurat() {
-  const [valueSurat, setvalueSurat] = useState({});
-  let value = {
-    namaLengkap: "Robetson",
-    tempatLahir: "kediri",
-    tanggalLahir: "18 - mei - 1999",
-    jenisKelamin: "Laki-Laki",
-    statusPerkawinan: "Lajang",
-    NIK: "6214141414535",
-    KK: "547548",
-    agama: "Katholik",
-    pekerjaan: "software developer",
-    alamatTinggal: "JL. Temanggung Tilung ",
-    jenisSurat: "surat rekomendasi kerja",
-    RT: "001",
-    RW: "002",
-    currentTime: "18 - mei - 2023",
-  };
+  const [dataPemohonSurat, setdataPemohonSurat] = useState([]);
+  const user = useSelector((state) => state.userReducer.value);
+  // column ------------------------------
   const columnPermohonanSurat = [
     {
       title: "Id",
@@ -38,8 +25,8 @@ function KelolaPermohonanSurat() {
     {
       title: "Nama Pemohon",
       width: 100,
-      dataIndex: "nama_pemohon",
-      key: "nama_pemohon",
+      dataIndex: "nama",
+      key: "nama",
     },
     {
       title: "NIK",
@@ -60,48 +47,75 @@ function KelolaPermohonanSurat() {
       dataIndex: "tanggal_permohonan",
       key: "tanggal_permohonan",
     },
+
+    {
+      title: "Nomor Telp",
+      width: 50,
+      dataIndex: "nomor_telp",
+      key: "nomor_telp",
+    },
+    {
+      title: "RT",
+      width: 50,
+      dataIndex: "rt",
+      key: "rt",
+    },
+    {
+      title: "RW",
+      width: 50,
+      dataIndex: "rw",
+      key: "rw",
+    },
     {
       title: "Status Permohonan",
       width: 50,
       dataIndex: "status_permohonan",
       key: "status_permohonan",
+      render: (status) => (
+        <p>
+          {parseInt(status) === 1
+            ? "Sudah di approve"
+            : "Belum di approve"}
+        </p>
+      ),
     },
     {
       title: "Action",
       key: "action",
       fixed: "right",
       width: 50,
-      render: () => (
+      render: (data) => (
         <div className="flex text-white gap-3">
           <Button
-            onClick={() => generateDocument(value, templatePath)}
+            onClick={() => generateDocument(data)}
             className="bg-darksky text-white "
             type="default"
           >
             Unduh
-            {/* <Link className="">Unduh</Link> */}
           </Button>
         </div>
       ),
     },
   ];
-  // variables --
-  const [dataPemohonSurat, setdataPemohonSurat] = useState([]);
-  // functions --
-  const handleGetDataPermohonanSurat = async () => {
-    try {
-      const response = await axiosInstance.get(
-        `/administrasikelurahan/src/api/fetchDataPermohonanSurat.php`
-      );
-      setdataPemohonSurat(
-        response.data.map((item, index) => {
-          return { ...item, key: index.toString() };
-        })
-      );
-    } catch (error) {}
+  let value = {
+    namaLengkap: "Robetson",
+    tempatLahir: "kediri",
+    tanggalLahir: "18 - mei - 1999",
+    jenisKelamin: "Laki-Laki",
+    statusPerkawinan: "Lajang",
+    NIK: "6214141414535",
+    KK: "547548",
+    agama: "Katholik",
+    pekerjaan: "software developer",
+    alamatTinggal: "JL. Temanggung Tilung ",
+    jenisSurat: "surat rekomendasi kerja",
+    RT: "001",
+    RW: "002",
+    currentTime: "18 - mei - 2023",
   };
+  // functions
 
-  async function generateDocument(value, templatePath) {
+  async function generateDocument(dataDocx) {
     try {
       let response = await fetch(templatePath);
       let data = await response.arrayBuffer();
@@ -113,7 +127,7 @@ function KelolaPermohonanSurat() {
           allowUnopenedTag: true,
         },
       });
-      templateDoc.render(value);
+      templateDoc.render(dataDocx);
       let generatedDoc = templateDoc.getZip().generate({
         type: "blob",
         mimeType:
@@ -129,6 +143,20 @@ function KelolaPermohonanSurat() {
     }
   }
 
+  const handleGetDataPermohonanSurat = async () => {
+    const url =
+      user.role === "admin"
+        ? `/administrasikelurahan/src/api/fetchDataPermohonanSuratJoinPendudukByRT.php?rt=${user.rt}`
+        : `/administrasikelurahan/src/api/fetchDataPermohonanSuratJoinPenduduk.php`;
+    try {
+      const response = await axiosInstance.get(url);
+      setdataPemohonSurat(
+        response.data.map((item, index) => {
+          return { ...item, key: index.toString() };
+        })
+      );
+    } catch (error) {}
+  };
   useEffect(() => {
     handleGetDataPermohonanSurat();
   }, []);
@@ -152,9 +180,9 @@ function KelolaPermohonanSurat() {
           columns={columnPermohonanSurat}
           pagination={{ pageSize: 5 }}
           // loading={setTimeout}
-          // scroll={{
-          //   x: 1000,
-          // }}
+          scroll={{
+            x: 1000,
+          }}
           // sticky
         />
       </Content>
