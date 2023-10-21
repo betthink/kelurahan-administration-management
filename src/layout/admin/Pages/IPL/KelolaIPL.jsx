@@ -5,25 +5,27 @@ import { Content, Header } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import ButtonGroup from "antd/es/button/button-group";
 import { useSelector } from "react-redux";
+import { useDebounce } from "use-debounce";
 
 function KelolaIPL() {
   const [data, setdata] = useState([]);
   const [isLoading, setisLoading] = useState(true);
   const user = useSelector((state) => state.userReducer.value);
+
   const columns = [
     {
       title: "Id",
       render: (text) => (
         <div className=" p-2 justify-self-center  self-center">{text}</div>
       ),
-      dataIndex: "id_ipl",
-      key: "id_ipl",
+      dataIndex: "id",
+      key: "id",
       fixed: "left",
-      width: 20,
+      width: 40,
     },
     {
       title: "Nama Kepala Keluarga",
-      dataIndex: "nama_kepala_keluarga",
+      dataIndex: "nama",
       key: "nama",
       width: 100,
     },
@@ -44,7 +46,7 @@ function KelolaIPL() {
       title: "Status Pembayaran",
       dataIndex: "status_ipl",
       key: "StatusPembayaran",
-      width: 100,
+      width: 80,
       render: (status) => {
         return <p>{parseInt(status) === 1 ? "Lunas" : "Terhutang"}</p>;
       },
@@ -65,13 +67,19 @@ function KelolaIPL() {
             key: "action",
             fixed: "right",
             width: 70,
-            render: () => (
+            render: (data) => (
               <ButtonGroup>
                 <Button className="bg-manggo text-white">
-                  <Link to={"/VerifikasiPembayaran"}>detail</Link>
+                  <Link state={{ data }} to={"DetailRiwayatPembayaran"}>
+                    detail
+                  </Link>
                 </Button>
                 <Button className="bg-darksky text-white " type="default">
-                  <Link to={"/VerifikasiPembayaran"} className="">
+                  <Link
+                    state={{ data }}
+                    to={"Verifikasi-Pembayaran"}
+                    className=""
+                  >
                     verifikasi
                   </Link>
                 </Button>
@@ -81,12 +89,23 @@ function KelolaIPL() {
         ]
       : []),
   ];
+  const [dataSearch, setdataSearch] = useState(null);
+  const [debouncedValue] = useDebounce(dataSearch, 500);
+  // functions --
 
+  const handleSearch = (event) => {
+    setdataSearch(event);
+  };
+  const handleChange = (event) => {
+    setdataSearch(event.target.value);
+  };
   const handleGetDataIPL = async () => {
+    const url =
+      user.role === "admin"
+        ? `/administrasikelurahan/src/api/fetchDataPembayarIPLJoinDataPendudukByRT.php?rt=${user.rt}`
+        : `/administrasikelurahan/src/api/fetchDataPembayarIPLJoinDataPenduduk.php`;
     try {
-      const res = await axiosInstance.get(
-        "/administrasikelurahan/src/api/fetchDataVerifikasiPembayaran.php"
-      );
+      const res = await axiosInstance.get(url);
       setdata(
         res.data.map((item, index) => {
           return { ...item, key: index.toString() };

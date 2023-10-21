@@ -68,7 +68,7 @@ function KelolaPermohonanSurat() {
     },
     {
       title: "Status",
-      width: 100,
+      width: 120,
       dataIndex: "status_permohonan",
       key: "status_permohonan",
       render: (status) => (
@@ -83,7 +83,7 @@ function KelolaPermohonanSurat() {
       title: "Action",
       key: "action",
       fixed: "right",
-      width: 50,
+      width: 100,
       render: (data) => (
         <div className="flex text-white gap-3">
           <Button

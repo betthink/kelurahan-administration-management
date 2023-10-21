@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 function KelolaPenduduk() {
   // variables --
   const user = useSelector((state) => state.userReducer.value);
+  const [isLoading, setIsloading] = useState(true);
   const { Search } = Input;
   const columns = [
     {
@@ -141,7 +142,6 @@ function KelolaPenduduk() {
   ];
   const [dataPenduduk, setdataPenduduk] = useState([]);
   // filter data penduduk
-  // console.log(user);
   const [dataSearch, setdataSearch] = useState(null);
   const [debouncedValue] = useDebounce(dataSearch, 500);
   const filterItem =
@@ -154,22 +154,6 @@ function KelolaPenduduk() {
         })
       : dataPenduduk;
   // functions --
-  const handleGetDataPenduduk = async () => {
-    const url =
-      user.role === "admin"
-        ? `/administrasikelurahan/src/api/fetchDataPendudukByRT.php?rt=${user.rt}&rw=${user.rw}`
-        : `/administrasikelurahan/src/api/fetchDataPenduduk.php`;
-    try {
-      const response = await axiosInstance.get(url);
-      setdataPenduduk(
-        response.data.map((item, index) => {
-          return { ...item, key: index.toString() };
-        })
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const handleSearch = (event) => {
     setdataSearch(event);
   };
@@ -198,7 +182,23 @@ function KelolaPenduduk() {
       mes.error(message);
     }
   };
-
+  const handleGetDataPenduduk = async () => {
+    const url =
+      user.role === "admin"
+        ? `/administrasikelurahan/src/api/fetchDataPendudukByRT.php?rt=${user.rt}&rw=${user.rw}`
+        : `/administrasikelurahan/src/api/fetchDataPenduduk.php`;
+    try {
+      const response = await axiosInstance.get(url);
+      setdataPenduduk(
+        response.data.map((item, index) => {
+          return { ...item, key: index.toString() };
+        })
+      );
+      setIsloading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     handleGetDataPenduduk();
   }, []);
@@ -243,7 +243,7 @@ function KelolaPenduduk() {
           columns={columns}
           dataSource={filterItem}
           pagination={{ pageSize: 5 }}
-          // loading={setTimeout}
+          loading={isLoading}
           scroll={{
             x: 1500,
           }}
