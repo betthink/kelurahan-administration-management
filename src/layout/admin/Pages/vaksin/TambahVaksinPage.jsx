@@ -32,7 +32,7 @@ const TambahVaksinPage = () => {
       const { value, message } = response.data;
       if (value === 1) {
         alert(message);
-        navigate("/kelolaPosyandu");
+        navigate("/Dashboard/Informasi-vaksin");
       } else {
         alert(message);
       }

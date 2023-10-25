@@ -23,7 +23,15 @@ const UpdatePendudukPage = () => {
   const dataPenduduk = location.state.data;
   const [dataEntry, setdataEntry] = useState(dataPenduduk);
   const [isLoading, setisLoading] = useState(true);
-  const dateFormat = "YYYY-MM-DD";
+  const [reformatData, setreformatData] = useState({});
+  const agamaOption = [
+    "Islam",
+    "Kristen",
+    "Katholik",
+    "Hindu",
+    "Budha",
+    "Lain-Lain",
+  ];
   // functions
   const onFinish = (e) => {
     // const {
@@ -71,10 +79,13 @@ const UpdatePendudukPage = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
+  const handleReformatData = () => {
+    dataPenduduk.tanggal_lahir = new Date(dataPenduduk.tanggal_lahir);
+    setreformatData(dataPenduduk);
+    console.log(reformatData);
+  };
   useEffect(() => {
-    // handleGetDataById(id_penduduk);
-    console.log(dataPenduduk);
+    handleReformatData();
   }, [isLoading]);
   return (
     <div className="mx-20">
@@ -104,43 +115,107 @@ const UpdatePendudukPage = () => {
             direction="vertical"
             className="grid md:grid-cols-2 grid-cols-1"
           >
-            <Form.Item name="nama" label="Nama">
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+              name="nama"
+              label="Nama"
+            >
               <Input placeholder="Masukan Nama Penduduk" />
             </Form.Item>
-            <Form.Item name="nik" label="NIK">
+            <Form.Item
+              name="nik"
+              label="NIK"
+              rules={[
+                {
+                  required: true,
+                  message: "NIK tidak boleh kosong",
+                },
+                {
+                  min: 16,
+                  message: "NIK minimal setidaknya 16 karakter",
+                },
+                {
+                  pattern: /^[0-9]+$/,
+                  message: "NIK hanya boleh berisi angka",
+                },
+              ]}
+            >
               <Input placeholder="Masukan NIK Penduduk" />
             </Form.Item>
-            <Form.Item name="no_kk" label="No. KK">
+            <Form.Item
+              name="no_kk"
+              label="No. KK"
+              rules={[
+                {
+                  required: true,
+                  message: "Nomor KK tidak boleh kosong",
+                },
+                {
+                  min: 16,
+                  message: "Nomor KK minimal setidaknya 16 karakter",
+                },
+                {
+                  pattern: /^[0-9]+$/,
+                  message: "Nomor KK hanya boleh berisi angka",
+                },
+              ]}
+            >
               <Input placeholder="Masukan Nomor KK Penduduk" />
             </Form.Item>
-            <Form.Item name="alamat" label="Alamat">
+            <Form.Item name="alamat" label="Alamat" required>
               <Input placeholder="Masukan Alamat Penduduk" />
             </Form.Item>
-            <Form.Item name="nomor_telp" label="Nomor Telp">
+            <Form.Item name="pekerjaan" label="Pekerjaan" required>
+              <Input placeholder="Masukan Pekerjaan Penduduk" />
+            </Form.Item>
+            <Form.Item name="agama" label="Agama" required>
+              <Select placeholder="Pilih Agama Penduduk">
+                {agamaOption.map((item, i) => (
+                  <Select.Option key={i} value={item}>
+                    {item}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="nomor_telp"
+              label="Nomor Telp"
+              required
+              rules={[
+                {
+                  pattern: /^[0-9]+$/,
+                  message: "Nomor Telepon hanya boleh berisi angka",
+                },
+              ]}
+            >
               <Input placeholder="Masukan Npmor Telp Penduduk" />
             </Form.Item>
 
-            <Form.Item name="tanggal_lahirr" label="Tanggal Lahir">
+            <Form.Item 
+            // name="tanggal_lahir"
+             label="Tanggal Lahir" required>
               <DatePicker
-                // format="YYYY-MM-DD HH:mm:ss"
-                // defaultValue='2015-01-01'
                 placeholder="Pilih Kelahiran Tanggal"
                 style={{ width: "100%" }}
               />
             </Form.Item>
 
-            <Form.Item name="tempat_lahir" label="Tempat Lahir">
+            <Form.Item name="tempat_lahir" label="Tempat Lahir" required>
               <Input placeholder="Masukan Tempat Lahir Sesuai KTP" />
             </Form.Item>
 
-            <Form.Item name="jenis_kelamin" label="Jenis Kelamin">
+            <Form.Item name="jenis_kelamin" label="Jenis Kelamin" required>
               <Select placeholder="Pilih Jenis Kelamin">
                 <Select.Option value="Laki-Laki">Laki-Laki</Select.Option>
                 <Select.Option value="Perempuan">Perempuan</Select.Option>
               </Select>
             </Form.Item>
 
-            <Form.Item name="darah" label="Golongan darah">
+            <Form.Item name="darah" label="Golongan darah" required>
               <Select placeholder="Pilih Golongan Darah">
                 {["A", "B", "AB", "O"].map((item, i) => (
                   <Select.Option key={i} value={item}>
@@ -149,19 +224,19 @@ const UpdatePendudukPage = () => {
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item name="status_diri" label="Status">
+            <Form.Item name="status_diri" label="Status" required>
               <Select placeholder="Pilih Status Diri Penduduk">
                 <Select.Option value="Menikah">Menikah</Select.Option>
                 <Select.Option value="Lajang">Lajang</Select.Option>
               </Select>
             </Form.Item>
-            <Form.Item name="status_tinggal" label="Status Penduduk">
+            <Form.Item name="status_tinggal" label="Status Penduduk" required>
               <Select placeholder="Pilih Status Tinggal Penduduk">
                 <Select.Option value="Tetap">Tetap</Select.Option>
                 <Select.Option value="Sementara">Sementara</Select.Option>
               </Select>
             </Form.Item>
-            <Form.Item name="kepala_keluarga" label="kepala Keluarga?">
+            <Form.Item name="kepala_keluarga" label="kepala Keluarga?" required>
               <Select placeholder="Pilih Status kepala keluarga">
                 <Select.Option value={1}>Benar</Select.Option>
                 <Select.Option value={0}>Tidak</Select.Option>
@@ -169,13 +244,8 @@ const UpdatePendudukPage = () => {
             </Form.Item>
           </Space>
           <Form.Item className="bg-purp">
-            <Button
-              onClick={showModal}
-              block
-              type="primary"
-              htmlType="submit"
-            >
-              Simpan
+            <Button block type="primary" htmlType="submit" onClick={showModal}>
+              Tambahkan
             </Button>
           </Form.Item>
         </Form>

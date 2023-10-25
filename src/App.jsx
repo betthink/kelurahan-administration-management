@@ -20,10 +20,11 @@ import KelolaAdminRT from "./layout/admin/Pages/admin/KelolaAdminRT";
 import { useSelector } from "react-redux";
 import TambahAdmin from "./layout/admin/Pages/admin/TambahAdmin";
 import DetailRiwayatPembayaran from "./layout/admin/Pages/IPL/DetailRiwayatPembayaran";
+import UpdateAkunAdmin from "./layout/admin/Pages/admin/UpdateAkunAdmin";
+import KelolaImunisasi from "./layout/admin/Pages/posyandu/KelolaImunisasi";
 
 const App = () => {
   const user = useSelector((state) => state.userReducer.value);
-
   return (
     <>
       <Routes>
@@ -67,9 +68,14 @@ const App = () => {
           />
           <Route path="Kelola-Admin" element={<KelolaAdminRT />} />
           <Route path="Kelola-Admin/Tambah-Admin" element={<TambahAdmin />} />
+          <Route
+            path="Kelola-Admin/UpdateAkunAdmin"
+            element={<UpdateAkunAdmin />}
+          />
           <Route path="Update-Penduduk" element={<UpdatePendudukPage />} />
           <Route path="Tambah-Penduduk" element={<TambahPenduduk />} />
           <Route path="Tambah-VaksinPage" element={<TambahVaksinPage />} />
+          <Route path="Kelola-Imunisasi" element={<KelolaImunisasi />} />
           <Route
             path="Kelola-IPL/Verifikasi-Pembayaran"
             element={<VerifikasiPembayaran />}

@@ -67,7 +67,7 @@ function TambahPenduduk() {
       no_kk: noKK,
       tanggal_lahir: date,
       tempat_lahir: tempatLahir,
-      alamat,
+      alamat, 
       pekerjaan,
       agama,
       darah,
@@ -120,7 +120,6 @@ function TambahPenduduk() {
     setIsModalOpen(false);
   };
   useEffect(() => {
-    console.log(user);
   }, []);
   return (
     <div className="mx-20">

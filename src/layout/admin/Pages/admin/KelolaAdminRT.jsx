@@ -1,11 +1,12 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Breadcrumb, Button, Space, Table } from "antd";
+import { Breadcrumb, Button, Space, Table, message as mes } from "antd";
 import Search from "antd/es/input/Search";
 import { Content, Header } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import ButtonGroup from "antd/es/button/button-group";
+import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
 
 export default function KelolaAdminRT() {
   const [dataAccountAdmin, setdataAccountAdmin] = useState([]);
@@ -53,12 +54,22 @@ export default function KelolaAdminRT() {
       fixed: "right",
       render: (data) => (
         <ButtonGroup className="flex gap-3">
-          <Button className="bg-manggo   text-white"> Edit </Button>
-          <Button className="bg-purp  text-white"> Hapus </Button>
+          <Button className="bg-manggo text-white">
+            <Link to="/Dashboard/Kelola-Admin/UpdateAkunAdmin" state={{ data }}>
+              Edit
+            </Link>
+          </Button>
+          <Button
+            onClick={() => handleDeleteAdminById(data.id_admin)}
+            className="bg-purp  text-white"
+          >
+            Hapus
+          </Button>
         </ButtonGroup>
       ),
     },
   ];
+
   const handleGetDataAdmin = async () => {
     const url = `administrasikelurahan/src/api/fetchAccountAdminRT.php`;
     try {
@@ -70,6 +81,25 @@ export default function KelolaAdminRT() {
             return { ...item, key: index.toString() };
           })
         );
+      }
+    } catch (error) {}
+  };
+  const handleDeleteAdminById = async (id) => {
+    try {
+      const res = await axiosWithMultipart({
+        url: `/administrasikelurahan/src/delete/delDataAkunAdmin.php`,
+        method: "POST",
+        data: {
+          id_admin: id,
+        },
+      });
+      const { value, message } = res.data;
+      console.log(res);
+      if (value === 1) {
+        mes.success(message);
+        window.location.reload();
+      } else {
+        mes.error(message);
       }
     } catch (error) {}
   };
@@ -118,7 +148,6 @@ export default function KelolaAdminRT() {
           scroll={{
             x: 1500,
           }}
-          // summary={() => <Table.Summary fixed={"top"} />}
           sticky
         />
         <Space>

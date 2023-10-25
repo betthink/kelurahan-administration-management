@@ -135,7 +135,7 @@ function KelolaPermohonanSurat() {
         compression: "DEFLATE",
       });
 
-      saveAs(generatedDoc, `Surat Pengantar ${value.namaLengkap}.docx`);
+      saveAs(generatedDoc, `Surat Pengantar - ${dataDocx.jenis_surat}-${dataDocx.nama}.docx`);
       message.success("Berhasil mengunduh surat");
     } catch (error) {
       message.error("Error", JSON.stringify(error));

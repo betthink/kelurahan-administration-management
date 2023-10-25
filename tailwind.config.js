@@ -12,6 +12,7 @@ module.exports = {
         purp: "#475BE8",
         galaxy: "#001529",
         theme: "#E9E9E9",
+        whiteSmoke: "#F5F5F5",
         brown: "#808191",
         manggo: "#F29A2E",
         darksky: "#263287",

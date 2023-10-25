@@ -68,7 +68,7 @@ function LandingPage() {
   };
 
   return (
-    <Layout className="w-full bg-[#F5F5F5] ">
+    <Layout className="w-full bg-whiteSmoke ">
       <Content className="mx-auto  w-full md:h-screen flex flex-col-reverse md:flex-row md:justify-between    text-black px-10 md:px-6">
         <div className=" w-full md:w-1/2 py-6 flex justify-center flex-col items-center">
           <div className="font-semibold text-base md:text-2xl">Masuk Sebagai warga</div>

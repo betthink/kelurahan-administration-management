@@ -52,13 +52,13 @@ const PermohonanSurat = () => {
     handleGetJenisSurat();
   }, []);
   return (
-    <div className="  w-full  text-white">
+    <div className="  w-full md:h-screen bg-whiteSmoke text-white">
       <Header className="text-white">Permohonan Pembuatan Surat</Header>
       <Content className=" h-full items-center flex justify-center   ">
         <Form
           layout="vertical"
           onFinish={handlePermohonanPembuatanSurat}
-          className="w-1/2 border container py-12 mt-10 bg-darksky "
+          className="w-1/2 border container py-12 mt-10  "
         >
           <Form.Item
             rules={[{ required: true }]}

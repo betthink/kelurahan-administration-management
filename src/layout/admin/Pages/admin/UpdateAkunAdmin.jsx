@@ -3,58 +3,70 @@ import {
   Button,
   Form,
   Input,
-  Space,
-  Select,
   Modal,
+  Select,
+  Space,
   message as mes,
 } from "antd";
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
-export default function TambahAdmin() {
-  const [dataNewAdmin, setdataNewAdmin] = useState({});
+
+export default function UpdateAkunAdmin() {
+  // variables
+  const location = useLocation();
+  const navigate = useNavigate();
+  const data = location.state?.data;
+  const [dataNewAdmin, setdataNewAdmin] = useState(data);
   const optionsRW = ["001", "002", "003", "004", "005"];
   const optionsRT = ["001", "002", "003", "004", "005"];
-  const navigate = useNavigate();
-  const handleSetDataAdmin = (e) => {
-    setdataNewAdmin(e);
-  };
-  const handleAddAdmin = async () => {
-    const url = `/administrasikelurahan/src/post/addAccountAdmin.php`;
+  const handleUpdateAkun = async () => {
+    const url = `/administrasikelurahan/src/update/uodateAkunAdmin.php`;
     try {
-      const response = await axiosWithMultipart(url, {
+      const res = await axiosWithMultipart(url, {
         method: "post",
-        data: dataNewAdmin,
+        data: {
+          id_admin: dataNewAdmin.id_admin,
+          nik: dataNewAdmin.nik,
+          nomor_telp: dataNewAdmin.nomor_telp,
+          jenis_kelamin: dataNewAdmin.jenis_kelamin,
+          password: dataNewAdmin.password,
+          username: dataNewAdmin.username,
+          rt: dataNewAdmin.rt,
+          rw: dataNewAdmin.rw,
+        },
       });
-      const { value, message } = response.data;
-      console.log(response.data);
-      if (value === 1) {
-        mes.success(message);
+      const { data, status } = res;
+      if (status === 200) {
+        mes.success(data.message);
         navigate("/Dashboard/Kelola-Admin");
       } else {
-        mes.error(message);
+        mes.error(data.message);
       }
     } catch (error) {
       console.log(error);
-      throw error;
     }
   };
+  const handleSetDataUpdate = (e) => {
+    setdataNewAdmin((prev) => ({
+      ...prev,
+      ...e,
+    }));
+  };
+
   // modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
   };
   const handleOk = async () => {
-    await handleAddAdmin();
+    await handleUpdateAkun();
     setIsModalOpen(false);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
-  useEffect(() => {
-    console.log(dataNewAdmin);
-  }, [dataNewAdmin]);
   return (
     <div className="mx-20">
       {/* path */}
@@ -71,9 +83,10 @@ export default function TambahAdmin() {
       <div className="h-full self-center flex  p-6 bg-white">
         {/* form */}
         <Form
-          onFinish={handleSetDataAdmin}
+          onFinish={handleSetDataUpdate}
           layout="vertical"
           size={"medium"}
+          initialValues={dataNewAdmin}
           className="w-full justify-center flex  flex-col "
         >
           <Space
@@ -201,9 +214,14 @@ export default function TambahAdmin() {
               </Select>
             </Form.Item>
           </Space>
-          <Form.Item className="bg-purp">
-            <Button block type="primary" htmlType="submit" onClick={showModal}>
-              Tambahkan
+          <Form.Item>
+            <Button
+              className="bg-purp py-3 h-full w-3/4 mx-auto justify-center flex"
+              type="primary"
+              htmlType="submit"
+              onClick={showModal}
+            >
+              Simpan
             </Button>
           </Form.Item>
         </Form>

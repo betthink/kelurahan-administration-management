@@ -5,7 +5,7 @@ import { Outlet, Routes } from "react-router-dom";
 const { Header, Content } = Layout;
 const PublicLayout = () => {
   return (
-    <Layout className="h-screen bg-darkgreen ">
+    <Layout className="h-screen">
       <Header className=" flex flex-row justify-between text-white">
         <div className="">Logo</div>
         <div className="">Mode</div>
