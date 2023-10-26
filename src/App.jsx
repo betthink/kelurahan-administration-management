@@ -22,6 +22,7 @@ import TambahAdmin from "./layout/admin/Pages/admin/TambahAdmin";
 import DetailRiwayatPembayaran from "./layout/admin/Pages/IPL/DetailRiwayatPembayaran";
 import UpdateAkunAdmin from "./layout/admin/Pages/admin/UpdateAkunAdmin";
 import KelolaImunisasi from "./layout/admin/Pages/posyandu/KelolaImunisasi";
+import TambahPesertaImunisasi from "./layout/admin/Pages/posyandu/TambahPesertaImunisasi";
 
 const App = () => {
   const user = useSelector((state) => state.userReducer.value);
@@ -65,6 +66,10 @@ const App = () => {
           <Route
             path="Informasi-PosyandPage"
             element={<InformasiPosyandPage />}
+          />
+          <Route
+            path="Tambah-peserta-posyandu"
+            element={<TambahPesertaImunisasi />}
           />
           <Route path="Kelola-Admin" element={<KelolaAdminRT />} />
           <Route path="Kelola-Admin/Tambah-Admin" element={<TambahAdmin />} />
