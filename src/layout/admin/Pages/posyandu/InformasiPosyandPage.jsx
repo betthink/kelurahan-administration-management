@@ -1,10 +1,11 @@
-import { Breadcrumb, Button, Space, Table } from "antd";
+import { Breadcrumb, Button, Space, Table, message as mes } from "antd";
 import ButtonGroup from "antd/es/button/button-group";
 import { Content, Header } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import ModalTambahPeserta from "./components/ModalTambahPeserta";
+import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
 
 const InformasiPosyandPage = () => {
   const [dataPosyandu, setdataPosyandu] = useState([]);
@@ -13,6 +14,26 @@ const InformasiPosyandPage = () => {
     setisOpenModal(true);
   }
 
+  async function handleDeletePeserta(id) {
+    const url = `/administrasikelurahan/src/delete/delDataPesertaPosyandu.php`;
+    try {
+      const res = await axiosWithMultipart(url, {
+        method: "post",
+        data: {
+          id_imunisasi: id,
+        },
+      });
+      const { data, status } = res;
+      if (status === 200) {
+        mes.info(data.message);
+        window.location.reload();
+      } else {
+        mes.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   const column = [
     {
       title: "ID",
@@ -37,7 +58,17 @@ const InformasiPosyandPage = () => {
     {
       title: "Aksi",
       key: "action",
-      render: () => <Button>Ubah Tahapan</Button>,
+      render: (data) => (
+        <ButtonGroup className="flex gap-1 ">
+          <Button className="  bg-blusky text-white">Ubah Tahapan</Button>
+          <Button
+            onClick={() => handleDeletePeserta(data.id_imunisasi)}
+            className="px-3 bg-red-500 text-white"
+          >
+            Hapus
+          </Button>
+        </ButtonGroup>
+      ),
     },
   ];
   async function handleGetDataPesertaPosyandu() {

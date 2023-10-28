@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal, Checkbox, Form, Input, Select } from "antd";
+import { Button, Modal, Form, Input, Select, message as mes } from "antd";
 import { axiosInstance } from "../../../../../utils/axiosInstance";
+import { axiosWithMultipart } from "../../../../../utils/axioswithmultipart";
 export default function ModalTambahPeserta({ isOpen, onCancel }) {
   const [jenisVaksin, setjenisVaksin] = useState([]);
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -15,8 +13,26 @@ export default function ModalTambahPeserta({ isOpen, onCancel }) {
       const res = await axiosInstance.get(url);
       const { data, status } = res;
       if (status === 200) {
-        setjenisVaksin(data);
-        console.log(data.jenis_vaksin);
+        setjenisVaksin(data.map((item) => item.jenis_vaksin));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function handleAddPesertaPosyandu(value) {
+    const url = `/administrasikelurahan/src/post/addDataPesertaPosyandu.php`;
+    try {
+      const res = await axiosWithMultipart(url, {
+        method: "POST",
+        data: value,
+      });
+      const { data, status } = res;
+      if (status === 200) {
+        mes.success(data.message);
+        onCancel();
+        window.location.reload();
+      } else {
+        mes.success(data.message);
       }
     } catch (error) {
       console.log(error);
@@ -35,13 +51,13 @@ export default function ModalTambahPeserta({ isOpen, onCancel }) {
       <Form
         layout="vertical"
         name="basic"
-        onFinish={onFinish}
+        onFinish={handleAddPesertaPosyandu}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item
           label="Wali / Orang tua"
-          name="wali"
+          name="wali_peserta"
           rules={[
             {
               required: true,
@@ -54,7 +70,7 @@ export default function ModalTambahPeserta({ isOpen, onCancel }) {
 
         <Form.Item
           label="Peserta Imunisasi"
-          name="peserta"
+          name="nama_peserta"
           rules={[
             {
               required: true,
@@ -66,7 +82,7 @@ export default function ModalTambahPeserta({ isOpen, onCancel }) {
         </Form.Item>
         <Form.Item
           label="Tahapan Vaksin"
-          name="tahapVaksin"
+          name="tahap_vaksin"
           rules={[
             {
               required: true,
