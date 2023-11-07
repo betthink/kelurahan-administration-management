@@ -6,12 +6,30 @@ import { Link } from "react-router-dom";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import ModalTambahPeserta from "./components/ModalTambahPeserta";
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
+import ModalUpdateTahapanVaksin from "./components/ModalUpdateTahapanVaksin";
 
 const InformasiPosyandPage = () => {
   const [dataPosyandu, setdataPosyandu] = useState([]);
   const [isOpenModal, setisOpenModal] = useState(false);
-  function handleOpenModal() {
-    setisOpenModal(true);
+  const [isOpen, setIsopen] = useState(false);
+  const [jenisVaksin, setjenisVaksin] = useState([]);
+  const [idImunisasi, setidImunisasi] = useState([]);
+  function handleOpenModal(id) {
+    setIsopen(true);
+    setidImunisasi(id);
+  }
+
+  async function handleGetJenisVaksin() {
+    const url = `/administrasikelurahan/src/api/fetchDataVaksin.php`;
+    try {
+      const res = await axiosInstance.get(url);
+      const { data, status } = res;
+      if (status === 200) {
+        setjenisVaksin(data.map((item) => item.jenis_vaksin));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function handleDeletePeserta(id) {
@@ -60,7 +78,12 @@ const InformasiPosyandPage = () => {
       key: "action",
       render: (data) => (
         <ButtonGroup className="flex gap-1 ">
-          <Button className="  bg-blusky text-white">Ubah Tahapan</Button>
+          <Button
+            onClick={() => handleOpenModal(data.id_imunisasi)}
+            className="  bg-blusky text-white"
+          >
+            Ubah Tahapan
+          </Button>
           <Button
             onClick={() => handleDeletePeserta(data.id_imunisasi)}
             className="px-3 bg-red-500 text-white"
@@ -88,6 +111,7 @@ const InformasiPosyandPage = () => {
     }
   }
   useEffect(() => {
+    handleGetJenisVaksin();
     handleGetDataPesertaPosyandu();
   }, []);
   return (
@@ -117,10 +141,21 @@ const InformasiPosyandPage = () => {
         </Space>
         <Table dataSource={dataPosyandu} columns={column} />
       </Content>
+      {/* modal add peserta */}
       <>
         <ModalTambahPeserta
+          dataJenisVaksin={jenisVaksin}
           onCancel={() => setisOpenModal(false)}
           isOpen={isOpenModal}
+        />
+      </>
+      {/* modal update tahapan vaksin */}
+      <>
+        <ModalUpdateTahapanVaksin
+          idImunisasi={idImunisasi}
+          onCancel={() => setIsopen(false)}
+          isOpen={isOpen}
+          dataJenisVaksin={jenisVaksin}
         />
       </>
     </div>

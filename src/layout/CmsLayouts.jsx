@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import {
+  AppstoreOutlined,
   DesktopOutlined,
+  MailOutlined,
   PieChartOutlined,
+  SettingOutlined,
   TeamOutlined,
+  UserAddOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
+import { Avatar, Layout, Menu } from "antd";
 import { Footer } from "antd/es/layout/layout";
 import { useSelector } from "react-redux";
 
@@ -64,8 +68,14 @@ const CmsLayouts = () => {
         )
       : null,
   ];
+
+  const onClick = (e) => {
+    console.log("click", e);
+  };
   // state
   const [collapsed, setCollapsed] = useState(false);
+  useEffect(() => {
+  }, []);
   return (
     <Layout
       style={{
@@ -102,10 +112,24 @@ const CmsLayouts = () => {
         className={` site-layout`}
         style={
           !collapsed
-            ? { marginLeft: "200px", transition: "margin-left 0.5s ease" } // Tambahkan transisi ketika tidak collapsed
+            ? { marginLeft: "200px", transition: "margin-left 0.5s ease" }
             : { transition: "margin-left 0.2s ease", marginLeft: "0" }
         }
       >
+        <div className="w-full px-4 py-6 bg-white flex justify-end">
+          <div className="flex items-center gap-4">
+            <span>{user?.username}</span>
+
+            <Avatar
+            className="cursor-pointer"
+              size={40}
+              style={{
+                backgroundColor: "#475be8",
+              }}
+              icon={<UserAddOutlined />}
+            />
+          </div>
+        </div>
         <Content
           className={` site-layout `}
           style={{

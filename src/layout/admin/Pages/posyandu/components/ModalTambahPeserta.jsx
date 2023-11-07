@@ -1,24 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, Form, Input, Select, message as mes } from "antd";
-import { axiosInstance } from "../../../../../utils/axiosInstance";
 import { axiosWithMultipart } from "../../../../../utils/axioswithmultipart";
-export default function ModalTambahPeserta({ isOpen, onCancel }) {
-  const [jenisVaksin, setjenisVaksin] = useState([]);
+export default function ModalTambahPeserta({ isOpen, onCancel, dataJenisVaksin }) {
+ 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-  async function handleGetJenisVaksin() {
-    const url = `/administrasikelurahan/src/api/fetchDataVaksin.php`;
-    try {
-      const res = await axiosInstance.get(url);
-      const { data, status } = res;
-      if (status === 200) {
-        setjenisVaksin(data.map((item) => item.jenis_vaksin));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+
   async function handleAddPesertaPosyandu(value) {
     const url = `/administrasikelurahan/src/post/addDataPesertaPosyandu.php`;
     try {
@@ -38,9 +26,6 @@ export default function ModalTambahPeserta({ isOpen, onCancel }) {
       console.log(error);
     }
   }
-  useEffect(() => {
-    handleGetJenisVaksin();
-  }, []);
   return (
     <Modal
       footer={false}
@@ -91,7 +76,7 @@ export default function ModalTambahPeserta({ isOpen, onCancel }) {
           ]}
         >
           <Select placeholder="Pilih vaksin">
-            {jenisVaksin.map((item, i) => (
+            {dataJenisVaksin?.map((item, i) => (
               <Select.Option key={i} value={item}>
                 {item}
               </Select.Option>
