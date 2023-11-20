@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Breadcrumb, Table, Button, Space, Input, message as mes } from "antd";
 import { Link } from "react-router-dom";
-import { PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { Header, Content } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import ButtonGroup from "antd/es/button/button-group";
@@ -116,23 +116,29 @@ function KelolaPenduduk() {
     ...(user.role === "admin"
       ? [
           {
-            title: "Action",
+            title: "Operations",
             key: "operation",
             fixed: "right",
             width: 200,
             render: (data) => (
               <ButtonGroup>
-                <Button className="bg-manggo">
+                <Button className="border-none">
                   <Link state={{ data }} to={"/Dashboard/Update-Penduduk"}>
-                    Edit
+                    <EditOutlined
+                      style={{ fontSize: "28px" }}
+                      className="text-purp"
+                    />
                   </Link>
                 </Button>
                 <Button
+                  className="border-none"
                   onClick={() => handleDeletePenduduk(data.id_penduduk)}
-                  className="bg-darksky text-white "
                   type="default"
                 >
-                  Hapus
+                  <DeleteOutlined
+                    style={{ fontSize: "28px" }}
+                    className="text-purp"
+                  />
                 </Button>
               </ButtonGroup>
             ),
@@ -223,7 +229,7 @@ function KelolaPenduduk() {
         </div>
         {user.role === "admin" ? (
           <Button
-            className="flex flex-row   cursor-pointer bg-blusky text-white items-center "
+            className="flex flex-row   cursor-pointer bg-purp text-white items-center "
             type="default"
           >
             <Link className="pr-1" to={"/Dashboard/Tambah-Penduduk"}>

@@ -9,7 +9,9 @@ module.exports = {
 
     extend: {
       colors: {
-        purp: "#475BE8",
+        purp: "#6a58ba",
+        darkpurp: "#504190",
+        // purp: "#475BE8",
         galaxy: "#001529",
         theme: "#E9E9E9",
         whiteSmoke: "#F5F5F5",

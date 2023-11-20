@@ -6,6 +6,7 @@ import { axiosInstance } from "../../../../utils/axiosInstance";
 
 export default function DetailRiwayatPembayaran() {
   const [dataRiwayatPembayaran, setdataRiwayatPembayaran] = useState([]);
+  const [lastData, setLastData] = useState([]);
   const location = useLocation();
   const prevPageState = location.state.data;
   const columnRiwayatPembayaran = [
@@ -48,10 +49,19 @@ export default function DetailRiwayatPembayaran() {
       key: "jumlah_pembayaran",
       //   width: 10,
       render: (data) => (
-        <span className={`${data > 0 ? "text-green-500" : "text-red-700"}  font-bold text-base`}>
-          {" "}
-          {parseInt(data) > 0 ? "Lunas" : "Terhutang"}{" "}
-        </span>
+        <div
+          className={`p-1 rounded items-center justify-center flex w-fit ${
+            data > 0 ? "bg-green-100" : "bg-red-200"
+          }`}
+        >
+          <span
+            className={`${
+              data > 0 ? "text-green-500" : "text-red-700"
+            }  font-bold text-base`}
+          >
+            {parseInt(data) > 0 ? "Lunas" : "Terhutang"}
+          </span>
+        </div>
       ),
     },
   ];
@@ -69,11 +79,19 @@ export default function DetailRiwayatPembayaran() {
             };
           })
         );
+        const id_pembayaran_values = data.map((item) => item.id_pembayaran);
+        const max_id_pembayaran = Math.max(...id_pembayaran_values);
+        const lastData = data.filter(
+          (item) => parseInt(item.id_pembayaran) === max_id_pembayaran
+        );
+        console.log(lastData);
+        setLastData(lastData);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     handleGetRiwayatPembayaran();
   }, []);

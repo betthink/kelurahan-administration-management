@@ -12,10 +12,25 @@
   align-items: center;
   justify-content: space-between;
 }
-/* .ant-menu {
-  background-color: #475be8;
-  color: white;
+.ant-menu {
+  @apply bg-purp
 }
 .ant-sider {
-  background-color: #475be8;
-} */
+  @apply bg-purp
+}
+
+.ant-menu > .ant-menu-item-selected
+ {
+  border-left: 2px solid 'red';
+  
+  @apply bg-darkpurp text-white rounded-none
+ 
+}
+.ant-menu > .ant-menu-item-active {
+  @apply rounded-none
+}
+/* ant-menu > .ant-menu-item:hover,
+.ant-menu > .ant-menu-submenu:hover,
+.ant-menu > .ant-menu-item-active,
+.ant-menu > .ant-menu-item-open,
+.ant-menu> .ant-menu-submenu-open */
