@@ -37,12 +37,12 @@ function KelolaInformasiVaksinSPage() {
       width: 160,
       render: (id) => (
         <ButtonGroup>
-          <Button onClick={() => handleOnchange(id)} className="bg-manggo">
+          <Button onClick={() => handleOnchange(id)} className="bg-success text-white">
             Edit
           </Button>
           <Button
             onClick={() => handleDeleteVaksin(id)}
-            className="bg-darksky text-white "
+            className="bg-danger text-white "
             type="default"
           >
             Hapus
@@ -52,16 +52,11 @@ function KelolaInformasiVaksinSPage() {
     },
   ];
   const [dataVaksin, setdataVaksin] = useState([]);
-  // functions
-  // const updatedDataVaksin = dataVaksin.map((item, index) => {
-  //   return { ...item, key: index.toString() };
-  // });
   const [isValiable, setisValiable] = useState(null);
   const handleGetDataVaksin = async () => {
     const response = await axiosInstance.get(
       `administrasikelurahan/src/api/fetchDataVaksin.php`
     );
-
     setdataVaksin(
       response.data.map((item, index) => {
         return { ...item, key: index.toString() };
@@ -90,8 +85,7 @@ function KelolaInformasiVaksinSPage() {
     }
   };
   const handleUpdateVaksin = async () => {
-    // console.log({ idVaccine });
-    // console.log({ isValiable });
+
     const res = await axiosWithMultipart(
       "/administrasikelurahan/src/update/updateVaksin.php",
       {
@@ -113,7 +107,6 @@ function KelolaInformasiVaksinSPage() {
   };
   const handleOnchange = (id) => {
     setIsModalOpen(true);
-    console.log(id);
     setIdVaccine(id);
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -136,7 +129,7 @@ function KelolaInformasiVaksinSPage() {
         </Breadcrumb>
         <Button
           onClick={() => navigate("/Dashboard/Tambah-VaksinPage")}
-          className="flex flex-row   cursor-pointer bg-blusky text-white items-center "
+          className="flex flex-row   cursor-pointer bg-third hover:text-white text-white items-center "
           type="default"
         >
           Tambah Vaksin

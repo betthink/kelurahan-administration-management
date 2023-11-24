@@ -8,7 +8,7 @@ import ModalTambahPeserta from "./components/ModalTambahPeserta";
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
 import ModalUpdateTahapanVaksin from "./components/ModalUpdateTahapanVaksin";
 
-const InformasiPosyandPage = () => {
+const KelolaInformasiPosyand = () => {
   const [dataPosyandu, setdataPosyandu] = useState([]);
   const [isOpenModal, setisOpenModal] = useState(false);
   const [isOpen, setIsopen] = useState(false);
@@ -80,13 +80,13 @@ const InformasiPosyandPage = () => {
         <ButtonGroup className="flex gap-1 ">
           <Button
             onClick={() => handleOpenModal(data.id_imunisasi)}
-            className="  bg-blusky text-white"
+            className="  bg-success text-white"
           >
             Ubah Tahapan
           </Button>
           <Button
             onClick={() => handleDeletePeserta(data.id_imunisasi)}
-            className="px-3 bg-red-500 text-white"
+            className="px-3 bg-danger text-white"
           >
             Hapus
           </Button>
@@ -162,4 +162,4 @@ const InformasiPosyandPage = () => {
   );
 };
 
-export default InformasiPosyandPage;
+export default KelolaInformasiPosyand;

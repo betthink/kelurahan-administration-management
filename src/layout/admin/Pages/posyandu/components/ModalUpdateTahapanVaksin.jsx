@@ -49,7 +49,7 @@ export default function ModalUpdateTahapanVaksin({
           </Select>
         </Form.Item>
         <Form.Item>
-          <Button htmlType="submit" block className="bg-purp">
+          <Button htmlType="submit" block className="bg-third text-white">
             Ubah
           </Button>
         </Form.Item>

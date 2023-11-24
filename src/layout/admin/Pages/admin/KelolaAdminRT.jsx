@@ -54,14 +54,14 @@ export default function KelolaAdminRT() {
       fixed: "right",
       render: (data) => (
         <ButtonGroup className="flex gap-3">
-          <Button className="bg-manggo text-white">
+          <Button className="bg-success text-white">
             <Link to="/Dashboard/Kelola-Admin/UpdateAkunAdmin" state={{ data }}>
               Edit
             </Link>
           </Button>
           <Button
             onClick={() => handleDeleteAdminById(data.id_admin)}
-            className="bg-purp  text-white"
+            className="bg-danger  text-white"
           >
             Hapus
           </Button>
@@ -125,7 +125,7 @@ export default function KelolaAdminRT() {
 
         <Button
           // onClick={showModal}
-          className="flex flex-row   cursor-pointer bg-blusky text-white items-center "
+          className="flex flex-row   cursor-pointer bg-third text-white items-center "
           type="default"
         >
           <Link className="pr-1" to={"/Dashboard/Kelola-Admin/Tambah-Admin"}>
@@ -150,11 +150,7 @@ export default function KelolaAdminRT() {
           }}
           sticky
         />
-        <Space>
-          <Button type="primary" className="bg-purp">
-            Download
-          </Button>
-        </Space>
+       
       </Content>
     </div>
   );

@@ -5,7 +5,6 @@ import KelolaPenduduk from "./layout/admin/Pages/penduduk/KelolaPenduduk";
 import KelolaIPL from "./layout/admin/Pages/IPL/KelolaIPL";
 import KelolaPermohonanSurat from "./layout/admin/Pages/Surat/KelolaPermohonanSurat";
 import KelolaInformasiVaksinSPage from "./layout/admin/Pages/vaksin/KelolaInformasiVaksinSPage";
-import InformasiPosyandPage from "./layout/admin/Pages/posyandu/InformasiPosyandPage";
 import UpdatePendudukPage from "./layout/admin/Pages/penduduk/UpdatePendudukPage";
 import TambahPenduduk from "./layout/admin/Pages/penduduk/TambahPenduduk";
 import TambahVaksinPage from "./layout/admin/Pages/vaksin/TambahVaksinPage";
@@ -23,6 +22,7 @@ import DetailRiwayatPembayaran from "./layout/admin/Pages/IPL/DetailRiwayatPemba
 import UpdateAkunAdmin from "./layout/admin/Pages/admin/UpdateAkunAdmin";
 import KelolaImunisasi from "./layout/admin/Pages/posyandu/KelolaImunisasi";
 import TambahPesertaImunisasi from "./layout/admin/Pages/posyandu/TambahPesertaImunisasi";
+import KelolaInformasiPosyand from "./layout/admin/Pages/posyandu/KelolaInformasiPosyand";
 
 const App = () => {
   const user = useSelector((state) => state.userReducer.value);
@@ -65,7 +65,7 @@ const App = () => {
           />
           <Route
             path="Informasi-PosyandPage"
-            element={<InformasiPosyandPage />}
+            element={<KelolaInformasiPosyand />}
           />
           <Route
             path="Tambah-peserta-posyandu"

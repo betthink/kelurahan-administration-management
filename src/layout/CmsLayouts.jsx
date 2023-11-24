@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import {
-  AppstoreOutlined,
   DesktopOutlined,
-  MailOutlined,
+  DownOutlined,
   PieChartOutlined,
-  SettingOutlined,
-  SmileOutlined,
   TeamOutlined,
-  UserAddOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Layout, Menu, Space } from "antd";
+import { PiBookThin } from "react-icons/pi";
+import { Avatar, Button, Dropdown, Layout, Menu, Space } from "antd";
 import { Footer, Header } from "antd/es/layout/layout";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../app/feature/user/userSlice";
 
 const CmsLayouts = () => {
-  const [openLogOut, setopenLogOut] = useState(false);
   const { Sider, Content } = Layout;
   const user = useSelector((state) => state.userReducer.value);
   const getItem = (label, key, icon, path) => {
@@ -77,79 +73,95 @@ const CmsLayouts = () => {
     dispatch(logOut());
     navigate("/");
   };
-  const handleOpenLogOut = () => {
-    console.log("cliked");
-    setopenLogOut((prev) => !prev);
-  };
-
   // state
   const [collapsed, setCollapsed] = useState(false);
+  const items = [
+    {
+      key: "1",
+      label: (
+        <span
+        >
+        Profile
+        </span>
+      ),
+    },
+    {
+      key: "3",
+      danger: true,
+      label: (
+        <a onClick={handleLogOut}
+        >
+         Log out
+        </a>
+      ),
+    },
+   
+  ];
   useEffect(() => {}, []);
   return (
     <>
       <Layout className="w-full ">
         <Header
-          className="flex min-h-[3rem] py-6 bg-darkpurp justify-between w-full items-center text-white sticky z-10
+          className="flex min-h-[3rem] py-6 bg-secondary justify-between w-full items-center text-four sticky z-10
        "
         >
-          <div className="demo-logo-vertical">
-            <SmileOutlined style={{ fontSize: "30px" }} />
+          {/* logo */}
+          <div className="flex gap-2 items-center ">
+            <PiBookThin className="text-third" size={30} />
+            <span className="text-third font-bold text-3xl ">Kelurahan</span>
           </div>
-          <div className="flex  items-center gap-6 relative">
-            <Button
-              onClick={handleOpenLogOut}
-              className="border-none flex items-center justify-center"
-            >
-              <Avatar shape="square" size={36} icon={<UserOutlined />} />
-            </Button>
-
-            <span className="flex gap-3 justify-center  ">
-              <p>{user?.username} </p>
-              <p>{user?.role} </p>
-            </span>
-          </div>
+          <Dropdown
+            trigger={["click"]}
+            menu={{
+              items,
+            }}
+          >
+            <a onClick={(e) => e.preventDefault()}>
+              <Space>
+                <Avatar
+                  className="bg-manggo  align-middle"
+                  size="large"
+                >
+                 <UserOutlined style={{ fontSize: '1.2rem' }}/>
+                </Avatar>
+                <span className="text-manggo font-semibold capitalize ">{user?.username}</span>
+                <DownOutlined />
+              </Space>
+            </a>
+          </Dropdown>
         </Header>
-        <Layout className="w-full bg-purp flex">
+        <Layout className="w-full bg-secondary flex">
           <Sider
             className="ant-menu transition-all sticky"
-            theme="dark"
+            theme="light"
             style={{
-              backgroundColor: "#6a58ba",
+              backgroundColor: "#FCFCFC",
               overflow: "auto",
               height: "100vh",
               position: "sticky",
               left: 0,
               top: 0,
               bottom: 0,
-              width: collapsed ? "80px" : "300px",
+              width: collapsed ? "80px" : "350px",
             }}
             collapsible
             collapsed={collapsed}
             onCollapse={(value) => setCollapsed(value)}
           >
             <Menu
-              activeBarBorderWidth
-              // theme="dark"
+            
               defaultSelectedKeys={["0"]}
               mode="inline"
               items={menuItems}
             />
           </Sider>
-          <Layout className={` site-layout relative `}>
+          <Layout className={` `}>
             <Content
               className="site-layout "
               style={{
                 margin: "0 16px",
               }}
             >
-              {openLogOut ? (
-                <button
-                  className="top-20 right-2 absolute p-2 bg-darkpurp rounded text-white text-lg border-none  cursor-pointer"
-                  onClick={handleLogOut}
-                >
-                  Log out
-                </button>
-              ) : null}
               <Outlet />
             </Content>
             <Footer

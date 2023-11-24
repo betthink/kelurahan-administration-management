@@ -67,7 +67,7 @@ function TambahPenduduk() {
       no_kk: noKK,
       tanggal_lahir: date,
       tempat_lahir: tempatLahir,
-      alamat, 
+      alamat,
       pekerjaan,
       agama,
       darah,
@@ -119,8 +119,7 @@ function TambahPenduduk() {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
   return (
     <div className="mx-20">
       {/* path */}
@@ -313,8 +312,19 @@ function TambahPenduduk() {
           <Modal
             title="Apakah Data Sudah Benar?"
             open={isModalOpen}
-            bodyStyle={{}}
-            onOk={handleOk}
+            footer={[
+              <Button key="back" className="bg-danger text-white" onClick={handleCancel}>
+                Batalkan
+              </Button>,
+              <Button className="bg-success"
+                key="submit"
+                type="primary" 
+                onClick={handleOk}
+
+              >
+                Submit
+              </Button>,
+            ]}
             onCancel={handleCancel}
           >
             <p>nama: {dataEntry.nama}</p>

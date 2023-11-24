@@ -151,6 +151,23 @@ function VerifikasiPembayaran() {
           title="Apakah data pembayaran sudah benar?"
           open={isModalOpen}
           onOk={handleOk}
+          footer={[
+            <Button
+              key="back"
+              className="bg-danger text-white"
+              onClick={handleCancel}
+            >
+              Batalkan
+            </Button>,
+            <Button
+              className="bg-success"
+              key="submit"
+              type="primary"
+              onClick={handleOk}
+            >
+              Submit
+            </Button>,
+          ]}
           onCancel={handleCancel}
         >
           <div className="grid grid-cols-2">
@@ -162,7 +179,6 @@ function VerifikasiPembayaran() {
             <p> {dataPembayaran.metode}</p>
             <span> Jumlah: </span>
             <p> {dataPembayaran.jumlah_pembayaran}</p>
-            {/* <p> {date}</p> */}
           </div>
         </Modal>
       </>

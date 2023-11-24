@@ -11,6 +11,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
+import ButtonGroup from "antd/es/button/button-group";
 export default function TambahAdmin() {
   const [dataNewAdmin, setdataNewAdmin] = useState({});
   const optionsRW = ["001", "002", "003", "004", "005"];
@@ -74,11 +75,11 @@ export default function TambahAdmin() {
           onFinish={handleSetDataAdmin}
           layout="vertical"
           size={"medium"}
-          className="w-full justify-center flex  flex-col "
+          className="w-full p-10 "
         >
           <Space
             direction="vertical"
-            className="grid md:grid-cols-2 grid-cols-1"
+            className="grid md:grid-cols-2 grid-cols-1 "
           >
             <Form.Item
               rules={[
@@ -201,21 +202,27 @@ export default function TambahAdmin() {
               </Select>
             </Form.Item>
           </Space>
-          <Form.Item className="bg-purp">
-            <Button block type="primary" htmlType="submit" onClick={showModal}>
+          <Form.Item className="bg-success">
+            <Button className="h-10" block type="primary" htmlType="submit" onClick={showModal}>
               Tambahkan
             </Button>
           </Form.Item>
         </Form>
         <>
           <Modal
-            title="Basic Modal"
+            title="Apakah data sudah benar?"
             open={isModalOpen}
-            onOk={handleOk}
+            footer={[<Button className="bg-success text-white">Submit</Button>]}
             onCancel={handleCancel}
           >
-            <p> {dataNewAdmin.username}</p>
-            <p>{dataNewAdmin.password}</p>
+            <div className="grid grid-cols-2  gap-2">
+              <p> {dataNewAdmin.username}</p>
+              <p>{dataNewAdmin.password}</p>
+              <p> {dataNewAdmin.rt}</p>
+              <p>{dataNewAdmin.rw}</p>
+              <p>{dataNewAdmin.nomor_telp}</p>
+              <p>{dataNewAdmin.jenis_kelamin}</p>
+            </div>
           </Modal>
         </>
       </div>

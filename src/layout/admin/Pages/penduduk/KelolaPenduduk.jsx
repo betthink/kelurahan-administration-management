@@ -1,11 +1,19 @@
 // lib
 import React, { useEffect, useState } from "react";
-import { Breadcrumb, Table, Button, Space, Input, message as mes } from "antd";
+import {
+  Breadcrumb,
+  Table,
+  Button,
+  Space,
+  Input,
+  message as mes,
+  Spin,
+} from "antd";
 import { Link } from "react-router-dom";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { Header, Content } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
-import ButtonGroup from "antd/es/button/button-group";
+import { CgDetailsMore } from "react-icons/cg";
 import { useDebounce } from "use-debounce";
 import { useSelector } from "react-redux";
 // components
@@ -14,138 +22,7 @@ function KelolaPenduduk() {
   const user = useSelector((state) => state.userReducer.value);
   const [isLoading, setIsloading] = useState(true);
   const { Search } = Input;
-  const columns = [
-    {
-      title: "Id",
-      width: 50,
-      dataIndex: "id_penduduk",
-      key: "id_penduduk",
-      fixed: "left",
-    },
-    {
-      title: "Nama",
-      width: 200,
-      dataIndex: "nama",
-      key: "nama",
-    },
-    {
-      title: "NIK",
-      width: 100,
-      dataIndex: "nik",
-      key: "nik",
-    },
-    {
-      title: "NO. KK",
-      dataIndex: "no_kk",
-      key: "no_kk",
-      width: 150,
-    },
-    {
-      title: "Alamat",
-      dataIndex: "alamat",
-      key: "alamat",
-      width: 150,
-    },
-    {
-      title: "Jenis Kelamin",
-      dataIndex: "jenis_kelamin",
-      key: "jenis_kelamin",
-      width: 150,
-    },
-    {
-      title: "Nomor Telp",
-      dataIndex: "nomor_telp",
-      key: "nomor_telp",
-      width: 150,
-    },
-    {
-      title: "Tanggal Lahir",
-      dataIndex: "tanggal_lahir",
-      key: "tanggal_lahir",
-      width: 150,
-    },
-    {
-      title: "Tempat Lahir",
-      dataIndex: "tempat_lahir",
-      key: "tempat_lahir",
-      width: 150,
-    },
-    {
-      title: "Agama",
-      dataIndex: "agama",
-      key: "agama",
-      width: 150,
-    },
-    {
-      title: "Pekerjaan",
-      dataIndex: "pekerjaan",
-      key: "pekerjaan",
-      width: 150,
-    },
-    {
-      title: "Darah",
-      dataIndex: "darah",
-      key: "darah",
-      width: 70,
-    },
-    {
-      title: "Status Tinggal",
-      dataIndex: "status_tinggal",
-      key: "status_tinggal",
-      width: 130,
-    },
-    {
-      title: "Status Penduduk",
-      dataIndex: "status_diri",
-      key: "status_diri",
-      width: 150,
-    },
-    {
-      title: "RT",
-      dataIndex: "rt",
-      key: "rt",
-      width: 150,
-    },
-    {
-      title: "RW",
-      dataIndex: "rw",
-      key: "rw",
-      width: 150,
-    },
 
-    ...(user.role === "admin"
-      ? [
-          {
-            title: "Operations",
-            key: "operation",
-            fixed: "right",
-            width: 200,
-            render: (data) => (
-              <ButtonGroup>
-                <Button className="border-none">
-                  <Link state={{ data }} to={"/Dashboard/Update-Penduduk"}>
-                    <EditOutlined
-                      style={{ fontSize: "28px" }}
-                      className="text-purp"
-                    />
-                  </Link>
-                </Button>
-                <Button
-                  className="border-none"
-                  onClick={() => handleDeletePenduduk(data.id_penduduk)}
-                  type="default"
-                >
-                  <DeleteOutlined
-                    style={{ fontSize: "28px" }}
-                    className="text-purp"
-                  />
-                </Button>
-              </ButtonGroup>
-            ),
-          },
-        ]
-      : []),
-  ];
   const [dataPenduduk, setdataPenduduk] = useState([]);
   // filter data penduduk
   const [dataSearch, setdataSearch] = useState(null);
@@ -167,7 +44,6 @@ function KelolaPenduduk() {
     setdataSearch(event.target.value);
   };
   const handleDeletePenduduk = async (id) => {
-    console.log(id);
     const res = await axiosInstance(
       "/administrasikelurahan/src/delete/delDataPenduduk.php",
       {
@@ -229,10 +105,10 @@ function KelolaPenduduk() {
         </div>
         {user.role === "admin" ? (
           <Button
-            className="flex flex-row   cursor-pointer bg-purp text-white items-center "
+            className="flex flex-row   cursor-pointer bg-third hover:text-third hover:bg-white  hover:border-third text-white items-center "
             type="default"
           >
-            <Link className="pr-1" to={"/Dashboard/Tambah-Penduduk"}>
+            <Link className="pr-{item.}" to={"/Dashboard/Tambah-Penduduk"}>
               Tambah Penduduk
             </Link>
             <PlusOutlined />
@@ -241,23 +117,96 @@ function KelolaPenduduk() {
       </Header>
       <Content
         style={{ position: "sticky", top: 400 }}
-        className="p-6 bg-white min-h-[40rem]"
+        className=" min-h-[40rem]  overflow-x-auto"
       >
         {/* tabel */}
-        <Table
-          // key={dataPenduduk.id_penduduk}
-          columns={columns}
-          dataSource={filterItem}
-          pagination={{ pageSize: 5 }}
-          loading={isLoading}
-          scroll={{
-            x: 1500,
-          }}
-          // summary={() => <Table.Summary fixed={"top"} />}
-          sticky
-        />
-        <Space>
-          <Button type="primary" className="bg-purp">
+        {isLoading ? (
+          <div className=" flex flex-col mt-[10rem] justify-center w-full items-center ">
+            <Spin />
+          </div>
+        ) : (
+          <div className="min-w-full bg-white p-10  rounded-md mb-10">
+            <table className="w-full">
+              <thead className=" border-b  ">
+                <tr className="text-xs font-bold  ">
+                  <th className="py-2 whitespace-nowrap px-4 font-normal">ID</th>
+                  <th className="py-2 whitespace-nowrap px-4 font-normal">Name</th>
+                  <th className="py-2 whitespace-nowrap px-4 font-normal">NIK</th>
+                  <th className="py-2 whitespace-nowrap px-4 font-normal">
+                    Nomor telepon
+                  </th>
+                  <th className="py-2 whitespace-nowrap px-4 font-normal">
+                    Alamat
+                  </th>
+
+                  <th className="py-2 whitespace-nowrap px-4 font-normal ">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {dataPenduduk.map((item, i) => (
+                  <tr
+                    className={`${
+                      i % 2 === 0 ? "bg-primary" : "bg-secondary"
+                    }  text-xs  `}
+                    key={item.id_penduduk}
+                  >
+                    <td className="py-2 whitespace-nowrap px-4 text-center ">
+                      {item.id_penduduk}
+                    </td>
+                    <td className="py-2 whitespace-nowrap px-4 text-center ">
+                      {item.nama}
+                    </td>
+                    <td className="py-2 whitespace-nowrap px-4 text-center ">
+                      {item.nik}
+                    </td>
+                    <td className="py-2 whitespace-nowrap px-4 text-center ">
+                      {item.nomor_telp}
+                    </td>
+                    <td className="py-2 whitespace-nowrap px-4 text-center ">
+                      {item.alamat}
+                    </td>
+
+                    <td className="py-2 whitespace-nowrap px-4 flex justify-center">
+                      <Button className="border-none">
+                        <Link
+                          state={{ data: item }}
+                          to={"/Dashboard/Update-Penduduk"}
+                        >
+                          <EditOutlined
+                            style={{ fontSize: "1.2rem" }}
+                            className="text-success"
+                          />
+                        </Link>
+                      </Button>
+                      <Button
+                        className="border-none text-manggo"
+                        // onClick={() => handleDeletePenduduk(item.id_penduduk)}
+                        type="default"
+                      >
+                        <CgDetailsMore size={22} />
+                      </Button>
+                      <Button
+                        className="border-none"
+                        onClick={() => handleDeletePenduduk(item.id_penduduk)}
+                        type="default"
+                      >
+                        <DeleteOutlined
+                          style={{ fontSize: "1.2rem" }}
+                          className="text-danger"
+                        />
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        <Space className="flex justify-end">
+          <Button type="primary" className=" text-third">
             Download
           </Button>
         </Space>
