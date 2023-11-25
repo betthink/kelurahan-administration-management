@@ -155,7 +155,7 @@ const CmsLayouts = () => {
               items={menuItems}
             />
           </Sider>
-          <Layout className={` `}>
+          <Layout>
             <Content
               className="site-layout "
               style={{

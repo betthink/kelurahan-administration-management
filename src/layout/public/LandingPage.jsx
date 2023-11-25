@@ -129,7 +129,7 @@ function LandingPage() {
           <div className="">
             <span>Apakah anda admin RT ?</span>
             <Button
-              className="border-none self-end text-md text-purp font-bold"
+              className="border-none self-end text-md text-blusky font-bold"
               onClick={() => navigate("/login-admin")}
             >
               Login di sini

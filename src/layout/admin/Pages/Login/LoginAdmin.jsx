@@ -65,62 +65,7 @@ const LoginAdmin = () => {
     formik.setFieldValue(target.name, target.value);
   };
   return (
-    // <Layout className="h-screen w-full bg-darkgreen ">
-    //   <Content className="mx-auto  w-1/2 h-screen flex justify-center items-center flex-col py-20 text-white">
-    //     <div className="">Log in</div>
-    //     <div className="">Masuk Sebagai Admin</div>
-    //     <Form onFinish={formik.handleSubmit} className="w-1/2 py-10">
-    //       <Form.Item
-    //         name="username"
-    //         rules={[
-    //           {
-    //             required: true,
-    //             message: "username tidak boleh kosong",
-    //           },
-    //         ]}
-    //       >
-    //         <Input
-    //           name="username"
-    //           onChange={handleChange}
-    //           className="bg-[#1b4455] py-3 hover:bg-[#1b4455] placeholder:text-white text-white border"
-    //           placeholder="Masukkan username"
-    //         />
-    //       </Form.Item>
-    //       <Form.Item
-    //         name="password"
-    //         rules={[
-    //           {
-    //             required: true,
-    //             message: "password tidak boleh kosong",
-    //           },
-
-    //           // {
-    //           //   pattern: /^[0-9]+$/,
-    //           //   message: "password hanya boleh berisi angka",
-    //           // },
-    //         ]}
-    //       >
-    //         <Input
-    //           name="password"
-    //           onChange={handleChange}
-    //           className="bg-[#1b4455] py-3 hover:bg-[#1b4455] placeholder:text-white text-white border"
-    //           placeholder="Masukkan password"
-    //         />
-    //       </Form.Item>
-    //       <Form.Item>
-    //         <Button
-    //           htmlType="submit"
-    //           type="primary"
-    //           shape="default"
-    //           block
-    //           className="bg-blue-600"
-    //         >
-    //           Log in
-    //         </Button>
-    //       </Form.Item>
-    //     </Form>
-    //   </Content>
-    // </Layout>
+  
     <Layout className="w-full bg-[#F5F5F5] ">
       <Content className="mx-auto  w-full md:h-screen flex flex-col-reverse md:flex-row md:justify-between    text-black px-10 md:px-6">
         <div className=" w-full md:w-1/2 py-6 flex justify-center flex-col items-center">
@@ -154,11 +99,6 @@ const LoginAdmin = () => {
                   required: true,
                   message: "password tidak boleh kosong",
                 },
-
-                // {
-                //   pattern: /^[0-9]+$/,
-                //   message: "password hanya boleh berisi angka",
-                // },
               ]}
             >
               <Input
@@ -174,7 +114,7 @@ const LoginAdmin = () => {
                 type="primary"
                 shape="default"
                 block
-                className="bg-blue-600 py-5 justify-center flex items-center"
+                className="bg-third py-5 justify-center flex items-center"
               >
                 Log in
               </Button>
@@ -182,7 +122,7 @@ const LoginAdmin = () => {
           </Form>
 
         </div>
-        <div className=" py-6 md:h-screen w-full md:w-1/2 bg-blusky rounded-lg md:rounded-none text-white flex flex-col items-center justify-center gap-6 px-3 text-center">
+        <div className=" py-6 md:h-screen w-full md:w-1/2 bg-third rounded-lg md:rounded-none text-white flex flex-col items-center justify-center gap-6 px-3 text-center">
           <h2 className="text-base md:text-3xl">Selamat datang warga</h2>
           <h3 className="text-sm md:text-lg">
             Silakan melakukan login dengan data anda untuk menggunakan sarana
