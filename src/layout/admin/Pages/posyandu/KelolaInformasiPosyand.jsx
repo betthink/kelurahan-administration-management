@@ -15,7 +15,9 @@ const KelolaInformasiPosyand = () => {
   const [jenisVaksin, setjenisVaksin] = useState([]);
   const [idImunisasi, setidImunisasi] = useState([]);
   function handleOpenModal(id) {
-    setIsopen(true);
+    // setIsopen(true);
+    setisOpenModal(true)
+    // setIsopen(true);
     setidImunisasi(id);
   }
 

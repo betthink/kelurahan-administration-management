@@ -1,14 +1,6 @@
 // lib
 import React, { useEffect, useState } from "react";
-import {
-  Breadcrumb,
-  Table,
-  Button,
-  Space,
-  Input,
-  message as mes,
-  Spin,
-} from "antd";
+import { Breadcrumb, Button, Space, Input, message as mes, Spin } from "antd";
 import { Link } from "react-router-dom";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { Header, Content } from "antd/es/layout/layout";
@@ -16,6 +8,7 @@ import { axiosInstance } from "../../../../utils/axiosInstance";
 import { CgDetailsMore } from "react-icons/cg";
 import { useDebounce } from "use-debounce";
 import { useSelector } from "react-redux";
+import ModalTampilkanData from "../posyandu/components/ModalTampilkanData";
 // components
 function KelolaPenduduk() {
   // variables --
@@ -26,6 +19,11 @@ function KelolaPenduduk() {
   const [dataPenduduk, setdataPenduduk] = useState([]);
   // filter data penduduk
   const [dataSearch, setdataSearch] = useState(null);
+  const [openDetail, setopenDetail] = useState(null);
+  const [dataDetail, setdataDetail] = useState(null);
+  const handleCancel = () => {
+    setopenDetail(false);
+  };
   const [debouncedValue] = useDebounce(dataSearch, 500);
   const filterItem =
     debouncedValue !== null
@@ -56,6 +54,7 @@ function KelolaPenduduk() {
         },
       }
     );
+
     const { value, message } = res.data;
     if (value === 1) {
       mes.success(message);
@@ -63,6 +62,10 @@ function KelolaPenduduk() {
     } else {
       mes.error(message);
     }
+  };
+  const handleOpenDetail = async (item) => {
+    await setdataDetail(item);
+    setopenDetail(true);
   };
   const handleGetDataPenduduk = async () => {
     const url =
@@ -125,13 +128,19 @@ function KelolaPenduduk() {
             <Spin />
           </div>
         ) : (
-          <div className="min-w-full bg-white p-10  rounded-md mb-10">
+          <div className="min-w-full bg-white p-10  rounded-md mb-10  overflow-x-auto">
             <table className="w-full">
               <thead className=" border-b  ">
                 <tr className="text-xs font-bold  ">
-                  <th className="py-2 whitespace-nowrap px-4 font-normal">ID</th>
-                  <th className="py-2 whitespace-nowrap px-4 font-normal">Name</th>
-                  <th className="py-2 whitespace-nowrap px-4 font-normal">NIK</th>
+                  <th className="py-2 whitespace-nowrap px-4 font-normal">
+                    ID
+                  </th>
+                  <th className="py-2 whitespace-nowrap px-4 font-normal">
+                    Name
+                  </th>
+                  <th className="py-2 whitespace-nowrap px-4 font-normal">
+                    NIK
+                  </th>
                   <th className="py-2 whitespace-nowrap px-4 font-normal">
                     Nomor telepon
                   </th>
@@ -146,70 +155,80 @@ function KelolaPenduduk() {
               </thead>
               <tbody>
                 {dataPenduduk.map((item, i) => (
-                  <tr
-                    className={`${
-                      i % 2 === 0 ? "bg-primary" : "bg-secondary"
-                    }  text-xs  `}
-                    key={item.id_penduduk}
-                  >
-                    <td className="py-2 whitespace-nowrap px-4 text-center ">
-                      {item.id_penduduk}
-                    </td>
-                    <td className="py-2 whitespace-nowrap px-4 text-center ">
-                      {item.nama}
-                    </td>
-                    <td className="py-2 whitespace-nowrap px-4 text-center ">
-                      {item.nik}
-                    </td>
-                    <td className="py-2 whitespace-nowrap px-4 text-center ">
-                      {item.nomor_telp}
-                    </td>
-                    <td className="py-2 whitespace-nowrap px-4 text-center ">
-                      {item.alamat}
-                    </td>
+                  <React.Fragment key={item.id_penduduk}>
+                    <tr
+                      className={`${
+                        i % 2 === 0 ? "bg-primary" : "bg-secondary"
+                      }  text-xs  `}
+                      key={item.id_penduduk}
+                    >
+                      <td className="py-2 whitespace-nowrap px-4 text-center ">
+                        {item.id_penduduk}
+                      </td>
+                      <td className="py-2 whitespace-nowrap px-4 text-center ">
+                        {item.nama}
+                      </td>
+                      <td className="py-2 whitespace-nowrap px-4 text-center ">
+                        {item.nik}
+                      </td>
+                      <td className="py-2 whitespace-nowrap px-4 text-center ">
+                        {item.nomor_telp}
+                      </td>
+                      <td className="py-2 whitespace-nowrap px-4 text-center ">
+                        {item.alamat}
+                      </td>
 
-                    <td className="py-2 whitespace-nowrap px-4 flex justify-center">
-                      <Button className="border-none">
-                        <Link
-                          state={{ data: item }}
-                          to={"/Dashboard/Update-Penduduk"}
+                      <td className="py-2 whitespace-nowrap px-4 flex justify-center">
+                        <Button className="border-none">
+                          <Link
+                            state={{ data: item }}
+                            to={"/Dashboard/Update-Penduduk"}
+                          >
+                            <EditOutlined
+                              style={{ fontSize: "1.2rem" }}
+                              className="text-success"
+                            />
+                          </Link>
+                        </Button>
+                        <Button
+                          className="border-none text-manggo"
+                          onClick={() => handleOpenDetail(item)}
+                          type="default"
                         >
-                          <EditOutlined
+                          <CgDetailsMore size={22} />
+                        </Button>
+                        <Button
+                          className="border-none"
+                          onClick={() => handleDeletePenduduk(item.id_penduduk)}
+                          type="default"
+                        >
+                          <DeleteOutlined
                             style={{ fontSize: "1.2rem" }}
-                            className="text-success"
+                            className="text-danger"
                           />
-                        </Link>
-                      </Button>
-                      <Button
-                        className="border-none text-manggo"
-                        // onClick={() => handleDeletePenduduk(item.id_penduduk)}
-                        type="default"
-                      >
-                        <CgDetailsMore size={22} />
-                      </Button>
-                      <Button
-                        className="border-none"
-                        onClick={() => handleDeletePenduduk(item.id_penduduk)}
-                        type="default"
-                      >
-                        <DeleteOutlined
-                          style={{ fontSize: "1.2rem" }}
-                          className="text-danger"
-                        />
-                      </Button>
-                    </td>
-                  </tr>
+                        </Button>
+                      </td>
+                      {/* modal */}
+                    </tr>
+                    <ModalTampilkanData
+                      data={dataDetail}
+                      isOpen={openDetail}
+                      onCancel={handleCancel}
+                      title={
+                        <p>
+                          Detail data
+                          <span className="text-red-700">
+                            {dataDetail?.nama}
+                          </span>
+                        </p>
+                      }
+                    />
+                  </React.Fragment>
                 ))}
               </tbody>
             </table>
           </div>
         )}
-
-        <Space className="flex justify-end">
-          <Button type="primary" className=" text-third">
-            Download
-          </Button>
-        </Space>
       </Content>
     </div>
   );

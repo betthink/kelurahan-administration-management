@@ -5,6 +5,7 @@ import { axiosWithMultipart } from "../../../utils/axioswithmultipart";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { axiosInstance } from "../../../utils/axiosInstance";
+import NavigatorBar from "../components/NavigatorBar";
 
 const PermohonanSurat = () => {
   const [jenisSurat, setjenisSurat] = useState([]);
@@ -52,17 +53,21 @@ const PermohonanSurat = () => {
     handleGetJenisSurat();
   }, []);
   return (
-    <div className="  w-full md:h-screen bg-whiteSmoke text-white">
-      <Header className="text-white">Permohonan Pembuatan Surat</Header>
-      <Content className=" h-full items-center flex justify-center   ">
+    <div className="  w-full  bg-whiteSmoke h-[100vh] ">
+      <NavigatorBar />
+      <Content className="  items-center flex justify-center   ">
         <Form
           layout="vertical"
           onFinish={handlePermohonanPembuatanSurat}
-          className="w-1/2 border container py-12 mt-10  "
+          className="w-1/2 border container py-12 flex flex-col   gap-6  mt-20 bg-white  shadow-md  "
         >
           <Form.Item
             rules={[{ required: true }]}
-            label={<label style={{ color: "#fff" }}>Jenis Surat</label>}
+            label={
+              <label className="text-green-600 font-semibold">
+                Jenis Surat
+              </label>
+            }
             name="surat"
           >
             <Select placeholder="Pilih jenis permohonan surat">
@@ -74,9 +79,12 @@ const PermohonanSurat = () => {
             </Select>
           </Form.Item>
           <Form.Item>
-            x
-            <Button style={{ color: "#fff" }} block htmlType="submit">
-              Submit
+            <Button
+              block
+              className="bg-green-600 text-white h-10 hover:to-green-700"
+              htmlType="submit"
+            >
+              Ajukan
             </Button>
           </Form.Item>
         </Form>

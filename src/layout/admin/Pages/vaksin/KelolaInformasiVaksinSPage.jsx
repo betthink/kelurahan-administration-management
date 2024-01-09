@@ -37,7 +37,10 @@ function KelolaInformasiVaksinSPage() {
       width: 160,
       render: (id) => (
         <ButtonGroup>
-          <Button onClick={() => handleOnchange(id)} className="bg-success text-white">
+          <Button
+            onClick={() => handleOnchange(id)}
+            className="bg-success text-white"
+          >
             Edit
           </Button>
           <Button
@@ -59,7 +62,7 @@ function KelolaInformasiVaksinSPage() {
     );
     setdataVaksin(
       response.data.map((item, index) => {
-        return { ...item, key: index.toString() };
+        return { ...item, key: index.toString(), id_vaksin: index + 1 };
       })
     );
   };
@@ -85,7 +88,6 @@ function KelolaInformasiVaksinSPage() {
     }
   };
   const handleUpdateVaksin = async () => {
-
     const res = await axiosWithMultipart(
       "/administrasikelurahan/src/update/updateVaksin.php",
       {

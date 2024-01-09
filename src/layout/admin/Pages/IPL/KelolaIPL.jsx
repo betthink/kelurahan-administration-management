@@ -6,13 +6,12 @@ import { axiosInstance } from "../../../../utils/axiosInstance";
 import ButtonGroup from "antd/es/button/button-group";
 import { useSelector } from "react-redux";
 import { TiDocumentText } from "react-icons/ti";
-import { EditOutlined } from "@ant-design/icons";
 import { CgDetailsMore } from "react-icons/cg";
 
 function KelolaIPL() {
-  const [data, setdata] = useState([]);
   const [isLoading, setisLoading] = useState(true);
   const user = useSelector((state) => state.userReducer.value);
+  const [data, setdata] = useState([]);
 
   const handleGetDataIPL = async () => {
     const url =

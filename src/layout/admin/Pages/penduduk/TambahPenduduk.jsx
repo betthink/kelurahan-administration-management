@@ -56,9 +56,15 @@ function TambahPenduduk() {
       tempatLahir,
       kepalaKeluarga,
     } = e;
-    const date = `${tanggalLahir.$d.getFullYear()}-${
-      tanggalLahir.$d.getMonth() + 1
-    }-${tanggalLahir.$d.getDate()}`;
+   const date = `${tanggalLahir.$d.getFullYear()}-${(
+     tanggalLahir.$d.getMonth() + 1
+   )
+     .toString()
+     .padStart(2, "0")}-${tanggalLahir.$d
+     .getDate()
+     .toString()
+     .padStart(2, "0")}`;
+
     setdataEntry({
       ...dataEntry,
 
@@ -133,7 +139,7 @@ function TambahPenduduk() {
           margin: "16px 0",
         }}
       />
-      <div className="h-full self-center flex  p-6 bg-white">
+      <div className="h-full self-center flex  p-6 bg-white px-20">
         {/* form */}
         <Form
           onFinish={onFinish}
@@ -143,7 +149,7 @@ function TambahPenduduk() {
         >
           <Space
             direction="vertical"
-            className="grid md:grid-cols-2 grid-cols-1"
+            className="grid md:grid-cols-3 grid-cols-1 "
           >
             <Form.Item
               rules={[
@@ -302,8 +308,14 @@ function TambahPenduduk() {
               </Select>
             </Form.Item>
           </Space>
-          <Form.Item className="bg-purp">
-            <Button block type="primary" htmlType="submit" onClick={showModal}>
+          <Form.Item className="rounded-md shadow-md">
+            <Button
+              className="h-10 font-semibold hover:font-bold hover:translate-y-[.1rem] bg-third hover:bg-none"
+              block
+              type="primary"
+              htmlType="submit"
+              onClick={showModal}
+            >
               Tambahkan
             </Button>
           </Form.Item>
@@ -313,14 +325,18 @@ function TambahPenduduk() {
             title="Apakah Data Sudah Benar?"
             open={isModalOpen}
             footer={[
-              <Button key="back" className="bg-danger text-white" onClick={handleCancel}>
+              <Button
+                key="back"
+                className="bg-danger text-white"
+                onClick={handleCancel}
+              >
                 Batalkan
               </Button>,
-              <Button className="bg-success"
+              <Button
+                className="bg-success"
                 key="submit"
-                type="primary" 
+                type="primary"
                 onClick={handleOk}
-
               >
                 Submit
               </Button>,
@@ -337,8 +353,8 @@ function TambahPenduduk() {
             <p>darah: {dataEntry.darah}</p>
             <p>tangga lLahir: {dataEntry.tanggal_lahir}</p>
             <p>jenis Kelamin: {dataEntry.jenis_kelamin}</p>
-            <p>status: {dataEntry.status}</p>
-            <p>status Penduduk: {dataEntry.statusPenduduk}</p>
+            <p>status: {dataEntry.status_diri}</p>
+            <p>status Penduduk: {dataEntry.status_tinggal}</p>
           </Modal>
         </>
       </div>
