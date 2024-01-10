@@ -38,6 +38,7 @@ function TambahPenduduk() {
     nomor_telp: "",
     jenis_kelamin: "",
   });
+   
   // functions
   const onFinish = (e) => {
     const {
@@ -183,7 +184,12 @@ function TambahPenduduk() {
                 },
               ]}
             >
-              <Input placeholder="Masukan NIK Penduduk" value={dataEntry.nik} />
+              <Input
+                name="nik"
+                maxLength={17}
+                placeholder="Masukan NIK Penduduk"
+                value={dataEntry.nik}
+              />
             </Form.Item>
             <Form.Item
               name="noKK"
@@ -204,6 +210,7 @@ function TambahPenduduk() {
               ]}
             >
               <Input
+                maxLength={17}
                 placeholder="Masukan Nomor KK Penduduk"
                 value={dataEntry.no_kk}
               />

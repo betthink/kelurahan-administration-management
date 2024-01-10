@@ -68,10 +68,9 @@ function LandingPage() {
   };
 
   return (
-    <Layout className="w-full bg-whiteSmoke ">
-      <Content className="mx-auto  w-full md:h-screen flex flex-col-reverse md:flex-row md:justify-between    text-black gap-10">
-        <div className="md:w-1/2 flex justify-center flex-col container ">
-          <div className="w-full py-6 flex justify-center px-3 md:px-0 bg-white border shadow-md  flex-col items-center">
+    <Layout className="w-full h-screen bg-whiteSmoke ">
+      <Content className=" h-screen  text-black gap-10 w-full mx-auto my-20 px-64">
+          <div className="w-full container  py-6 flex justify-center px-3 md:px-0 bg-white border shadow-md  flex-col items-center">
             <div className="font-semibold text-base md:text-2xl text-green-600">
               Masuk Sebagai warga
             </div>
@@ -140,23 +139,7 @@ function LandingPage() {
                 Login di sini
               </Button>
             </div>
-          </div>
-        </div>
-        <div className=" py-6 md:h-screen w-full md:w-1/2 bg-gradient-to-r from-green-600 to-green-800  text-white flex flex-col items-center justify-center gap-2 px-3 text-center">
-          <div className="md:w-[30rem] flex flex-col gap-2 capitalize font-sans">
-            <h2 className="text-base md:text-2xl">Selamat datang warga</h2>
-            <h3 className="text-sm md:text-lg">
-              Silakan melakukan login dengan data anda untuk menggunakan sarana
-              dari
-            </h3>
-          </div>
-          <div className="p-2 border border-double rounded-lg shadow-md">
-            <img
-              className="md:max-w-md object-cover max-w-[10rem]"
-              src={BannerWarga}
-              alt="Banner warga"
-            />
-          </div>
+          {/* </div> */}
         </div>
       </Content>
     </Layout>

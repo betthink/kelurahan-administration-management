@@ -66,12 +66,12 @@ function KelolaIPL() {
                   <th className="py-2 whitespace-nowrap px-4 font-normal text-start">
                     Status Tinggal
                   </th>
-                  <th className="py-2 whitespace-nowrap px-4 font-normal text-start">
+                  {/* <th className="py-2 whitespace-nowrap px-4 font-normal text-start">
                     Status Pembayaran
-                  </th>
+                  </th> */}
 
                   <th className="py-2 whitespace-nowrap px-4 font-normal text-center ">
-                    Action
+                    Aksi
                   </th>
                 </tr>
               </thead>
@@ -95,8 +95,7 @@ function KelolaIPL() {
                     <td className="py-2 whitespace-nowrap px-4 text-start ">
                       {item.status_tinggal}
                     </td>
-                    <td className="py-2 whitespace-nowrap px-4 text-start">
-                      {/* {getStatusPembayaran(item.id_user)} */}
+                    {/* <td className="py-2 whitespace-nowrap px-4 text-start">
 
                       <div
                         className={`p-1 rounded items-center justify-center flex w-fit bg-green-100
@@ -109,7 +108,7 @@ function KelolaIPL() {
                           Lunas
                         </p>
                       </div>
-                    </td>
+                    </td> */}
 
                     <td className="py-2 whitespace-nowrap px-4 flex justify-center">
                       <Button className="border-none text-success">
@@ -119,7 +118,7 @@ function KelolaIPL() {
                           to={"DetailRiwayatPembayaran"}
                         >
                           <CgDetailsMore size={22} className="" />
-                          <p>Detail</p>
+                          <p>Detail pembayaran</p>
                         </Link>
                       </Button>
                       {user.role === "super_admin" ? null : (

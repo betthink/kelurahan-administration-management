@@ -65,10 +65,9 @@ const LoginAdmin = () => {
     formik.setFieldValue(target.name, target.value);
   };
   return (
-  
     <Layout className="w-full bg-[#F5F5F5] ">
-      <Content className="mx-auto  w-full md:h-screen flex flex-col-reverse md:flex-row md:justify-between    text-black px-10 md:px-6">
-        <div className=" w-full md:w-1/2 py-6 flex justify-center flex-col items-center">
+      <Content className=" h-screen  text-black gap-10 w-full mx-auto my-20 px-64">
+        <div className=" w-full container  py-6 flex justify-center px-3 md:px-0 bg-white border shadow-md  flex-col items-center">
           <div className="font-semibold text-base md:text-2xl">
             Masuk Sebagai Admin
           </div>
@@ -120,19 +119,6 @@ const LoginAdmin = () => {
               </Button>
             </Form.Item>
           </Form>
-
-        </div>
-        <div className=" py-6 md:h-screen w-full md:w-1/2 bg-third rounded-lg md:rounded-none text-white flex flex-col items-center justify-center gap-6 px-3 text-center">
-          <h2 className="text-base md:text-3xl">Selamat datang warga</h2>
-          <h3 className="text-sm md:text-lg">
-            Silakan melakukan login dengan data anda untuk menggunakan sarana
-            dari
-          </h3>
-          <img
-            className="md:max-w-md object-cover max-w-[10rem]"
-            src={BannerAdmin}
-            alt="Banner warga"
-          />
         </div>
       </Content>
     </Layout>
