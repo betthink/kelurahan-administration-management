@@ -169,7 +169,7 @@ const CmsLayouts = () => {
                 textAlign: "center",
               }}
             >
-              Mantap corp 😁 ©2023 Created by Robetsn
+              ©2023 Created by Ade
             </Footer>
           </Layout>
         </Layout>

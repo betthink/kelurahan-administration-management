@@ -21,7 +21,7 @@ const TambahVaksinPage = () => {
   };
   const handleAddDataVaksin = async () => {
     try {
-      console.log(vaksin);
+      // console.log(vaksin);
       const response = await axiosWithMultipart(
         "/administrasikelurahan/src/post/addDataVaksin.php",
         {
@@ -92,12 +92,27 @@ const TambahVaksinPage = () => {
           <Modal
             title="Apakah nama vaksin sudah benar?"
             open={isModalOpen}
-            bodyStyle={{}}
-            onOk={handleOk}
+            footer={[
+              <Button
+                key="back"
+                className="bg-danger text-white"
+                onClick={handleCancel}
+              >
+                Batalkan
+              </Button>,
+              <Button
+                className="bg-success"
+                key="submit"
+                type="primary"
+                onClick={handleOk}
+              >
+                Submit
+              </Button>,
+            ]}
             onCancel={handleCancel}
           >
             <p>
-              Nama vaksin:
+              Nama vaksin baru:
               <span className="text-green-600"> {vaksin.jenis_vaksin} </span>
             </p>
           </Modal>

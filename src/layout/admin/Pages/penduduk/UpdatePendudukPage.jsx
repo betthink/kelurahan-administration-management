@@ -7,6 +7,7 @@ import {
   Modal,
   Select,
   Space,
+  message as mes,
 } from "antd";
 import { Header } from "antd/es/layout/layout";
 import React, { useState, useEffect } from "react";
@@ -33,45 +34,70 @@ const UpdatePendudukPage = () => {
     "Lain-Lain",
   ];
   // functions
-  const onFinish = (e) => {
-    // const {
-
-    // } = e;
-    console.log(e);
-    // const date = `${tanggalLahir.$d.getFullYear()}-${
-    //   tanggalLahir.$d.getMonth() + 1
-    // }-${tanggalLahir.$d.getDate()}`;
-    // setdataEntry({
-    //   ...dataEntry,
-
-    //   nama,
-    //   nik,
-    //   no_kk: noKK,
-    //   tanggal_lahir: date,
-    //   tempat_lahir: tempatLahir,
-    //   alamat,
-    //   darah,
-    //   kepala_keluarga: kepalaKeluarga,
-    //   status_tinggal: statusPenduduk,
-    //   status_diri: status,
-    //   nomor_telp: nomorTelp,
-    //   jenis_kelamin: jenisKelamin,
-    // });
-  };
-
-  const handleUpdatePenduduk = async (e) => {
-    // const res = await axiosWithMultipart(
-    //   `/administrasikelurahan/src/update/updateDataP.php`,
-    //   {
-    //     method: "post",
-    //     data: ,
-    //   }
-    // );
-  };
-  // modal
   const showModal = () => {
     setIsModalOpen(true);
   };
+  const onFinish = (e) => {
+    const {
+      nama,
+      nik,
+      no_kk,
+      alamat,
+      pekerjaan,
+      agama,
+      nomor_telp,
+      // tanggalLahir,
+      darah,
+      jenis_kelamin,
+      status_tinggal,
+      status_diri,
+      tempat_lahir,
+      kepala_keluarga,
+    } = e;
+    // const date = `${tanggalLahir.$d.getFullYear()}-${
+    //   tanggalLahir.$d.getMonth() + 1
+    // }-${tanggalLahir.$d.getDate()}`;
+    setdataEntry({
+      ...dataEntry,
+
+      nama,
+      nik,
+      no_kk,
+      // tanggal_lahir: date,
+      tempat_lahir,
+      alamat,
+      darah,
+      agama,
+      pekerjaan,
+      kepala_keluarga,
+      status_tinggal,
+      status_diri,
+      nomor_telp,
+      jenis_kelamin,
+    });
+    showModal();
+  };
+
+  const handleUpdatePenduduk = async () => {
+    const url = `/administrasikelurahan/src/update/updateDataP.php`;
+    try {
+      const res = await axiosWithMultipart(url, {
+        method: "post",
+        data: dataEntry,
+      });
+      const { data, status } = res;
+      if (status === 200) {
+        mes.success(data.message);
+        navigate("/Dashboard/Kelola-Penduduk");
+      } else {
+        mes.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // modal
+
   const handleOk = async () => {
     handleUpdatePenduduk();
     setIsModalOpen(false);
@@ -79,14 +105,8 @@ const UpdatePendudukPage = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const handleReformatData = () => {
-    dataPenduduk.tanggal_lahir = new Date(dataPenduduk.tanggal_lahir);
-    setreformatData(dataPenduduk);
-    console.log(reformatData);
-  };
-  useEffect(() => {
-    handleReformatData();
-  }, [isLoading]);
+
+  useEffect(() => {}, [isLoading]);
   return (
     <div className="mx-20">
       {/* path */}
@@ -195,14 +215,16 @@ const UpdatePendudukPage = () => {
               <Input placeholder="Masukan Npmor Telp Penduduk" />
             </Form.Item>
 
-            <Form.Item 
-            // name="tanggal_lahir"
-             label="Tanggal Lahir" required>
+            {/* <Form.Item
+              name="tanggal_lahir"
+              label="Tanggal Lahir"
+              required
+            >
               <DatePicker
                 placeholder="Pilih Kelahiran Tanggal"
                 style={{ width: "100%" }}
               />
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item name="tempat_lahir" label="Tempat Lahir" required>
               <Input placeholder="Masukan Tempat Lahir Sesuai KTP" />
@@ -244,8 +266,8 @@ const UpdatePendudukPage = () => {
             </Form.Item>
           </Space>
           <Form.Item className="bg-purp">
-            <Button block type="primary" htmlType="submit" onClick={showModal}>
-              Tambahkan
+            <Button block type="primary" htmlType="submit">
+              Ubah
             </Button>
           </Form.Item>
         </Form>
@@ -253,8 +275,23 @@ const UpdatePendudukPage = () => {
           <Modal
             title="Apakah Data Sudah Benar?"
             open={isModalOpen}
-            bodyStyle={{}}
-            onOk={handleOk}
+            footer={[
+              <Button
+                key="back"
+                className="bg-danger text-white"
+                onClick={handleCancel}
+              >
+                Batalkan
+              </Button>,
+              <Button
+                className="bg-success"
+                key="submit"
+                type="primary"
+                onClick={handleOk}
+              >
+                Simpan
+              </Button>,
+            ]}
             onCancel={handleCancel}
           >
             <p>nama: {dataEntry.nama}</p>
@@ -265,10 +302,12 @@ const UpdatePendudukPage = () => {
             <p>tempat_lahir: {dataEntry.tempat_lahir}</p>
             <p>kepala Keluarga: {dataEntry.kepala_keluarga}</p>
             <p>darah: {dataEntry.darah}</p>
-            <p>tangga lLahir: {dataEntry.tanggal_lahir}</p>
+            <p>pekerjaan: {dataEntry.pekerjaan}</p>
+            <p>agama: {dataEntry.agama}</p>
+            {/* <p>tangga lLahir: {dataEntry.tanggal_lahir}</p> */}
             <p>jenis Kelamin: {dataEntry.jenis_kelamin}</p>
-            <p>status: {dataEntry.status}</p>
-            <p>status Penduduk: {dataEntry.statusPenduduk}</p>
+            <p>status: {dataEntry.status_diri}</p>
+            <p>status Penduduk: {dataEntry.status_tinggal}</p>
           </Modal>
         </>
       </div>

@@ -37,7 +37,7 @@ function LandingPage() {
             isLoggin: true,
           })
         );
-        navigate("/HomePage", { state: { data } });
+        navigate("/Informasi-iuran", { state: { data } });
       } else {
         mes.error(message);
       }

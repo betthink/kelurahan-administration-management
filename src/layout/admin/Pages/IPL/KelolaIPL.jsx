@@ -3,7 +3,6 @@ import { Breadcrumb, Table, Button, Spin } from "antd";
 import { Link } from "react-router-dom";
 import { Content, Header } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
-import ButtonGroup from "antd/es/button/button-group";
 import { useSelector } from "react-redux";
 import { TiDocumentText } from "react-icons/ti";
 import { CgDetailsMore } from "react-icons/cg";
@@ -31,32 +30,6 @@ function KelolaIPL() {
     }
   };
 
-  const getStatusPembayaran = async (id) => {
-    const url = `/administrasikelurahan/src/api/fetchDataRiwayatPembayaranByIduser.php?id_user=${id}`;
-    const res = await axiosInstance.get(url);
-    const { status, data } = res;
-
-    if (status === 200) {
-      const id_pembayaran_values = data.map((item) => item.id_pembayaran);
-      const max_id_pembayaran = Math.max(...id_pembayaran_values);
-      const lastData = data.filter(
-        (item) => parseInt(item.id_pembayaran) === max_id_pembayaran
-      );
-      const dateVerifikasi = new Date(lastData[0].waktu_verifikasi);
-      const yearVerifikasi = dateVerifikasi.getFullYear();
-      const monthVerifikasi = dateVerifikasi.getMonth() + 1;
-      const currentDate = new Date();
-      const currentYear = currentDate.getFullYear();
-      const currentMonth = currentDate.getMonth() + 1;
-      const isMatch =
-        yearVerifikasi === currentYear && monthVerifikasi === currentMonth;
-
-      return isMatch ? "Lunas" : "Terhutang";
-    }
-
-    return "Error"; // or whatever default value you want
-  };
-
   useEffect(() => {
     handleGetDataIPL();
   }, []);
@@ -81,9 +54,9 @@ function KelolaIPL() {
             <table className="w-full ">
               <thead className=" border-b   ">
                 <tr className="text-xs  ">
-                  <th className="py-2 whitespace-nowrap px-4 font-normal text-start">
+                  {/* <th className="py-2 whitespace-nowrap px-4 font-normal text-start">
                     ID
-                  </th>
+                  </th> */}
                   <th className="py-2 whitespace-nowrap px-4 font-normal text-start">
                     Nama Kepala Keluarga
                   </th>
@@ -110,9 +83,9 @@ function KelolaIPL() {
                     } text-four `}
                     key={item.id}
                   >
-                    <td className="py-2 whitespace-nowrap px-4 text-start ">
+                    {/* <td className="py-2 whitespace-nowrap px-4 text-start ">
                       {item.id}
-                    </td>
+                    </td> */}
                     <td className="py-2 whitespace-nowrap px-4 text-start ">
                       {item.nama}
                     </td>
@@ -149,19 +122,21 @@ function KelolaIPL() {
                           <p>Detail</p>
                         </Link>
                       </Button>
-                      <Button
-                        className="border-none text-manggo"
-                        type="default"
-                      >
-                        <Link
-                          state={{ data: item }}
-                          to={"Verifikasi-Pembayaran"}
-                          className=" flex justify-center items-center"
+                      {user.role === "super_admin" ? null : (
+                        <Button
+                          className="border-none text-manggo"
+                          type="default"
                         >
-                          <TiDocumentText size={22} />
-                          <p>Verifikasi</p>
-                        </Link>
-                      </Button>
+                          <Link
+                            state={{ data: item }}
+                            to={"Verifikasi-Pembayaran"}
+                            className=" flex justify-center items-center"
+                          >
+                            <TiDocumentText size={22} />
+                            <p>Verifikasi</p>
+                          </Link>
+                        </Button>
+                      )}
                     </td>
                   </tr>
                 ))}

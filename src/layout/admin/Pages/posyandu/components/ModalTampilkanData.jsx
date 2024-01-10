@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Button, Modal, Form, Input, Select, message as mes } from "antd";
 import { axiosWithMultipart } from "../../../../../utils/axioswithmultipart";
 export default function ModalTampilkanData({ isOpen, onCancel, data, title }) {
- 
   //   async function handleAddPesertaPosyandu(value) {
   //     const url = `/administrasikelurahan/src/post/addDataPesertaPosyandu.php`;
   //     try {
@@ -24,23 +23,20 @@ export default function ModalTampilkanData({ isOpen, onCancel, data, title }) {
   //   }
   return (
     <Modal footer={false} title={title} onCancel={onCancel} open={isOpen}>
-      <div>
-        <p>{data?.nama}</p>
-        <p>{data?.nik}</p>
-        <p>{data?.no_kk}</p>
-        <p>{data?.tanggal_lahir}</p>
-        <p>{data?.tempat_lahir}</p>
-        <p>{data?.agama}</p>
-        <p>{data?.pekerjaan}</p>
-        <p>{data?.rt}</p>
-        <p>{data?.rw}</p>
-        <p>{data?.jenis_kelamin}</p>
-        <p>{data?.nomor_telp}</p>
-        <p>{data?.alamat}</p>
-        <p>{data?.darah}</p>
-        <p>{data?.nomor_telp}</p>
-        <p>{data?.status_tinggal}</p>
-        <p>{data?.status_diri}</p>
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-2">
+        <p>nama:</p> <span className="text-green-500"> {data?.nama}</span>
+        <p>nik:</p> <span className="text-green-500"> {data?.nik}</span>
+        <p>no Kartu Keluarga:</p> <span className="text-green-500"> {data?.no_kk}</span>
+        <p>alamat:</p> <span className="text-green-500"> {data?.alamat}</span>
+        <p>nomorTelp:</p> <span className="text-green-500"> {data?.nomor_telp}</span>
+        <p>Tempat lahir:</p> <span className="text-green-500"> {data?.tempat_lahir}</span>
+        <p>darah:</p> <span className="text-green-500"> {data?.darah}</span>
+        <p>pekerjaan:</p> <span className="text-green-500"> {data?.pekerjaan}</span>
+        <p>agama:</p> <span className="text-green-500"> {data?.agama}</span>
+        <p>Jenis Kelamin:</p> <span className="text-green-500"> {data?.jenis_kelamin}</span>
+        <p>status:</p> <span className="text-green-500"> {data?.status_diri}</span>
+        <p>status Penduduk:</p> <span className="text-green-500"> {data?.status_tinggal}</span>
+        <p>kepala Keluarga:</p> <span className="text-green-500"> {data?.kepala_keluarga == 1 ? "Iya": "Tidak"}</span>
       </div>
     </Modal>
   );

@@ -180,9 +180,9 @@ function KelolaPermohonanSurat() {
           <table className="w-full ">
             <thead className=" border-b   ">
               <tr className="text-xs  ">
-                <th className="py-2 whitespace-nowrap px-4 font-normal text-start">
+                {/* <th className="py-2 whitespace-nowrap px-4 font-normal text-start">
                   ID
-                </th>
+                </th> */}
                 <th className="py-2 whitespace-nowrap px-4 font-normal text-start">
                   Nama Pemohon
                 </th>
@@ -199,9 +199,9 @@ function KelolaPermohonanSurat() {
                 <th className="py-2 whitespace-nowrap px-4 font-normal text-start">
                   RT
                 </th>
-                <th className="py-2 whitespace-nowrap px-4 font-normal text-start">
+                {/* <th className="py-2 whitespace-nowrap px-4 font-normal text-start">
                   Status Persetujuan
-                </th>
+                </th> */}
 
                 <th className="py-2 whitespace-nowrap px-4 font-normal text-center ">
                   Unduh
@@ -216,9 +216,9 @@ function KelolaPermohonanSurat() {
                   } text-four `}
                   key={i}
                 >
-                  <td className="py-2 whitespace-nowrap px-4 text-start ">
+                  {/* <td className="py-2 whitespace-nowrap px-4 text-start ">
                     {item.id_pemohon}
-                  </td>
+                  </td> */}
                   <td className="py-2 whitespace-nowrap px-4 text-start ">
                     {item.nama}
                   </td>
@@ -235,7 +235,7 @@ function KelolaPermohonanSurat() {
                   <td className="py-2 whitespace-nowrap px-4 text-start ">
                     {item.rt}
                   </td>
-                  <td className="py-2 whitespace-nowrap px-4 text-start ">
+                  {/* <td className="py-2 whitespace-nowrap px-4 text-start ">
                     <p
                       className={`${
                         item.status_permohonan === 1
@@ -247,7 +247,7 @@ function KelolaPermohonanSurat() {
                         ? "Sudah di approve"
                         : "Belum di approve"}
                     </p>
-                  </td>
+                  </td> */}
 
                   <td className="py-2 whitespace-nowrap px-4 flex justify-center">
                     <Button

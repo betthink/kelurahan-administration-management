@@ -7,6 +7,7 @@ import { axiosInstance } from "../../../../utils/axiosInstance";
 import ModalTambahPeserta from "./components/ModalTambahPeserta";
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
 import ModalUpdateTahapanVaksin from "./components/ModalUpdateTahapanVaksin";
+import { useSelector } from "react-redux";
 
 const KelolaInformasiPosyand = () => {
   const [dataPosyandu, setdataPosyandu] = useState([]);
@@ -14,6 +15,7 @@ const KelolaInformasiPosyand = () => {
   const [isOpen, setIsopen] = useState(false);
   const [jenisVaksin, setjenisVaksin] = useState([]);
   const [idImunisasi, setidImunisasi] = useState([]);
+   const user = useSelector((state) => state.userReducer.value);
   function handleOpenModal(id) {
     // setIsopen(true);
     setisOpenModal(true)
@@ -54,14 +56,10 @@ const KelolaInformasiPosyand = () => {
       console.log(error);
     }
   }
-  const column = [
+  const columns = [
+    // ... Kolom umum di sini
     {
-      title: "ID",
-      key: "id_imunisasi",
-      dataIndex: "id_imunisasi",
-    },
-    {
-      title: "Orang Tua / Wali  ",
+      title: "Orang Tua / Wali",
       key: "wali_peserta",
       dataIndex: "wali_peserta",
     },
@@ -75,7 +73,10 @@ const KelolaInformasiPosyand = () => {
       key: "tahap_vaksin",
       dataIndex: "tahap_vaksin",
     },
-    {
+  ];
+
+  if (user.role !== "super_admin") {
+    columns.push({
       title: "Aksi",
       key: "action",
       render: (data) => (
@@ -94,8 +95,9 @@ const KelolaInformasiPosyand = () => {
           </Button>
         </ButtonGroup>
       ),
-    },
-  ];
+    });
+  }
+
   async function handleGetDataPesertaPosyandu() {
     const url = `/administrasikelurahan/src/api/fetchDataPesertaPosyandu.php`;
     try {
@@ -141,7 +143,7 @@ const KelolaInformasiPosyand = () => {
             </Button>
           </ButtonGroup>
         </Space>
-        <Table dataSource={dataPosyandu} columns={column} />
+        <Table dataSource={dataPosyandu} columns={columns} />
       </Content>
       {/* modal add peserta */}
       <>

@@ -132,9 +132,9 @@ function KelolaPenduduk() {
             <table className="w-full">
               <thead className=" border-b  ">
                 <tr className="text-xs font-bold  ">
-                  <th className="py-2 whitespace-nowrap px-4 font-normal">
+                  {/* <th className="py-2 whitespace-nowrap px-4 font-normal">
                     ID
-                  </th>
+                  </th> */}
                   <th className="py-2 whitespace-nowrap px-4 font-normal">
                     Name
                   </th>
@@ -162,9 +162,9 @@ function KelolaPenduduk() {
                       }  text-xs  `}
                       key={item.id_penduduk}
                     >
-                      <td className="py-2 whitespace-nowrap px-4 text-center ">
+                      {/* <td className="py-2 whitespace-nowrap px-4 text-center ">
                         {item.id_penduduk}
-                      </td>
+                      </td> */}
                       <td className="py-2 whitespace-nowrap px-4 text-center ">
                         {item.nama}
                       </td>
@@ -177,37 +177,51 @@ function KelolaPenduduk() {
                       <td className="py-2 whitespace-nowrap px-4 text-center ">
                         {item.alamat}
                       </td>
-
-                      <td className="py-2 whitespace-nowrap px-4 flex justify-center">
-                        <Button className="border-none">
-                          <Link
-                            state={{ data: item }}
-                            to={"/Dashboard/Update-Penduduk"}
+                      {user.role === "super_admin" ? (
+                        <td className="py-2 whitespace-nowrap px-4 flex justify-center">
+                          <Button
+                            className="border-none text-manggo"
+                            onClick={() => handleOpenDetail(item)}
+                            type="default"
                           >
-                            <EditOutlined
+                            <CgDetailsMore size={22} />
+                          </Button>
+                        </td>
+                      ) : (
+                        <td className="py-2 whitespace-nowrap px-4 flex justify-center">
+                          <Button className="border-none">
+                            <Link
+                              state={{ data: item }}
+                              to={"/Dashboard/Update-Penduduk"}
+                            >
+                              <EditOutlined
+                                style={{ fontSize: "1.2rem" }}
+                                className="text-success"
+                              />
+                            </Link>
+                          </Button>
+                          <Button
+                            className="border-none text-manggo"
+                            onClick={() => handleOpenDetail(item)}
+                            type="default"
+                          >
+                            <CgDetailsMore size={22} />
+                          </Button>
+                          <Button
+                            className="border-none"
+                            onClick={() =>
+                              handleDeletePenduduk(item.id_penduduk)
+                            }
+                            type="default"
+                          >
+                            <DeleteOutlined
                               style={{ fontSize: "1.2rem" }}
-                              className="text-success"
+                              className="text-danger"
                             />
-                          </Link>
-                        </Button>
-                        <Button
-                          className="border-none text-manggo"
-                          onClick={() => handleOpenDetail(item)}
-                          type="default"
-                        >
-                          <CgDetailsMore size={22} />
-                        </Button>
-                        <Button
-                          className="border-none"
-                          onClick={() => handleDeletePenduduk(item.id_penduduk)}
-                          type="default"
-                        >
-                          <DeleteOutlined
-                            style={{ fontSize: "1.2rem" }}
-                            className="text-danger"
-                          />
-                        </Button>
-                      </td>
+                          </Button>
+                        </td>
+                      )}
+
                       {/* modal */}
                     </tr>
                     <ModalTampilkanData
@@ -216,7 +230,7 @@ function KelolaPenduduk() {
                       onCancel={handleCancel}
                       title={
                         <p>
-                          Detail data
+                          Detail data{" "}
                           <span className="text-red-700">
                             {dataDetail?.nama}
                           </span>
