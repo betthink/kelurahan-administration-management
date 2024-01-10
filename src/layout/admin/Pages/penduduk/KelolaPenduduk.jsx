@@ -96,7 +96,11 @@ function KelolaPenduduk() {
             className="w-full"
             items={[
               { title: "Admin" },
-              { title: <Link to={"/KelolaPenduduk"}>Kelola Penduduk</Link> },
+              {
+                title: (
+                  <Link to={"/Dashboard/Kelola-Penduduk"}>Kelola Penduduk</Link>
+                ),
+              },
             ]}
           />
           <Search

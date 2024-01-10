@@ -133,8 +133,16 @@ function TambahPenduduk() {
       <Breadcrumb
         items={[
           { title: "Admin" },
-          { title: <Link to={"/KelolaPenduduk"}>Kelola Penduduk</Link> },
-          { title: <Link to={"/KelolaPenduduk"}>Tambah Penduduk</Link> },
+          {
+            title: (
+              <Link to={"/Dashboard/Kelola-Penduduk"}>Kelola Penduduk</Link>
+            ),
+          },
+          {
+            title: (
+              <Link to={"/Dashboard/Tambah-Penduduk"}>Tambah Penduduk</Link>
+            ),
+          },
         ]}
         style={{
           margin: "16px 0",

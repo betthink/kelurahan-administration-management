@@ -38,19 +38,14 @@ export default function NavigatorBar() {
     },
   ];
   return (
-    <nav className="w-full  bg-green-600 text-white  flex">
-      <ul className="flex justify-between w-full text-sm px-40 py-3">
+    <nav className="w-full  bg-green-600 text-white  flex overflow-hidden">
+      <ul className="flex justify-between w-full text-sm  px-2 md:px-40 py-3">
         <li className="flex space-x-10 pt-3">
           <div className="flex gap-2 items-center ">
             <PiBookThin className="text-secondary" size={30} />
             <span className="text-secondary font-bold text-3xl ">Kelurahan</span>
           </div>
-          {/* <div className="flex space-x-10">
-            <Link to="/Informasi-iuran">Riwayat Pembayaran</Link>
-            <Link to="/Homepage/Permohonan-Surat">Permohonan surat</Link>
-          </div> */}
         </li>
-
         <li>
           <div className="flex  items-center justify-center gap-6 cursor-pointer">
             <Dropdown trigger={["click"]} menu={{ items }}>

@@ -110,11 +110,11 @@ export default function DetailRiwayatPembayaran() {
           <Breadcrumb
             items={[
               { title: "Admin" },
-              { title: <Link to={"/KelolaIPL"}>Kelola IPL</Link> },
+              { title: <Link to={"/Dashboard/Kelola-IPL"}>Kelola IPL</Link> },
 
               {
                 title: (
-                  <Link to={"/VerifikasiPembayaran"}>
+                  <Link to={"/Dashboard/Kelola-IPL/DetailRiwayatPembayaran"}>
                     Detail Riwayat Pembayaran
                   </Link>
                 ),
@@ -126,7 +126,11 @@ export default function DetailRiwayatPembayaran() {
           />
           <div className="">
             <span>Status : </span>{" "}
-            <span className={`${isMatch ? "text-green-500" : "text-red-700"} font-bold text-lg underline`}>
+            <span
+              className={`${
+                isMatch ? "text-green-500" : "text-red-700"
+              } font-bold text-lg underline`}
+            >
               {" "}
               {isMatch ? "Lunas" : "Belum Lunas"}
             </span>

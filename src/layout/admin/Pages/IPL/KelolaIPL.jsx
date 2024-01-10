@@ -39,8 +39,8 @@ function KelolaIPL() {
         <Breadcrumb
           className=""
           items={[
-            { title: "Home" },
-            { title: <Link to={"KelolaIPL"}>Kelola IPL</Link> },
+            { title: "Admin" },
+            { title: <Link to={"/Dashboard/Kelola-IPL"}>Kelola IPL</Link> },
           ]}
         />
       </Header>

@@ -32,7 +32,7 @@ const CmsLayouts = () => {
     },
     {
       link: "/Dashboard/Kelola-Penduduk",
-      title: "Kelola Penduduk",
+      title: "Kelola penduduk",
       icon: TeamOutlined,
     },
     {
@@ -42,12 +42,12 @@ const CmsLayouts = () => {
     },
     {
       link: "/Dashboard/kelola-Surat",
-      title: "kelola Surat",
+      title: "Kelola surat",
       icon: UserOutlined,
     },
     {
       link: "/Dashboard/Informasi-PosyandPage",
-      title: "kelola PosyandPage",
+      title: "Kelola posyandu",
       icon: TeamOutlined,
     },
   ];
@@ -76,15 +76,15 @@ const CmsLayouts = () => {
   // state
   const [collapsed, setCollapsed] = useState(false);
   const items = [
-    {
-      key: "1",
-      label: (
-        <span
-        >
-        Profile
-        </span>
-      ),
-    },
+    // {
+    //   key: "1",
+    //   label: (
+    //     <span
+    //     >
+    //     Profile
+    //     </span>
+    //   ),
+    // },
     {
       key: "3",
       danger: true,

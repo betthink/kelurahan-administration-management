@@ -66,9 +66,9 @@ const LoginAdmin = () => {
   };
   return (
     <Layout className="w-full bg-[#F5F5F5] ">
-      <Content className=" h-screen  text-black gap-10 w-full mx-auto my-20 px-64">
+      <Content className=" h-screen px-2 md:px-0 w-full  text-black gap-10 md:w-1/2 mx-auto my-20 ">
         <div className=" w-full container  py-6 flex justify-center px-3 md:px-0 bg-white border shadow-md  flex-col items-center">
-          <div className="font-semibold text-base md:text-2xl">
+          <div className="font-semibold text-third text-base md:text-2xl">
             Masuk Sebagai Admin
           </div>
           <Form
@@ -119,6 +119,15 @@ const LoginAdmin = () => {
               </Button>
             </Form.Item>
           </Form>
+          <div className="">
+            <span>Apakah anda Warga ?</span>
+            <Button
+              className="border-none self-end text-md text-third font-bold"
+              onClick={() => navigate("/Landingpage")}
+            >
+              Login  di sini
+            </Button>
+          </div>
         </div>
       </Content>
     </Layout>

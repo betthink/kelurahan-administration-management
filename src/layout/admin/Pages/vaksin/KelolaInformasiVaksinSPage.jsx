@@ -11,12 +11,12 @@ function KelolaInformasiVaksinSPage() {
   const navigate = useNavigate();
   const [idVaccine, setIdVaccine] = useState(null);
   const columnVaksin = [
-    {
-      title: "Id",
-      width: 100,
-      dataIndex: "id_vaksin",
-      key: "id_vaksin",
-    },
+    // {
+    //   title: "Id",
+    //   width: 100,
+    //   dataIndex: "id_vaksin",
+    //   key: "id_vaksin",
+    // },
     {
       title: "Jenis Vaksin",
       width: 100,
@@ -24,10 +24,21 @@ function KelolaInformasiVaksinSPage() {
       key: "jenis_vaksin",
     },
     {
-      title: "Status",
+      title: "Status ketersedia",
       width: 100,
       dataIndex: "status",
       key: "status",
+      render: (data) => (
+        <p
+          className={`${
+            data == 1
+              ? "text-green-500 bg-green-100"
+              : "text-red-500 bg-red-100"
+          }  py-1 rounded-sm w-12 flex justify-center`}
+        >
+          {data == 1 ? "Benar" : "Tidak"}
+        </p>
+      ),
     },
     {
       title: "Action",

@@ -124,13 +124,19 @@ const KelolaInformasiPosyand = () => {
         <Breadcrumb
           items={[
             { title: "Admin" },
-            { title: <Link to={"/kelolaPosyandu"}>Kelola Posyandu</Link> },
+            {
+              title: (
+                <Link to={"/Dashboard/Informasi-PosyandPage"}>
+                  Kelola Posyandu
+                </Link>
+              ),
+            },
           ]}
         >
           <Breadcrumb.Item>Admin</Breadcrumb.Item>
           <Breadcrumb.Item>Kelola Posyandu</Breadcrumb.Item>
         </Breadcrumb>
-        <div>Layanan POSYANDU</div>
+        {/* <div>Layanan POSYANDU</div> */}
       </Header>
       <Content className=" items-center">
         <Space className="justify-between w-full bg-white py-6 px-10">

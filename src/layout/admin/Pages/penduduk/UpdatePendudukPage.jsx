@@ -22,9 +22,15 @@ const UpdatePendudukPage = () => {
   //   atribute form
   const location = useLocation();
   const dataPenduduk = location.state.data;
+
+  // Mengubah nilai
+  if (dataPenduduk.kepala_keluarga == 1) {
+    dataPenduduk.kepala_keluarga = 1;
+  } else {
+    dataPenduduk.kepala_keluarga = 0;
+  }
   const [dataEntry, setdataEntry] = useState(dataPenduduk);
-  const [isLoading, setisLoading] = useState(true);
-  const [reformatData, setreformatData] = useState({});
+  console.log(dataEntry);
   const agamaOption = [
     "Islam",
     "Kristen",
@@ -106,7 +112,6 @@ const UpdatePendudukPage = () => {
     setIsModalOpen(false);
   };
 
-  useEffect(() => {}, [isLoading]);
   return (
     <div className="mx-20">
       {/* path */}
@@ -114,8 +119,16 @@ const UpdatePendudukPage = () => {
         <Breadcrumb
           items={[
             { title: "Admin" },
-            { title: <Link to={"/KelolaPenduduk"}>Kelola Penduduk</Link> },
-            { title: <Link to={"/KelolaPenduduk"}>Tambah Penduduk</Link> },
+            {
+              title: (
+                <Link to={"/Dashboard/Kelola-Penduduk"}>Kelola Penduduk</Link>
+              ),
+            },
+            {
+              title: (
+                <Link to={"/Dashboard/Update-Penduduk"}>Tambah Penduduk</Link>
+              ),
+            },
           ]}
           style={{
             margin: "16px 0",
@@ -164,7 +177,7 @@ const UpdatePendudukPage = () => {
                 },
               ]}
             >
-              <Input placeholder="Masukan NIK Penduduk" />
+              <Input maxLength={17} placeholder="Masukan NIK Penduduk" />
             </Form.Item>
             <Form.Item
               name="no_kk"
@@ -184,7 +197,7 @@ const UpdatePendudukPage = () => {
                 },
               ]}
             >
-              <Input placeholder="Masukan Nomor KK Penduduk" />
+              <Input maxLength={17} placeholder="Masukan Nomor KK Penduduk" />
             </Form.Item>
             <Form.Item name="alamat" label="Alamat" required>
               <Input placeholder="Masukan Alamat Penduduk" />
@@ -265,8 +278,8 @@ const UpdatePendudukPage = () => {
               </Select>
             </Form.Item>
           </Space>
-          <Form.Item className="bg-purp">
-            <Button block type="primary" htmlType="submit">
+          <Form.Item className="bg-purp rounded-md">
+            <Button className="h-10 " block type="primary" htmlType="submit">
               Ubah
             </Button>
           </Form.Item>

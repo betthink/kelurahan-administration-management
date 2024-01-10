@@ -53,7 +53,7 @@ const PermohonanSurat = () => {
     handleGetJenisSurat();
   }, []);
   return (
-    <div className="  w-full  bg-whiteSmoke h-[100vh] ">
+    <div className=" overflow-hidden w-full  bg-whiteSmoke h-[100vh] ">
       <NavigatorBar />
       <Content className="  items-center flex justify-center   ">
         <Form

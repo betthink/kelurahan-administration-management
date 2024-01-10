@@ -69,7 +69,7 @@ function LandingPage() {
 
   return (
     <Layout className="w-full h-screen bg-whiteSmoke ">
-      <Content className=" h-screen  text-black gap-10 w-full mx-auto my-20 px-64">
+      <Content className=" h-screen px-2 md:px-0 text-black gap-10 w-full md:w-1/2 mx-auto my-20 ">
           <div className="w-full container  py-6 flex justify-center px-3 md:px-0 bg-white border shadow-md  flex-col items-center">
             <div className="font-semibold text-base md:text-2xl text-green-600">
               Masuk Sebagai warga

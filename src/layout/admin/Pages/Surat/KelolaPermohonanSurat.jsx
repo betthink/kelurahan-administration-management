@@ -168,7 +168,7 @@ function KelolaPermohonanSurat() {
         <Breadcrumb
           items={[
             { title: "Admin" },
-            { title: <Link to={"/kelolaSurat"}>Kelola Permohonan Surat</Link> },
+            { title: "Kelola Permohonan Surat" },
           ]}
         >
           <Breadcrumb.Item>Admin</Breadcrumb.Item>

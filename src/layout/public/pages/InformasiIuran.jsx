@@ -102,10 +102,10 @@ export default function InformasiIuran() {
     const isMatch = yearMatch && monthMatch;
 
     return (
-      <section className="">
+      <section className="overflow-hidden">
         <NavigatorBar />
         <div className="container"> 
-          <Header className="bg-white text-lg font-bold mx-10 pt-20  ">
+          <Header className="bg-white text-lg font-bold md:mx-10 md:pt-20 md:px-10  w-full p-0">
             <span>Riwayat Pembayaran</span>
             <div className="">
               <span>Status : </span>{" "}
@@ -117,7 +117,7 @@ export default function InformasiIuran() {
               </span>
             </div>
           </Header>
-          <Content className="mx-20 pt-20">
+          <Content className="md:mx-20 mt-6 md:pt-20 overflow-x-auto">
             <Table
               dataSource={dataRiwayatPembayaran}
               columns={columnRiwayatPembayaran}
