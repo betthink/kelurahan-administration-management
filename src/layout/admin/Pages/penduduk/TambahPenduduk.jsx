@@ -38,7 +38,7 @@ function TambahPenduduk() {
     nomor_telp: "",
     jenis_kelamin: "",
   });
-   
+
   // functions
   const onFinish = (e) => {
     const {
@@ -57,14 +57,14 @@ function TambahPenduduk() {
       tempatLahir,
       kepalaKeluarga,
     } = e;
-   const date = `${tanggalLahir.$d.getFullYear()}-${(
-     tanggalLahir.$d.getMonth() + 1
-   )
-     .toString()
-     .padStart(2, "0")}-${tanggalLahir.$d
-     .getDate()
-     .toString()
-     .padStart(2, "0")}`;
+    const date = `${tanggalLahir.$d.getFullYear()}-${(
+      tanggalLahir.$d.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}-${tanggalLahir.$d
+      .getDate()
+      .toString()
+      .padStart(2, "0")}`;
 
     setdataEntry({
       ...dataEntry,
@@ -223,7 +223,16 @@ function TambahPenduduk() {
                 value={dataEntry.no_kk}
               />
             </Form.Item>
-            <Form.Item name="alamat" label="Alamat" required>
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: "Nomor KK tidak boleh kosong",
+                },
+              ]}
+              name="alamat"
+              label="Alamat"
+            >
               <Input
                 placeholder="Masukan Alamat Penduduk"
                 value={dataEntry.alamat}

@@ -11,12 +11,12 @@ import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
 export default function KelolaAdminRT() {
   const [dataAccountAdmin, setdataAccountAdmin] = useState([]);
   const columnDataAdmin = [
-    {
-      title: "ID",
-      key: "id_admin",
-      dataIndex: "id_admin",
-      width: 50,
-    },
+    // {
+    //   title: "ID",
+    //   key: "id_admin",
+    //   dataIndex: "id_admin",
+    //   width: 50,
+    // },
     {
       title: "Username",
       key: "username",

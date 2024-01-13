@@ -112,6 +112,7 @@ function LandingPage() {
                 ]}
               >
                 <Input
+                maxLength={17}
                   name="nik"
                   onChange={handleChange}
                   className="py-3  border"

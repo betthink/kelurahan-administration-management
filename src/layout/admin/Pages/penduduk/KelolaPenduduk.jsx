@@ -56,6 +56,7 @@ function KelolaPenduduk() {
     );
 
     const { value, message } = res.data;
+    console.log(res.data);
     if (value === 1) {
       mes.success(message);
       window.location.reload();

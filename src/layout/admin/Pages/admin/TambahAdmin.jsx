@@ -11,11 +11,21 @@ import {
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
-import ButtonGroup from "antd/es/button/button-group";
 export default function TambahAdmin() {
   const [dataNewAdmin, setdataNewAdmin] = useState({});
   const optionsRW = ["001", "002", "003", "004", "005"];
-  const optionsRT = ["001", "002", "003", "004", "005"];
+  const optionsRT = [
+    "001",
+    "002",
+    "003",
+    "004",
+    "005",
+    "006",
+    "007",
+    "008",
+    "009",
+    "010",
+  ];
   const navigate = useNavigate();
   const handleSetDataAdmin = (e) => {
     setdataNewAdmin(e);
@@ -28,7 +38,6 @@ export default function TambahAdmin() {
         data: dataNewAdmin,
       });
       const { value, message } = response.data;
-      console.log(response.data);
       if (value === 1) {
         mes.success(message);
         navigate("/Dashboard/Kelola-Admin");
@@ -121,7 +130,7 @@ export default function TambahAdmin() {
                 },
               ]}
             >
-              <Input placeholder="Masukan NIK Admin" />
+              <Input maxLength={17} placeholder="Masukan NIK Admin" />
             </Form.Item>
             <Form.Item
               name="rt"
@@ -187,6 +196,7 @@ export default function TambahAdmin() {
               ]}
             >
               <Input
+                maxLength={20}
                 placeholder="Masukan Nomor Telp Admin"
                 value={dataNewAdmin.nomor_telp}
               />
@@ -203,7 +213,13 @@ export default function TambahAdmin() {
             </Form.Item>
           </Space>
           <Form.Item className="bg-success">
-            <Button className="h-10" block type="primary" htmlType="submit" onClick={showModal}>
+            <Button
+              className="h-10"
+              block
+              type="primary"
+              htmlType="submit"
+              onClick={showModal}
+            >
               Tambahkan
             </Button>
           </Form.Item>
@@ -212,7 +228,11 @@ export default function TambahAdmin() {
           <Modal
             title="Apakah data sudah benar?"
             open={isModalOpen}
-            footer={[<Button className="bg-success text-white">Submit</Button>]}
+            footer={[
+              <Button onClick={handleOk} className="bg-success text-white">
+                Submit
+              </Button>,
+            ]}
             onCancel={handleCancel}
           >
             <div className="grid grid-cols-2  gap-2">

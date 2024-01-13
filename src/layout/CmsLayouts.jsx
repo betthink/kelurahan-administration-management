@@ -76,15 +76,7 @@ const CmsLayouts = () => {
   // state
   const [collapsed, setCollapsed] = useState(false);
   const items = [
-    // {
-    //   key: "1",
-    //   label: (
-    //     <span
-    //     >
-    //     Profile
-    //     </span>
-    //   ),
-    // },
+   
     {
       key: "3",
       danger: true,

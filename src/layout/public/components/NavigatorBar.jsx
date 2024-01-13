@@ -24,7 +24,7 @@ export default function NavigatorBar() {
     {
       key: "2",
       // danger: true,
-      label: <Link to="/Informasi-iuran">Riwayat Pembayaran</Link>,
+      label: <Link to="/Informasi-iuran">Riwayat pembayaran</Link>,
     },
     {
       key: "3",

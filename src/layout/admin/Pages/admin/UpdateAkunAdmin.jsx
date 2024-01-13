@@ -216,7 +216,7 @@ export default function UpdateAkunAdmin() {
           </Space>
           <Form.Item>
             <Button
-              className="bg-purp py-3 h-full w-3/4 mx-auto justify-center flex"
+              className="bg-purp py-3 h-full w-full mx-auto justify-center flex"
               type="primary"
               htmlType="submit"
               onClick={showModal}

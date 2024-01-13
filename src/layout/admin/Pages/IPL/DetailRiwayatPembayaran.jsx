@@ -23,6 +23,12 @@ export default function DetailRiwayatPembayaran() {
       //   width: 10,
     },
     {
+      title: "Verifikator",
+      dataIndex: "verifikator",
+      key: "verifikator",
+      //   width: 10,
+    },
+    {
       title: "Waktu verifikasi",
       dataIndex: "waktu_verifikasi",
       key: "waktu_verifikasi",
