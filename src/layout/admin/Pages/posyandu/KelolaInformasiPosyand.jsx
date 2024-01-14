@@ -15,14 +15,16 @@ const KelolaInformasiPosyand = () => {
   const [isOpen, setIsopen] = useState(false);
   const [jenisVaksin, setjenisVaksin] = useState([]);
   const [idImunisasi, setidImunisasi] = useState([]);
-   const user = useSelector((state) => state.userReducer.value);
+  const user = useSelector((state) => state.userReducer.value);
   function handleOpenModal(id) {
-    // setIsopen(true);
-    setisOpenModal(true)
-    // setIsopen(true);
+    // setisOpenModal(true);
+    // setisOpenModal(true)
+    setIsopen(true);
     setidImunisasi(id);
   }
-
+  function handleOpenTambahPeserta() {
+    setisOpenModal(true);
+  }
   async function handleGetJenisVaksin() {
     const url = `/administrasikelurahan/src/api/fetchDataVaksin.php`;
     try {
@@ -144,7 +146,7 @@ const KelolaInformasiPosyand = () => {
             <Button>
               <Link to="/Dashboard/Informasi-vaksin">Lihat vaksin</Link>
             </Button>
-            <Button onClick={() => handleOpenModal()}>
+            <Button onClick={() => handleOpenTambahPeserta()}>
               Tambah peserta imunisasi
             </Button>
           </ButtonGroup>

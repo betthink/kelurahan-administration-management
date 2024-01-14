@@ -227,13 +227,58 @@ export default function UpdateAkunAdmin() {
         </Form>
         <>
           <Modal
-            title="Basic Modal"
+            title="Apakah data sudah benar?"
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
+            footer={[
+              <Button
+                key="back"
+                className="bg-danger text-white"
+                onClick={handleCancel}
+              >
+                Batalkan
+              </Button>,
+              <Button
+                className="bg-success"
+                key="submit"
+                type="primary"
+                onClick={handleOk}
+              >
+                Simpan
+              </Button>,
+            ]}
           >
-            <p> {dataNewAdmin.username}</p>
-            <p>{dataNewAdmin.password}</p>
+            <div>
+              <div className="grid grid-cols-2">
+                <span>username</span>
+                <p  className="text-green-600"> {dataNewAdmin.username}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <span>password</span>
+                <p  className="text-green-600">{dataNewAdmin.password}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <span>NIK</span>
+                <p  className="text-green-600">{dataNewAdmin.nik}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <span>RT</span>
+                <p  className="text-green-600">{dataNewAdmin.rt}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <span>RW</span>
+                <p  className="text-green-600">{dataNewAdmin.rw}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <span>Nomor telp</span>
+                <p  className="text-green-600">{dataNewAdmin.nomor_telp}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <span>Jenis kelamin</span>
+                <p  className="text-green-600">{dataNewAdmin.jenis_kelamin}</p>
+              </div>
+            </div>
           </Modal>
         </>
       </div>
