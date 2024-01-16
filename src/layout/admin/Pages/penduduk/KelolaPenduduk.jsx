@@ -71,7 +71,7 @@ function KelolaPenduduk() {
   const handleGetDataPenduduk = async () => {
     const url =
       user.role === "admin"
-        ? `/administrasikelurahan/src/api/fetchDataPendudukByRT.php?rt=${user.rt}&rw=${user.rw}`
+        ? `/administrasikelurahan/src/api/penduduk/fetch_kepala_keluarga.php?rt=${user.rt}&rw=${user.rw}`
         : `/administrasikelurahan/src/api/fetchDataPenduduk.php`;
     try {
       const response = await axiosInstance.get(url);
@@ -191,6 +191,18 @@ function KelolaPenduduk() {
                           >
                             <CgDetailsMore size={22} />
                           </Button>
+                          <Button className="border-none">
+                            <Link
+                              state={{ data: item }}
+                              to={"/Dashboard/Detail-keluarga"}
+                            >
+                              <span className="text-red-700">Lihat</span>
+                              {/* <EditOutlined
+                                style={{ fontSize: "1.2rem" }}
+                                className="text-red-600"
+                              /> */}
+                            </Link>
+                          </Button>
                         </td>
                       ) : (
                         <td className="py-2 whitespace-nowrap px-4 flex justify-center">
@@ -205,12 +217,25 @@ function KelolaPenduduk() {
                               />
                             </Link>
                           </Button>
+
                           <Button
                             className="border-none text-manggo"
                             onClick={() => handleOpenDetail(item)}
                             type="default"
                           >
                             <CgDetailsMore size={22} />
+                          </Button>
+                          <Button className="border-none">
+                            <Link
+                              state={{ data: item }}
+                              to={"/Dashboard/Detail-keluarga"}
+                            >
+                              <span className="text-red-700">Lihat</span>
+                              {/* <EditOutlined
+                                style={{ fontSize: "1.2rem" }}
+                                className="text-red-600"
+                              /> */}
+                            </Link>
                           </Button>
                           <Button
                             className="border-none"
@@ -235,7 +260,7 @@ function KelolaPenduduk() {
                       onCancel={handleCancel}
                       title={
                         <p>
-                          Detail data{" "}
+                          Detail data
                           <span className="text-red-700">
                             {dataDetail?.nama}
                           </span>
