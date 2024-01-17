@@ -73,7 +73,11 @@ export default function DetailPendudukRT() {
           >
             Detail
           </Button>
-          <Button className="text-red-700">Hapus </Button>
+          <Button className="text-red-700">
+            <Link state={{ data: record }} to={"/Dashboard/Detail-keluarga"}>
+              Lihat anggota keluarga
+            </Link>
+          </Button>
         </Space>
       ),
     },

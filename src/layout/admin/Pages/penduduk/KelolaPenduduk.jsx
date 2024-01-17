@@ -175,12 +175,12 @@ function KelolaPenduduk() {
                 },
               ]}
             />
-            <Search
+            {/* <Search
               onChange={handleChange}
               placeholder="Cari penduduk ..."
               onSearch={handleSearch}
               // enterButton
-            />
+            /> */}
           </div>
         
         </Header>

@@ -32,7 +32,6 @@ export default function AdminView({data, loading, handleOpen, handleDelete}) {
                 <th className="py-2 whitespace-nowrap px-4 font-normal">
                   Alamat
                 </th>
-
                 <th className="py-2 whitespace-nowrap px-4 font-normal ">
                   Action
                 </th>
