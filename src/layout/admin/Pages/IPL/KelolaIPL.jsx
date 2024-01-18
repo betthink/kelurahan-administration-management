@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Breadcrumb, Table, Button, Spin } from "antd";
+import { Breadcrumb, Button } from "antd";
 import { Link } from "react-router-dom";
-import { Content, Header } from "antd/es/layout/layout";
+import { Header } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import { useSelector } from "react-redux";
 
@@ -15,7 +15,7 @@ function KelolaIPL() {
 
   const handleGetDataIPL = async () => {
     const url = `/administrasikelurahan/src/api/fetchDataPembayarIPLJoinDataPendudukByRT.php?rt=${user.rt}&rw=${user.rw}`;
-        
+
     try {
       const res = await axiosInstance.get(url);
       setdata(
@@ -45,6 +45,11 @@ function KelolaIPL() {
               { title: <Link to={"/Dashboard/Kelola-IPL"}>Kelola IPL</Link> },
             ]}
           />
+        <Button className="bg-green-500 text-white hover:bg-white hover:border-green-600 hover:text-green-600">
+            <Link to="/Dashboard/Laporan-keuangan" className="text-green-600">
+            Riwayat keuangan
+            </Link>
+          </Button>
         </Header>
         <SuperAdminView
           titlelink={"Lihat pembayar"}
@@ -63,6 +68,11 @@ function KelolaIPL() {
               { title: <Link to={"/Dashboard/Kelola-IPL"}>Kelola IPL</Link> },
             ]}
           />
+          <Button className="bg-green-500 text-white hover:bg-white hover:border-green-600 hover:text-green-600">
+            <Link to="/Dashboard/Laporan-keuangan" className="text-green-600">
+              Riwayat keuangan
+            </Link>
+          </Button>
         </Header>
         <AdminIplViews data={data} loading={isLoading} />
       </div>

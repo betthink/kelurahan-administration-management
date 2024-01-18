@@ -43,15 +43,15 @@ export default function DetailRiwayatPembayaran() {
     },
     {
       title: "Jumlah pembayaran",
-      dataIndex: "jumlah_pembayaran",
-      key: "jumlah_pembayaran",
+      dataIndex: "jumlah_transaksi",
+      key: "jumlah_transaksi",
       render: (data) => <span>{`Rp.${data}`}</span>,
       //   width: 10,
     },
     {
       title: "Status",
-      dataIndex: "jumlah_pembayaran",
-      key: "jumlah_pembayaran",
+      dataIndex: "jumlah_transaksi",
+      key: "jumlah_transaksi",
       //   width: 10,
       render: (data) => (
         <div

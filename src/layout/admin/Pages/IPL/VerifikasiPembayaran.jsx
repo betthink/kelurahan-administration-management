@@ -55,7 +55,7 @@ function VerifikasiPembayaran() {
     formData.append("file", file);
     formData.append("nama", dataPembayaran.nama);
     formData.append("nik", dataPembayaran.nik);
-    formData.append("jumlah_pembayaran", dataPembayaran.jumlah_pembayaran);
+    formData.append("jumlah_transaksi", dataPembayaran.jumlah_transaksi);
     formData.append("waktu_pembayaran", date);
     formData.append("metode", dataPembayaran.metode);
     formData.append("rt", prePageState?.rt || user?.rt);
@@ -65,6 +65,7 @@ function VerifikasiPembayaran() {
     try {
         const res = await axiosWithMultipart(url, {
           method: "POST",
+          
           data: formData,
         });
       const { value, message } = res.data;
@@ -132,7 +133,7 @@ function VerifikasiPembayaran() {
 
             <Form.Item
               required
-              name="jumlah_pembayaran"
+              name="jumlah_transaksi"
               label="Jumlah Pembayaran"
             >
               <Input placeholder="Masukan Jumlah Pembayaran" />
@@ -174,7 +175,7 @@ function VerifikasiPembayaran() {
                   onChange={handleChange}
                 >
                   <button
-                    style={{  
+                    style={{
                       border: 0,
                       background: "none",
                     }}
