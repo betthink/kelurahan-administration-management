@@ -182,9 +182,8 @@ function KelolaPenduduk() {
               // enterButton
             /> */}
           </div>
-        
         </Header>
-        <SuperAdminView/>
+        <SuperAdminView titlelink={'Lihat penduduk'} redirect="/Dashboard/Detail-penduduk-rt" />
       </div>
     );
   }

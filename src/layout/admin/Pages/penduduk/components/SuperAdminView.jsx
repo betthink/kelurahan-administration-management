@@ -1,30 +1,13 @@
 import { Avatar, Card, Divider, List, Skeleton } from "antd";
 import { Content } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { axiosInstance } from "../../../../../utils/axiosInstance";
 import { Link } from "react-router-dom";
 
-export default function SuperAdminView() {
+export default function SuperAdminView({redirect , titlelink}) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  const loadMoreData = () => {
-    if (loading) {
-      return;
-    }
-    setLoading(true);
-    fetch(
-      "https://randomuser.me/api/?results=10&inc=name,gender,email,nat,picture&noinfo"
-    )
-      .then((res) => res.json())
-      .then((body) => {
-        setData([...data, ...body.results]);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  };
+
   const handleGetLembaga = async () => {
     const url = `/administrasikelurahan/src/api/lembaga/fetch_all_lembaga.php`;
     if (loading) {
@@ -74,8 +57,8 @@ export default function SuperAdminView() {
                   </div>
                 }
               >
-                <Link className="text-blue-400" state={item} to="/Dashboard/Detail-penduduk-rt">
-                Lihat penduduk
+                <Link className="text-blue-400" state={item} to={redirect}>
+                  {titlelink}
                 </Link>
               </Card>
             </List.Item>

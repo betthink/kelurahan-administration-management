@@ -25,6 +25,7 @@ import TambahPesertaImunisasi from "./layout/admin/Pages/posyandu/TambahPesertaI
 import KelolaInformasiPosyand from "./layout/admin/Pages/posyandu/KelolaInformasiPosyand";
 import LihatDetailKeluarga from "./layout/admin/Pages/penduduk/LihatDetailKeluarga";
 import DetailPendudukRT from "./layout/admin/Pages/penduduk/DetailPendudukRT";
+import KelolaIPLRt from "./layout/admin/Pages/IPL/KelolaIPLRt";
 
 const App = () => {
   const user = useSelector((state) => state.userReducer.value);
@@ -87,6 +88,10 @@ const App = () => {
           <Route
             path="/Dashboard/Detail-penduduk-rt"
             element={<DetailPendudukRT />}
+          />
+          <Route
+            path="/Dashboard/list-peserta-ipl"
+            element={<KelolaIPLRt />}
           />
           <Route
             path="Kelola-IPL/Verifikasi-Pembayaran"
