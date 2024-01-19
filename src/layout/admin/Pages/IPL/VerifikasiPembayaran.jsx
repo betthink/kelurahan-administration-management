@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import {
   Breadcrumb,
   Layout,
@@ -38,12 +38,14 @@ function VerifikasiPembayaran() {
     setIsModalOpen(false);
   };
   const handleonFinish = (e) => {
-    setFile(e.file.fileList[0].originFileObj);
+    {
+      e.file && setFile(e.file.fileList[0].originFileObj);
+    }
+
     setdataPembayaran(e);
     setIsModalOpen(true);
   };
   // upload
-
 
   const handleVerikifikasiPembayaran = async () => {
     const url = `administrasikelurahan/src/post/addRiwayatPembayaran.php`;
@@ -52,7 +54,9 @@ function VerifikasiPembayaran() {
     }-${dataPembayaran.waktu_pembayaran.$d.getDate()}`;
     // Create FormData
     const formData = new FormData();
-    formData.append("file", file);
+
+    file && formData.append("file", file);
+
     formData.append("nama", dataPembayaran.nama);
     formData.append("nik", dataPembayaran.nik);
     formData.append("jumlah_transaksi", dataPembayaran.jumlah_transaksi);
@@ -63,11 +67,12 @@ function VerifikasiPembayaran() {
     formData.append("verifikator", user.username);
     formData.append("id_user", prePageState?.id_user);
     try {
-        const res = await axiosWithMultipart(url, {
-          method: "POST",
-          
-          data: formData,
-        });
+      const res = await axiosWithMultipart(url, {
+        method: "POST",
+
+        data: formData,
+      });
+      // console.log(res.data);
       const { value, message } = res.data;
       if (parseInt(value) === 1) {
         mes.success(message);
@@ -79,10 +84,10 @@ function VerifikasiPembayaran() {
   };
 
   const [fileList, setFileList] = useState([]);
- const [selectedMetode, setSelectedMetode] = useState(null);
-    const handleMetodeChange = (value) => {
-      setSelectedMetode(value);
-    };
+  const [selectedMetode, setSelectedMetode] = useState(null);
+  const handleMetodeChange = (value) => {
+    setSelectedMetode(value);
+  };
 
   const handleChange = (info) => {
     setFileList(info.fileList.slice(-1)); // Hanya menyimpan file terakhir
@@ -164,7 +169,7 @@ function VerifikasiPembayaran() {
               </Select>
             </Form.Item>
             {/* upload */}
-            {selectedMetode === "Transfer" && (
+            {selectedMetode === "Transfer" ? (
               <Form.Item label="Upload" name="file">
                 <Upload.Dragger
                   beforeUpload={() => false}
@@ -192,7 +197,7 @@ function VerifikasiPembayaran() {
                   </button>
                 </Upload.Dragger>
               </Form.Item>
-            )}
+            ) : null}
           </Space>
           <Form.Item>
             <Button type="primary" className="bg-purp" block htmlType="submit">

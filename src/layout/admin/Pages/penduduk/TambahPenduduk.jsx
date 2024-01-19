@@ -103,7 +103,6 @@ function TambahPenduduk() {
         }
       );
       const { value, message } = response.data;
-      console.log(response.data);
       if (value === 1) {
         mes.success(message);
         navigate("/Dashboard/Kelola-Penduduk");

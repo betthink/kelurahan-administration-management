@@ -39,7 +39,7 @@ export default function AdminView({data, loading, handleOpen, handleDelete}) {
             </thead>
             <tbody>
               {data?.map((item, i) => (
-                <React.Fragment key={item.id_penduduk}>
+                <React.Fragment key={i}>
                   <tr
                     className={`${
                       i % 2 === 0 ? "bg-primary" : "bg-secondary"

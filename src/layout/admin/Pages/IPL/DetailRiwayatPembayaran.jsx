@@ -1,58 +1,60 @@
-import { Breadcrumb, Table } from "antd";
+import { Breadcrumb, Button, Card, Modal, Table } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { axiosInstance } from "../../../../utils/axiosInstance";
+import Meta from "antd/es/card/Meta";
+import { formatAngka } from "../../../../utils/formatAngkaUang";
 
 export default function DetailRiwayatPembayaran() {
-  const [dataRiwayatPembayaran, setdataRiwayatPembayaran] = useState([]);
   const location = useLocation();
   const prevPageState = location.state.data;
+  const [dataRiwayatPembayaran, setdataRiwayatPembayaran] = useState([]);
+  const [dataModal, setdataModal] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = (data) => {
+    setdataModal(data);
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   const columnRiwayatPembayaran = [
-    // {
-    //   title: "ID pembayaran",
-    //   dataIndex: "id_pembayaran",
-    //   key: "id_pembayaran",
-    //   fixed: "left",
-    //   //   width: 2,
-    // },
     {
       title: "Waktu pembayaran",
       dataIndex: "waktu_pembayaran",
       key: "waktu_pembayaran",
-      //   width: 10,
     },
     {
       title: "Verifikator",
       dataIndex: "verifikator",
       key: "verifikator",
-      //   width: 10,
     },
     {
       title: "Waktu verifikasi",
       dataIndex: "waktu_verifikasi",
       key: "waktu_verifikasi",
-      //   width: 10,
     },
     {
       title: "metode",
       dataIndex: "metode",
       key: "metode",
       render: (data) => <span>{data}</span>,
-      //   width: 10,
     },
     {
       title: "Jumlah pembayaran",
       dataIndex: "jumlah_transaksi",
       key: "jumlah_transaksi",
-      render: (data) => <span>{`Rp.${data}`}</span>,
-      //   width: 10,
+      render: (data) => (
+        <span>{`Rp.${data !== null ? formatAngka(data) : 0}`}</span>
+      ),
     },
+
     {
       title: "Status",
       dataIndex: "jumlah_transaksi",
       key: "jumlah_transaksi",
-      //   width: 10,
       render: (data) => (
         <div
           className={`p-1 rounded items-center justify-center flex w-fit ${
@@ -69,10 +71,96 @@ export default function DetailRiwayatPembayaran() {
         </div>
       ),
     },
+    {
+      title: "#",
+      key: "action",
+      render: (data) => (
+        <>
+          <Button
+            onClick={() => showModal(data)}
+            className="text-primary_green"
+          >
+            Detail
+          </Button>
+          <Modal
+            title={<p className="font-bold text-xl">{dataModal?.nama}</p>}
+            width={600}
+            open={isModalOpen}
+            onCancel={handleCancel}
+            footer={false}
+          >
+            {dataModal?.foto === "" ? (
+              <div className="grid grid-cols-2">
+                <span>Metode pembayaran </span>
+                <p className="text-green-600 ">{dataModal?.metode}</p>
+                <span> Tanggal transaksi </span>
+                <p className="text-green-600 ">{dataModal?.waktu_pembayaran}</p>
+                <span> Verifikasi </span>
+                <p className="text-green-600 ">{dataModal?.verifikator}</p>
+                <span> Total transaksi </span>
+                <p className="text-green-600 ">
+                  Rp.{" "}
+                  {dataModal !== null &&
+                    formatAngka(dataModal?.jumlah_transaksi)}
+                </p>
+
+                <span>Waktu verifikasi </span>
+                <p className="text-green-600 ">{dataModal?.waktu_verifikasi}</p>
+                <span>Nomor ktp </span>
+                <p className="text-green-600 ">{dataModal?.nik}</p>
+              </div>
+            ) : (
+              <Card
+                className="w-full  justify-center flex flex-col"
+                // hoverable
+
+                cover={
+                  <section className="">
+                    <img
+                      className="w-full max-w-[200px] h-fit my-10 mx-auto "
+                      style={{
+                        // width: 200,
+                        objectFit: "cover",
+                      }}
+                      alt={`${dataModal?.nama}`}
+                      src={`http://localhost/administrasikelurahan/src/upload/${dataModal?.nama}/${dataModal?.waktu_pembayaran}/${dataModal?.foto}`}
+                    />
+                  </section>
+                }
+              >
+                <div className="grid grid-cols-2">
+                  <span>Metode pembayaran </span>
+                  <p className="text-green-600 ">{dataModal?.metode}</p>
+                  <span> Tanggal transaksi </span>
+                  <p className="text-green-600 ">
+                    {dataModal?.waktu_pembayaran}
+                  </p>
+                  <span> Verifikasi </span>
+                  <p className="text-green-600 ">{dataModal?.verifikator}</p>
+                  <span> Total transaksi </span>
+                  <p className="text-green-600 ">
+                    Rp.{" "}
+                    {dataModal !== null &&
+                      formatAngka(dataModal?.jumlah_transaksi)}
+                  </p>
+
+                  <span>Waktu verifikasi </span>
+                  <p className="text-green-600 ">
+                    {dataModal?.waktu_verifikasi}
+                  </p>
+                  <span>Nomor ktp </span>
+                  <p className="text-green-600 ">{dataModal?.nik}</p>
+                </div>
+              </Card>
+            )}
+          </Modal>
+        </>
+      ),
+    },
   ];
 
   const handleGetRiwayatPembayaran = async () => {
-    const url = `/administrasikelurahan/src/api/fetchDataRiwayatPembayaranByIduser.php?id_user=${prevPageState.id_user}`;
+    const url = `/administrasikelurahan/src/api/ipl/riwayat-pembayaran-by-iduser.php?id_user=${prevPageState.id_user}`;
     try {
       const res = await axiosInstance.get(url);
       const { status, data } = res;
@@ -85,7 +173,6 @@ export default function DetailRiwayatPembayaran() {
             };
           })
         );
-       
       }
     } catch (error) {
       console.log(error);

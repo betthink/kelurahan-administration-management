@@ -1,4 +1,4 @@
-import { Avatar, Card, Divider, List, Skeleton } from "antd";
+import {  Card,  List } from "antd";
 import { Content } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../../../../../utils/axiosInstance";

@@ -3,22 +3,16 @@ import React, { useEffect, useState } from "react";
 import {
   Breadcrumb,
   Button,
-  Space,
   Input,
   message as mes,
-  Spin,
-  List,
 } from "antd";
 import { Link } from "react-router-dom";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { Header, Content } from "antd/es/layout/layout";
+import {  PlusOutlined } from "@ant-design/icons";
+import { Header} from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
-import { CgDetailsMore } from "react-icons/cg";
-import { GrHomeOption } from "react-icons/gr";
 import { useDebounce } from "use-debounce";
 import { useSelector } from "react-redux";
 import ModalTampilkanData from "../posyandu/components/ModalTampilkanData";
-import InfiniteScroll from "react-infinite-scroll-component";
 import AdminView from "./components/AdminView";
 import SuperAdminView from "./components/SuperAdminView";
 // components
@@ -189,12 +183,7 @@ function KelolaPenduduk() {
                 },
               ]}
             />
-            {/* <Search
-              onChange={handleChange}
-              placeholder="Cari penduduk ..."
-              onSearch={handleSearch}
-              // enterButton
-            /> */}
+     
           </div>
         </Header>
         <SuperAdminView
