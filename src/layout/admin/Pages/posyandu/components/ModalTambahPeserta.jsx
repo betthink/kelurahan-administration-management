@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, Form, Input, Select, message as mes } from "antd";
 import { axiosWithMultipart } from "../../../../../utils/axioswithmultipart";
-export default function ModalTambahPeserta({ isOpen, onCancel, dataJenisVaksin }) {
- 
+import { useSelector } from "react-redux";
+import { axiosInstance } from "../../../../../utils/axiosInstance";
+export default function ModalTambahPeserta({
+  isOpen,
+  onCancel,
+  dataJenisVaksin,
+}) {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -26,6 +31,39 @@ export default function ModalTambahPeserta({ isOpen, onCancel, dataJenisVaksin }
       console.log(error);
     }
   }
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+  const user = useSelector((state) => state.userReducer.value);
+  const handleGetWakil = async () => {
+    const url = `/administrasikelurahan/src/api/penduduk/fetch_kepala_keluarga.php?rt=${user.rt}&rw=${user.rw}`;
+    const response = await axiosInstance.get(url);
+    const data = response.data;
+    if (response.status === 200) {
+      console.log(data);
+    }
+  };
+  const kepalaKeluarga = [
+    {
+      value: "jack",
+      label: "Jack",
+    },
+    {
+      value: "lucy",
+      label: "Lucy",
+    },
+    {
+      value: "Yiminghe",
+      label: "yiminghe",
+    },
+    {
+      value: "disabled",
+      label: "Disabled",
+    },
+  ];
+  useEffect(()=> {
+    handleGetWakil()
+  }, [])
   return (
     <Modal
       footer={false}
@@ -50,7 +88,13 @@ export default function ModalTambahPeserta({ isOpen, onCancel, dataJenisVaksin }
             },
           ]}
         >
-          <Input />
+          <Select placeholder="Pilih wakil / kepala keluarga">
+            {kepalaKeluarga.map((item, i) => (
+              <Select.Option key={i} value={item.value}>
+                {item.label}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item

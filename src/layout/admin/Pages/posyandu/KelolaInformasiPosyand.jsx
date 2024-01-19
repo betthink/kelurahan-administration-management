@@ -125,7 +125,7 @@ const KelolaInformasiPosyand = () => {
       <Header
         style={{
           position: "sticky",
-          top: 0, 
+          top: 0,
         }}
         className="header-breadcrump border-b"
       >
@@ -152,9 +152,11 @@ const KelolaInformasiPosyand = () => {
             <Button>
               <Link to="/Dashboard/Informasi-vaksin">Lihat vaksin</Link>
             </Button>
-            <Button onClick={() => handleOpenTambahPeserta()}>
-              Tambah peserta imunisasi
-            </Button>
+            {user.role !== "super_admin" ? (
+              <Button onClick={() => handleOpenTambahPeserta()}>
+                Tambah peserta imunisasi
+              </Button>
+            ) : null}
           </ButtonGroup>
         </Space>
         <Table dataSource={dataPosyandu} columns={columns} />

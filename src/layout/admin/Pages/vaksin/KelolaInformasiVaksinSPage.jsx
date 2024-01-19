@@ -11,12 +11,7 @@ function KelolaInformasiVaksinSPage() {
   const navigate = useNavigate();
   const [idVaccine, setIdVaccine] = useState(null);
   const columnVaksin = [
-    // {
-    //   title: "Id",
-    //   width: 100,
-    //   dataIndex: "id_vaksin",
-    //   key: "id_vaksin",
-    // },
+
     {
       title: "Jenis Vaksin",
       width: 100,
@@ -42,20 +37,20 @@ function KelolaInformasiVaksinSPage() {
     },
     {
       title: "Action",
-      key: "operation",
+      key: "id_vaksin",
       dataIndex: "id_vaksin",
       fixed: "right",
       width: 160,
-      render: (id) => (
+      render: (ids) => (
         <ButtonGroup>
           <Button
-            onClick={() => handleOnchange(id)}
+            onClick={() => handleOnchange(ids)}
             className="bg-success text-white"
           >
             Edit
           </Button>
           <Button
-            onClick={() => handleDeleteVaksin(id)}
+            onClick={() => handleDeleteVaksin(ids)}
             className="bg-danger text-white "
             type="default"
           >
@@ -69,11 +64,11 @@ function KelolaInformasiVaksinSPage() {
   const [isValiable, setisValiable] = useState(null);
   const handleGetDataVaksin = async () => {
     const response = await axiosInstance.get(
-      `administrasikelurahan/src/api/fetchDataVaksin.php`
+      `administrasikelurahan/src/api/vaksin/fetchDataVaksin.php`
     );
     setdataVaksin(
       response.data.map((item, index) => {
-        return { ...item, key: index.toString(), id_vaksin: index + 1 };
+        return { ...item, key: index.toString() };
       })
     );
   };

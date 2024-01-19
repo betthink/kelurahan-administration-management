@@ -3,7 +3,6 @@ import { Content, Header } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { axiosInstance } from "../../../../utils/axiosInstance";
-import Meta from "antd/es/card/Meta";
 import { formatAngka } from "../../../../utils/formatAngkaUang";
 
 export default function DetailRiwayatPembayaran() {
