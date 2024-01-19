@@ -1,4 +1,4 @@
-import { Breadcrumb } from "antd";
+import { Breadcrumb, Button } from "antd";
 import { Header } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
 import ListPesertaIPL from "./components/ListPesertaIPL";
@@ -23,6 +23,7 @@ export default function KelolaIPLRt() {
       throw error;
     }
   };
+  
   useEffect(() => {
     handleGetDataIPL();
   }, []);
@@ -36,6 +37,11 @@ export default function KelolaIPLRt() {
             { title: <Link to={"/Dashboard/Kelola-IPL"}>Kelola IPL</Link> },
           ]}
         />
+        <Button className="bg-green-500 text-white hover:bg-white hover:border-green-600 hover:text-green-600">
+          <Link state={dataLoc} to="/Dashboard/Laporan-keuangan" className="text-green-600">
+            Riwayat keuangan
+          </Link>
+        </Button>
       </Header>
       <ListPesertaIPL data={data} />
     </div>

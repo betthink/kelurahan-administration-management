@@ -2,7 +2,6 @@ import { Button } from 'antd';
 import { Content } from 'antd/es/layout/layout'
 import React from 'react'
 import { CgDetailsMore } from 'react-icons/cg';
-import { TiDocumentText } from 'react-icons/ti';
 import { Link } from 'react-router-dom';
 
 export default function ListPesertaIPL({ data }) {
@@ -57,16 +56,7 @@ export default function ListPesertaIPL({ data }) {
                     </Link>
                   </Button>
 
-                  {/* <Button className="border-none text-manggo" type="default">
-                    <Link
-                      state={{ data: item }}
-                      to={"/Dashboard/Kelola-IPL/Verifikasi-Pembayaran"}
-                      className=" flex justify-center items-center"
-                    >
-                      <TiDocumentText size={22} />
-                      <p>Verifikasi</p>
-                    </Link>
-                  </Button> */}
+    
                 </td>
               </tr>
             ))}

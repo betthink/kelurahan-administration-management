@@ -164,7 +164,10 @@ function KelolaPermohonanSurat() {
   }, []);
   return (
     <div className="mx-20">
-      <Header className="header-breadcrump">
+      <Header style={{ 
+        position: 'sticky',
+        top: 0,
+       }} className="header-breadcrump border-b-2">
         <Breadcrumb
           items={[
             { title: "Admin" },
@@ -175,7 +178,7 @@ function KelolaPermohonanSurat() {
           <Breadcrumb.Item>Kelola Permohonan Surat</Breadcrumb.Item>
         </Breadcrumb>
       </Header>
-      <Content className="p-6 bg-white min-h-[40rem]">
+      <Content className="p-6  bg-white min-h-[40rem]">
         <div className="min-w-full bg-white p-10 overflow-x-auto  rounded-md mb-10">
           <table className="w-full ">
             <thead className=" border-b   ">

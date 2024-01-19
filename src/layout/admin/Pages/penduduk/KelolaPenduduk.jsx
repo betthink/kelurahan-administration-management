@@ -102,7 +102,14 @@ function KelolaPenduduk() {
     return (
       <div className="mx-20">
         {/* path */}
-        <Header className="header-breadcrump">
+        <Header
+          style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 99,
+          }}
+          className="hidden  header-breadcrump bg-white items-center md:flex  "
+        >
           <div className="flex flex-row  justify-between items-center">
             <Breadcrumb
               className="w-full"
@@ -160,7 +167,14 @@ function KelolaPenduduk() {
     return (
       <div className="mx-20">
         {/* path */}
-        <Header className="header-breadcrump">
+        <Header
+          style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 99,
+          }}
+          className="header-breadcrump hidden md:flex border-b-2"
+        >
           <div className="flex flex-row  justify-between items-center">
             <Breadcrumb
               className="w-full"
@@ -183,7 +197,10 @@ function KelolaPenduduk() {
             /> */}
           </div>
         </Header>
-        <SuperAdminView titlelink={'Lihat penduduk'} redirect="/Dashboard/Detail-penduduk-rt" />
+        <SuperAdminView
+          titlelink={"Lihat penduduk"}
+          redirect="/Dashboard/Detail-penduduk-rt"
+        />
       </div>
     );
   }

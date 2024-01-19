@@ -108,7 +108,9 @@ export default function KelolaAdminRT() {
   }, []);
   return (
     <div className="mx-20">
-      <Header className="header-breadcrump">
+      <Header style={{ 
+        position: 'sticky', top: 0
+       }} className="header-breadcrump border-b-2 ">
         <div className="flex flex-row  justify-between items-center">
           <Breadcrumb
             className="w-full"

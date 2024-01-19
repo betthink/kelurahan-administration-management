@@ -37,7 +37,11 @@ function KelolaIPL() {
   if (user.role === "super_admin") {
     return (
       <div className="mx-20">
-        <Header className="header-breadcrump">
+        <Header style={{ 
+          position: 'sticky',
+          top: 0,
+          zIndex: 99
+         }} className="header-breadcrump hidden md:flex border-b-2">
           <Breadcrumb
             className=""
             items={[
@@ -45,11 +49,7 @@ function KelolaIPL() {
               { title: <Link to={"/Dashboard/Kelola-IPL"}>Kelola IPL</Link> },
             ]}
           />
-        <Button className="bg-green-500 text-white hover:bg-white hover:border-green-600 hover:text-green-600">
-            <Link to="/Dashboard/Laporan-keuangan" className="text-green-600">
-            Riwayat keuangan
-            </Link>
-          </Button>
+      
         </Header>
         <SuperAdminView
           titlelink={"Lihat pembayar"}
@@ -68,6 +68,7 @@ function KelolaIPL() {
               { title: <Link to={"/Dashboard/Kelola-IPL"}>Kelola IPL</Link> },
             ]}
           />
+          
           <Button className="bg-green-500 text-white hover:bg-white hover:border-green-600 hover:text-green-600">
             <Link to="/Dashboard/Laporan-keuangan" className="text-green-600">
               Riwayat keuangan

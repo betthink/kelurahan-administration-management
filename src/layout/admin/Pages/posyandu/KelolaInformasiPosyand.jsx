@@ -122,7 +122,13 @@ const KelolaInformasiPosyand = () => {
   }, []);
   return (
     <div className="mx-20 h-screen">
-      <Header className="header-breadcrump">
+      <Header
+        style={{
+          position: "sticky",
+          top: 0, 
+        }}
+        className="header-breadcrump border-b"
+      >
         <Breadcrumb
           items={[
             { title: "Admin" },
