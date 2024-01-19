@@ -1,4 +1,15 @@
-import { Breadcrumb, Button, Modal, Form, Input, message as mes } from "antd";
+import {
+  Breadcrumb,
+  Button,
+  Modal,
+  Form,
+  Input,
+  message as mes,
+  List,
+  Avatar,
+  Skeleton,
+  Divider,
+} from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -7,10 +18,12 @@ import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
 import { useSelector } from "react-redux";
 import { MdAttachMoney } from "react-icons/md";
 import { formatAngka } from "../../../../utils/formatAngkaUang";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function LaporanKeuangan() {
   const [dataPemasukan, setdataPemasukan] = useState(0);
   const [dataPengeluaran, setdataPengeluaran] = useState(0);
+  const [dataRiwayatTransaksi, setdataRiwayatTransaksi] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const user = useSelector((state) => state.userReducer.value);
   //   handle modal
@@ -26,7 +39,7 @@ export default function LaporanKeuangan() {
     const url = "/administrasikelurahan/src/api/ipl/total-keuangan.php";
     try {
       const response = await axiosInstance.get(url);
-      const data = response.data[0].total_jumlah_pembayaran;
+      const data = response.data[0].total_jumlah_pembayaran || 0;
       if (response.status === 200) {
         setdataPemasukan(data);
       }
@@ -39,7 +52,7 @@ export default function LaporanKeuangan() {
       "/administrasikelurahan/src/api/ipl/total-transaksi-pengeluaran.php";
     try {
       const response = await axiosInstance.get(url);
-      const data = response.data[0].total_jumlah_pengeluaran;
+      const data = response.data[0].total_jumlah_pengeluaran || 0;
       if (response.status === 200) {
         setdataPengeluaran(data);
       }
@@ -95,12 +108,13 @@ export default function LaporanKeuangan() {
   //   handle kirim pemasukan
   const handleKirimPengeluaran = async (v) => {
     const url =
-      "/administrasikelurahan/src/post/ipl/tambah-transaksi-pemasukan.php";
+      "/administrasikelurahan/src/post/ipl/tambah-transaksi-pengeluaran.php";
     try {
       const response = await axiosWithMultipart({
         method: "post",
         data: {
           verifikator: user.username,
+          rt: user.rt,
           jumlah_transaksi: v.jumlah_transaksi,
         },
         url,
@@ -116,9 +130,26 @@ export default function LaporanKeuangan() {
       throw error;
     }
   };
+
+  // atributes history
+  const [loading, setLoading] = useState(false);
+  const handleGetRiwayatTransaksi = async () => {
+    if (loading) {
+      return;
+    }
+    const url = `/administrasikelurahan/src/api/ipl/riwayat-transaksi-keuangan-ipl-by-rt.php?rt=${user.rt}`;
+    const response = await axiosInstance.get(url);
+    const data = response.data;
+    if (response.status === 200) {
+      setdataRiwayatTransaksi(data);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     handleGetPemasukan();
     handleGetpengeluaran();
+    handleGetRiwayatTransaksi();
   }, []);
   return (
     <div className=" md:mx-20">
@@ -163,6 +194,77 @@ export default function LaporanKeuangan() {
               {item.icon}
             </div>
           ))}
+        </div>
+
+        {/* history */}
+        <div
+          className="mt-6"
+          id="scrollableDiv"
+          style={{
+            height: 400,
+            overflow: "auto",
+            padding: "0 16px",
+            border: "1px solid rgba(140, 140, 140, 0.35)",
+          }}
+        >
+          <InfiniteScroll
+            dataLength={data.length}
+            next={handleGetRiwayatTransaksi}
+            hasMore={data.length < 5}
+            loader={
+              <Skeleton
+                avatar
+                paragraph={{
+                  rows: 1,
+                }}
+                active
+              />
+            }
+            // endMessage={<Divider plain>Semua data sudah di tampilkan</Divider>}
+            scrollableTarget="scrollableDiv"
+          >
+            <List
+              dataSource={dataRiwayatTransaksi}
+              renderItem={(item, i) => (
+                <List.Item key={i}>
+                  <List.Item.Meta
+                    avatar={<span className="text-blusky">{i + 1}</span>}
+                    title={
+                      <div className="flex gap-5 w-56 justify-between ">
+                        <span>Verifikator </span>
+                        <span>: </span>
+                        <span className="font-semibold text-blusky">
+                          {item.verifikator}
+                        </span>
+                      </div>
+                    }
+                    description={
+                      <div className="flex gap-5 w-56 justify-between ">
+                        <span>Waktu transaksi: </span>
+                        <span className="font-semibold">
+                          {item.waktu_verifikasi}
+                        </span>
+                      </div>
+                    }
+                  />
+                  <div className="flex flex-col justify-end">
+                    <span className="font-bold text-lg">
+                      {item.jenis_transaksi}
+                    </span>
+                    <span
+                      className={`${
+                        item.jenis_transaksi === "pengeluaran"
+                          ? "text-red-600"
+                          : "text-green-600"
+                      } text-right`}
+                    >
+                      {item.jumlah_transaksi}
+                    </span>
+                  </div>
+                </List.Item>
+              )}
+            />
+          </InfiniteScroll>
         </div>
       </Content>
       <>
