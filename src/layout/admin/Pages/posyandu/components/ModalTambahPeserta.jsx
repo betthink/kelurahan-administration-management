@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal, Form, Input, Select, message as mes } from "antd";
+import { Button, Modal, Form, Input, Select, message as mes, AutoComplete } from "antd";
 import { axiosWithMultipart } from "../../../../../utils/axioswithmultipart";
 import { useSelector } from "react-redux";
 import { axiosInstance } from "../../../../../utils/axiosInstance";
+import { Option } from "antd/es/mentions";
 export default function ModalTambahPeserta({
   isOpen,
   onCancel,
   dataJenisVaksin,
 }) {
+  const [kepalaKeluarga, setkepalaKeluarga] = useState([])
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -31,36 +33,34 @@ export default function ModalTambahPeserta({
       console.log(error);
     }
   }
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-  };
+
   const user = useSelector((state) => state.userReducer.value);
   const handleGetWakil = async () => {
     const url = `/administrasikelurahan/src/api/penduduk/fetch_kepala_keluarga.php?rt=${user.rt}&rw=${user.rw}`;
     const response = await axiosInstance.get(url);
     const data = response.data;
     if (response.status === 200) {
-      console.log(data);
+      setkepalaKeluarga(data)
     }
   };
-  const kepalaKeluarga = [
-    {
-      value: "jack",
-      label: "Jack",
-    },
-    {
-      value: "lucy",
-      label: "Lucy",
-    },
-    {
-      value: "Yiminghe",
-      label: "yiminghe",
-    },
-    {
-      value: "disabled",
-      label: "Disabled",
-    },
-  ];
+  // const kepalaKeluarga = [
+  //   {
+  //     value: "jack",
+  //     label: "Jack",
+  //   },
+  //   {
+  //     value: "lucy",
+  //     label: "Lucy",
+  //   },
+  //   {
+  //     value: "Yiminghe",
+  //     label: "yiminghe",
+  //   },
+  //   {
+  //     value: "disabled",
+  //     label: "Disabled",
+  //   },
+  // ];
   useEffect(()=> {
     handleGetWakil()
   }, [])
@@ -88,11 +88,17 @@ export default function ModalTambahPeserta({
             },
           ]}
         >
-          <Select placeholder="Pilih wakil / kepala keluarga">
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            placeholder="Pilih wakil / kepala keluarga"
+          >
             {kepalaKeluarga.map((item, i) => (
-              <Select.Option key={i} value={item.value}>
-                {item.label}
-              </Select.Option>
+              <Option key={i} value={item.nama}>
+                {item.nama}
+              </Option>
             ))}
           </Select>
         </Form.Item>
@@ -119,7 +125,7 @@ export default function ModalTambahPeserta({
             },
           ]}
         >
-          <Select placeholder="Pilih vaksin">
+          <Select showSearch placeholder="Pilih vaksin">
             {dataJenisVaksin?.map((item, i) => (
               <Select.Option key={i} value={item}>
                 {item}

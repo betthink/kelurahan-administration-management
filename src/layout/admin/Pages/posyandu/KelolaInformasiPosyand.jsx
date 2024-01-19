@@ -26,7 +26,7 @@ const KelolaInformasiPosyand = () => {
     setisOpenModal(true);
   }
   async function handleGetJenisVaksin() {
-    const url = `/administrasikelurahan/src/api/fetchDataVaksin.php`;
+    const url = `/administrasikelurahan/src/api/vaksin/fetchDataVaksin.php`;
     try {
       const res = await axiosInstance.get(url);
       const { data, status } = res;
