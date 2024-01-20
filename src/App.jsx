@@ -27,6 +27,8 @@ import LihatDetailKeluarga from "./layout/admin/Pages/penduduk/LihatDetailKeluar
 import DetailPendudukRT from "./layout/admin/Pages/penduduk/DetailPendudukRT";
 import KelolaIPLRt from "./layout/admin/Pages/IPL/KelolaIPLRt";
 import LaporanKeuangan from "./layout/admin/Pages/IPL/LaporanKeuangan";
+import Pdfgenerator from "./layout/admin/Pages/Surat/PdfViewer";
+import PdfViewer from "./layout/admin/Pages/Surat/PdfViewer";
 
 const App = () => {
   const user = useSelector((state) => state.userReducer.value);
@@ -99,6 +101,7 @@ const App = () => {
             path="Kelola-IPL/Verifikasi-Pembayaran"
             element={<VerifikasiPembayaran />}
           />
+          <Route path="Kelola-surat/pdf" element={<PdfViewer />} />
         </Route>
       </Routes>
     </>

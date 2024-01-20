@@ -78,7 +78,7 @@ export default function LaporanKeuangan() {
   const cardData = [
     {
       icon: <MdAttachMoney size={28} />,
-      bgColor: "bg-gradient-to-r from-primary_blue to-blue-400",
+      bgColor: "bg-gradient-to-l from-green-400 to-green-500",
       text: (
         <span>
           Total pemasukan Rp.
@@ -88,7 +88,7 @@ export default function LaporanKeuangan() {
     },
     {
       icon: <MdAttachMoney size={28} />,
-      bgColor: "bg-gradient-to-r from-primary_pink to-pink-400",
+      bgColor: "bg-gradient-to-l from-red-500 to-red-400",
       text: (
         <span>
           Total pengeluaran Rp.
@@ -98,7 +98,7 @@ export default function LaporanKeuangan() {
     },
     {
       icon: <MdAttachMoney size={28} />,
-      bgColor: "bg-gradient-to-r from-primary_green to-cyan-400",
+      bgColor: "bg-gradient-to-r from-primary_blue to-cyan-400",
       text: (
         <span>
           Sisa Keuangan Rp.
@@ -271,7 +271,7 @@ export default function LaporanKeuangan() {
                             : "text-green-600"
                         } text-right`}
                       >
-                        {item.jumlah_transaksi}
+                       Rp.{ item && formatAngka(item.jumlah_transaksi)}
                       </span>
                     </div>
                   </List.Item>

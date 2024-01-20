@@ -156,13 +156,7 @@ const CmsLayouts = () => {
             >
               <Outlet />
             </Content>
-            <Footer
-              style={{
-                textAlign: "center",
-              }}
-            >
-              ©2023 Created by Ade
-            </Footer>
+  
           </Layout>
         </Layout>
       </Layout>
