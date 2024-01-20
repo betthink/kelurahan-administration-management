@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
 import NavigatorBar from "../components/NavigatorBar";
 import { useSelector } from "react-redux";
+import { formatAngka } from "../../../utils/formatAngkaUang";
 
 export default function InformasiIuran() {
   // variables
@@ -12,13 +13,7 @@ export default function InformasiIuran() {
   const user = useSelector((state) => state.userReducer.value);
   // table column
   const columnRiwayatPembayaran = [
-    //  {
-    //    title: "ID pembayaran",
-    //    dataIndex: "id_pembayaran",
-    //    key: "id_pembayaran",
-    //    fixed: "left",
-    //    //   width: 2,
-    //  },
+
     {
       title: "Waktu pembayaran",
       dataIndex: "waktu_pembayaran",
@@ -40,15 +35,15 @@ export default function InformasiIuran() {
     },
     {
       title: "Jumlah pembayaran",
-      dataIndex: "jumlah_pembayaran",
-      key: "jumlah_pembayaran",
-      render: (data) => <span>{`Rp.${data}`}</span>,
+      dataIndex: "jumlah_transaksi",
+      key: "jumlah_transaksi",
+      render: (data) => <span>{`Rp.${data && formatAngka(data)}`}</span>,
       //   width: 10,
     },
     {
       title: "Status",
-      dataIndex: "jumlah_pembayaran",
-      key: "jumlah_pembayaran",
+      dataIndex: "jumlah_transaksi",
+      key: "jumlah_transaksi",
       //   width: 10,
       render: (data) => (
         <div
@@ -73,7 +68,7 @@ export default function InformasiIuran() {
   const parts = lastData?.waktu_pembayaran.split("-");
   // function
   async function handleGetIpl() {
-    const url = `/administrasikelurahan/src/api/fetchDataRiwayatPembayaranByIduser.php?id_user=${user.id}`;
+    const url = `/administrasikelurahan/src/api/ipl/riwayat-pembayaran-by-iduser.php?id_user=${user.id}`;
     try {
       const res = await axiosInstance.get(url);
       const { status, data } = res;

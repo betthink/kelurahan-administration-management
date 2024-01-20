@@ -122,14 +122,14 @@ const KelolaInformasiPosyand = () => {
   }, []);
   return (
     <div className="mx-20 h-screen">
-      <Header
+      <Header 
         style={{
           position: "sticky",
           top: 0,
         }}
-        className="header-breadcrump border-b"
+        className="header-breadcrump justify-between 0 w-full border-b"
       >
-        <Breadcrumb
+        <Breadcrumb className="w-full"
           items={[
             { title: "Admin" },
             {
@@ -145,10 +145,7 @@ const KelolaInformasiPosyand = () => {
           <Breadcrumb.Item>Kelola Posyandu</Breadcrumb.Item>
         </Breadcrumb>
         {/* <div>Layanan POSYANDU</div> */}
-      </Header>
-      <Content className=" items-center">
-        <Space className="justify-between w-full bg-white py-6 px-10">
-          <ButtonGroup className="justify-between w-full flex ">
+          <ButtonGroup className="  flex gap-3 ">
             <Button>
               <Link to="/Dashboard/Informasi-vaksin">Lihat vaksin</Link>
             </Button>
@@ -158,8 +155,12 @@ const KelolaInformasiPosyand = () => {
               </Button>
             ) : null}
           </ButtonGroup>
-        </Space>
-        <Table dataSource={dataPosyandu} columns={columns} />
+      </Header>
+
+      <Content className=" items-center">
+        <div className="min-w-full bg-white p-10 overflow-x-auto  rounded-md mb-10">
+          <Table dataSource={dataPosyandu} columns={columns} />
+        </div>
       </Content>
       {/* modal add peserta */}
       <>

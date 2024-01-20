@@ -40,7 +40,7 @@ const PermohonanSurat = () => {
       console.log(res.data);
       if (value === 1) {
         mes.success(message);
-        navigate("/HomePage");
+        navigate("/Informasi-iuran");
       } else {
         mes.error(message);
       }

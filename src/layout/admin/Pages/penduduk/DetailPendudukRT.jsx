@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import ModalTampilkanData from "../posyandu/components/ModalTampilkanData";
+import Search from "antd/es/input/Search";
+import { useDebounce } from "use-debounce";
 
 export default function DetailPendudukRT() {
   const location = useLocation();
@@ -82,14 +84,33 @@ export default function DetailPendudukRT() {
       ),
     },
   ];
+    const [dataSearch, setDataSearch] = useState(null); // Inisialisasi dengan nilai default
+    const [debouncedValue] = useDebounce(dataSearch, 500);
+
+    const filteredItems =
+      debouncedValue !== null
+        ? dataPenduduk.filter((item) => {
+            return (
+              item.nama.toLowerCase().includes(debouncedValue.toLowerCase()) ||
+              item.nik.includes(debouncedValue.toLowerCase())
+            );
+          })
+        : dataPenduduk;
+    const handleSearch = (event) => {
+      setDataSearch(event);
+    };
+
+    const handleChange = (event) => {
+      setDataSearch(event.target.value);
+    };
   useEffect(() => {
     handleGetDataPenduduk();
   }, []);
   return (
     <div className="mx-20">
       {/* path */}
-      <Header className="header-breadcrump">
-        <div className="flex flex-row  justify-between items-center">
+      <Header className="header-breadcrump w-full justify-between">
+        <div className="flex flex-row  w-full justify-between items-center">
           <Breadcrumb
             className="w-full"
             items={[
@@ -102,12 +123,18 @@ export default function DetailPendudukRT() {
             ]}
           />
         </div>
+        <Search className="w-1/2"
+          onChange={handleChange}
+          placeholder="Cari penduduk ..."
+          onSearch={handleSearch}
+          // enterButton
+        />
       </Header>
       <Content
         style={{ position: "sticky", top: 400 }}
         className=" min-h-[40rem]  overflow-x-auto"
       >
-        <Table columns={columns} dataSource={dataPenduduk} />
+        <Table columns={columns} dataSource={dataSearch !== null ? filteredItems : dataPenduduk} />
       </Content>
       <ModalTampilkanData
         data={dataDetail}

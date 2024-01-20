@@ -181,7 +181,7 @@ function KelolaPermohonanSurat() {
           <Breadcrumb.Item>Kelola Permohonan Surat</Breadcrumb.Item>
         </Breadcrumb>
       </Header>
-      <Content className="p-6  bg-white min-h-[40rem]">
+      <Content className=" bg-white min-h-[40rem]">
         <div className="min-w-full bg-white p-10 overflow-x-auto  rounded-md mb-10">
           <Table
             columns={columnPermohonanSurat}

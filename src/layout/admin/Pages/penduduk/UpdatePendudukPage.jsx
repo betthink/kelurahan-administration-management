@@ -13,7 +13,6 @@ import { Header } from "antd/es/layout/layout";
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
-import { axiosInstance } from "../../../../utils/axiosInstance";
 
 const UpdatePendudukPage = () => {
   // variables
@@ -30,7 +29,6 @@ const UpdatePendudukPage = () => {
     dataPenduduk.kepala_keluarga = 0;
   }
   const [dataEntry, setdataEntry] = useState(dataPenduduk);
-  console.log(dataEntry);
   const agamaOption = [
     "Islam",
     "Kristen",

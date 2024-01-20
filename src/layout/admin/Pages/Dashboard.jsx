@@ -114,7 +114,7 @@ const Dashboard = () => {
     handleGetDataPenduduk();
   }, []);
   return (
-    <section className=" m-6 gap-6 flex flex-col">
+    <section className="mx-20 m-6 gap-6 flex flex-col">
       <div className="flex gap-4 items-center ">
         <div className=" bg-third p-3 rounded-sm   text-secondary ">
           <MdHome size={18} />

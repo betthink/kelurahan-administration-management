@@ -119,10 +119,10 @@ export default function KelolaAdminRT() {
               { title: <Link to={"/KelolaPenduduk"}>Kelola Penduduk</Link> },
             ]}
           />
-          <Search
+          {/* <Search
             placeholder="Cari Admin ..."
             // onSearch={handleSearch}
-          />
+          /> */}
         </div>
 
         <Button

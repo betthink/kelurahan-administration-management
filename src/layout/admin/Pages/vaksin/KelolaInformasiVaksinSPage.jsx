@@ -11,7 +11,6 @@ function KelolaInformasiVaksinSPage() {
   const navigate = useNavigate();
   const [idVaccine, setIdVaccine] = useState(null);
   const columnVaksin = [
-
     {
       title: "Jenis Vaksin",
       width: 100,
@@ -144,12 +143,14 @@ function KelolaInformasiVaksinSPage() {
         </Button>
       </Header>
       <Content>
-        <Table
-          dataSource={dataVaksin}
-          columns={columnVaksin}
-          pagination={{ pageSize: 7 }}
-          sticky
-        />
+        <div className="min-w-full bg-white p-10 overflow-x-auto  rounded-md mb-10">
+          <Table
+            dataSource={dataVaksin}
+            columns={columnVaksin}
+            pagination={{ pageSize: 7 }}
+            sticky
+          />
+        </div>
       </Content>
       {/* modal */}
       <>

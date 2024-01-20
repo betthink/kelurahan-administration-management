@@ -29,6 +29,7 @@ export default function LaporanKeuangan() {
   const location = useLocation();
   const dataLoc = location.state;
   const rt = user.rt === "" ? dataLoc.rt : user.rt;
+
   //   handle modal
   const showModal = () => {
     setIsModalOpen(true);
@@ -177,12 +178,12 @@ export default function LaporanKeuangan() {
           }}
         />
         <div className="flex gap-6 justify-between items-center">
-          <span className="text-blusky">
-            {user.role === "admin" ? "RT" : "Kelurahan"}
-          </span>
-          {user.role === "admin" ? (
-            <span className="text-green-600 font-bold text-xl">{user.rt}</span>
-          ) : null}
+          <span className="text-blusky">RT</span>
+          
+            <span className="text-green-600 font-bold text-xl">
+              {dataLoc ? dataLoc.rt : rt}
+            </span>
+         
         </div>
       </Header>
       <Content className="mt-5 bg-white p-10">
@@ -210,75 +211,75 @@ export default function LaporanKeuangan() {
         </div>
 
         {/* history */}
-          <div
-            className="mt-6"
-            id="scrollableDiv"
-            style={{
-              height: 400,
-              overflow: "auto",
-              padding: "0 16px",
-              border: "1px solid rgba(140, 140, 140, 0.35)",
-            }}
-          >
-            <InfiniteScroll
-              dataLength={dataRiwayatTransaksi.length}
-              next={handleGetRiwayatTransaksi}
-              hasMore={dataRiwayatTransaksi.length < 1}
-              loader={
-                <Skeleton
-                  avatar
-                  paragraph={{
-                    rows: 1,
-                  }}
-                  active
-                />
-              }
-              // endMessage={<Divider plain>Semua data sudah di tampilkan</Divider>}
-              scrollableTarget="scrollableDiv"
-            >
-              <List
-                dataSource={dataRiwayatTransaksi}
-                renderItem={(item, i) => (
-                  <List.Item key={i}>
-                    <List.Item.Meta
-                      avatar={<span className="text-blusky">{i + 1}</span>}
-                      title={
-                        <div className="flex gap-5 w-56 justify-between ">
-                          <span>Verifikator </span>
-                          <span>: </span>
-                          <span className="font-semibold text-blusky">
-                            {item.verifikator}
-                          </span>
-                        </div>
-                      }
-                      description={
-                        <div className="flex gap-5 w-56 justify-between ">
-                          <span>Waktu transaksi: </span>
-                          <span className="font-semibold">
-                            {item.waktu_verifikasi}
-                          </span>
-                        </div>
-                      }
-                    />
-                    <div className="flex flex-col justify-end">
-                      <span className="font-bold text-lg">
-                        {item.jenis_transaksi}
-                      </span>
-                      <span
-                        className={`${
-                          item.jenis_transaksi === "pengeluaran"
-                            ? "text-red-600"
-                            : "text-green-600"
-                        } text-right`}
-                      >
-                       Rp.{ item && formatAngka(item.jumlah_transaksi)}
-                      </span>
-                    </div>
-                  </List.Item>
-                )}
+        <div
+          className="mt-6"
+          id="scrollableDiv"
+          style={{
+            height: 400,
+            overflow: "auto",
+            padding: "0 16px",
+            border: "1px solid rgba(140, 140, 140, 0.35)",
+          }}
+        >
+          <InfiniteScroll
+            dataLength={dataRiwayatTransaksi.length}
+            next={handleGetRiwayatTransaksi}
+            hasMore={dataRiwayatTransaksi.length < 1}
+            loader={
+              <Skeleton
+                avatar
+                paragraph={{
+                  rows: 1,
+                }}
+                active
               />
-            </InfiniteScroll>
-          </div>
+            }
+            // endMessage={<Divider plain>Semua data sudah di tampilkan</Divider>}
+            scrollableTarget="scrollableDiv"
+          >
+            <List
+              dataSource={dataRiwayatTransaksi}
+              renderItem={(item, i) => (
+                <List.Item key={i}>
+                  <List.Item.Meta
+                    avatar={<span className="text-blusky">{i + 1}</span>}
+                    title={
+                      <div className="flex gap-5 w-56 justify-between ">
+                        <span>Verifikator </span>
+                        <span>: </span>
+                        <span className="font-semibold text-blusky">
+                          {item.verifikator}
+                        </span>
+                      </div>
+                    }
+                    description={
+                      <div className="flex gap-5 w-56 justify-between ">
+                        <span>Waktu transaksi: </span>
+                        <span className="font-semibold">
+                          {item.waktu_verifikasi}
+                        </span>
+                      </div>
+                    }
+                  />
+                  <div className="flex flex-col justify-end">
+                    <span className="font-bold text-lg">
+                      {item.jenis_transaksi}
+                    </span>
+                    <span
+                      className={`${
+                        item.jenis_transaksi === "pengeluaran"
+                          ? "text-red-600"
+                          : "text-green-600"
+                      } text-right`}
+                    >
+                      Rp.{item && formatAngka(item.jumlah_transaksi)}
+                    </span>
+                  </div>
+                </List.Item>
+              )}
+            />
+          </InfiniteScroll>
+        </div>
       </Content>
       <>
         <Modal

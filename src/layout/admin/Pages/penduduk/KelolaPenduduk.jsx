@@ -1,14 +1,9 @@
 // lib
 import React, { useEffect, useState } from "react";
-import {
-  Breadcrumb,
-  Button,
-  Input,
-  message as mes,
-} from "antd";
+import { Breadcrumb, Button, Input, message as mes, ButtonGroup } from "antd";
 import { Link } from "react-router-dom";
-import {  PlusOutlined } from "@ant-design/icons";
-import { Header} from "antd/es/layout/layout";
+import { EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { Header } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import { useDebounce } from "use-debounce";
 import { useSelector } from "react-redux";
@@ -23,14 +18,16 @@ function KelolaPenduduk() {
   const { Search } = Input;
   const [dataPenduduk, setdataPenduduk] = useState([]);
   // filter data penduduk
-  const [dataSearch, setdataSearch] = useState(null);
   const [openDetail, setopenDetail] = useState(null);
   const [dataDetail, setdataDetail] = useState(null);
+
   const handleCancel = () => {
     setopenDetail(false);
   };
+  const [dataSearch, setDataSearch] = useState(null); // Inisialisasi dengan nilai default
   const [debouncedValue] = useDebounce(dataSearch, 500);
-  const filterItem =
+
+  const filteredItems =
     debouncedValue !== null
       ? dataPenduduk.filter((item) => {
           return (
@@ -39,13 +36,15 @@ function KelolaPenduduk() {
           );
         })
       : dataPenduduk;
-  // functions --
+
   const handleSearch = (event) => {
-    setdataSearch(event);
+    setDataSearch(event);
   };
+
   const handleChange = (event) => {
-    setdataSearch(event.target.value);
+    setDataSearch(event.target.value);
   };
+
   const handleDeletePenduduk = async (id) => {
     const res = await axiosInstance(
       "/administrasikelurahan/src/delete/delDataPenduduk.php",
@@ -139,7 +138,7 @@ function KelolaPenduduk() {
         </Header>
         {/* admin view */}
         <AdminView
-          data={dataPenduduk}
+          data={dataSearch !== null ? filteredItems : dataPenduduk}
           loading={isLoading}
           handleDelete={handleDeletePenduduk}
           handleOpen={handleOpenDetail}
@@ -183,7 +182,6 @@ function KelolaPenduduk() {
                 },
               ]}
             />
-     
           </div>
         </Header>
         <SuperAdminView

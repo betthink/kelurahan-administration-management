@@ -18,7 +18,7 @@ export default function PdfViewer(data) {
       paddingLeft: "3.18cm", // Set left margin
     },
     section: {
-      // justifyContent: "space-between",
+      justifyContent: "space-between",
       flexDirection: "row",
       // marginBottom: "0.63cm",
 
@@ -65,22 +65,35 @@ export default function PdfViewer(data) {
   });
   return (
     <div>
-      <PDFViewer width={1000} height={2000}>
+      <PDFViewer className="w-full h-screen">
         <Document>
           <Page size="A4" style={styles.page}>
             <View style={styles.text}>
-              <View style={{ lineHeight: 1.5 }}>
+              <View
+                style={{
+                  lineHeight: 1.5,
+                  width: "43%",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View style={styles.section}>
+                  <Text style={styles.text}>Kota</Text>
+                  <Text style={styles.text}>Palangka Raya</Text>
+                </View>
                 <View style={styles.section}>
                   <Text style={styles.text}>Kecamatan</Text>
-                  <Text style={styles.text}>:Jekan Raya</Text>
+                
+                  <Text style={styles.text}>Jekan Raya</Text>
                 </View>
                 <View style={styles.section}>
                   <Text style={styles.text}>Kelurahan</Text>
-                  <Text style={styles.text}>:Menteng</Text>
+               
+                  <Text style={styles.text}>Menteng</Text>
                 </View>
                 <View style={styles.section}>
-                  <Text style={styles.text}>RT. {dataLoc?.rt}</Text>
-                  <Text style={styles.text}>RW. {dataLoc?.rw}</Text>
+                  <Text style={styles.text}>
+                    RT. {dataLoc?.rt} / RW. {dataLoc?.rw}
+                  </Text>
                 </View>
               </View>
 
@@ -109,9 +122,9 @@ export default function PdfViewer(data) {
                     lineHeight: 1.5,
                   }}
                 >
-                  Yang bertanda tangan di bawah ini, Ketua RT. 001 / RW. 001
-                  Kelurahan Menteng, Kecamatan Jekan Raya, menerangkan dengan
-                  sebenarnya bahwa :
+                  Yang bertanda tangan di bawah ini, Ketua RT. {dataLoc?.rt} /
+                  RW. {dataLoc?.rw} Kelurahan Menteng, Kecamatan Jekan Raya,
+                  menerangkan dengan sebenarnya bahwa :
                 </Text>
               </View>
               {/* data surat */}
