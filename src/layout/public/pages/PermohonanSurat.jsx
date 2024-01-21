@@ -1,5 +1,5 @@
 import { Button, Form, Select, message as mes } from "antd";
-import { Content, Header } from "antd/es/layout/layout";
+import { Content} from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
 import { axiosWithMultipart } from "../../../utils/axioswithmultipart";
 import { useNavigate } from "react-router-dom";
@@ -37,10 +37,9 @@ const PermohonanSurat = () => {
         }
       );
       const { message, value } = res.data;
-      console.log(res.data);
       if (value === 1) {
         mes.success(message);
-        navigate("/Informasi-iuran");
+        navigate("/List-surat");
       } else {
         mes.error(message);
       }

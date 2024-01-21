@@ -1,27 +1,27 @@
 // libb
 import React, { useEffect, useState } from "react";
-import { Breadcrumb, Button, Table, message, Modal } from "antd";
+import { Breadcrumb, Button, Table, Modal } from "antd";
 import { Link } from "react-router-dom";
 import { Content, Header } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
-import Docxtemplater from "docxtemplater";
-import PizZip from "pizzip";
-import { saveAs } from "file-saver";
-import templatePath from "../../../../assets/docx/templete.docx";
 import { useSelector } from "react-redux";
 import { MdDownload } from "react-icons/md";
-import { Document, Page, Text, View, StyleSheet, PDFDownloadLink } from "@react-pdf/renderer";
-import PDFDocument from "./PDFDocument";
-import ButtonGroup from "antd/es/button/button-group";
+import ModalCofirmPersetujuan from "./components/ModalCofirmPersetujuan";
+
 // components
 function KelolaPermohonanSurat() {
   // atributes modal
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalConfirmSurat, setisModalConfirmSurat] = useState(false);
+  const [dataConfirm, setdataConfirm] = useState(false);
   const [dataDownload, setdataDownload] = useState(false);
   const isConfirmDownload = (data) => {
     setIsModalOpen(true);
     setdataDownload(data);
-
+  };
+  const handleIsConfirmPersetujuan = (data) => {
+    setisModalConfirmSurat(true);
+    setdataConfirm(data);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -36,12 +36,6 @@ function KelolaPermohonanSurat() {
       dataIndex: "nama",
       key: "nama",
     },
-    {
-      title: "NIK",
-      width: 100,
-      dataIndex: "nik",
-      key: "nik",
-    },
 
     {
       title: "Jenis Surat",
@@ -55,25 +49,30 @@ function KelolaPermohonanSurat() {
       dataIndex: "tanggal_permohonan",
       key: "tanggal_permohonan",
     },
-
     {
       title: "Nomor Telp",
       width: 50,
       dataIndex: "nomor_telp",
       key: "nomor_telp",
     },
+    {
+      title: "Status",
+      width: 50,
+      key: "isSetuju",
+      render: (data) => (
+        <span
+          className={`
+            ${
+              data.status_permohonan == 1
+                ? "text-green-500 bg-green-100  "
+                : "text-red-400 bg-red-200 "
+            } p-1 rounded-sm w-fit `}
+        >
+          {data.status_permohonan == 1 ? "Disetujui" : "Belum"}
+        </span>
+      ),
+    },
 
-    // {
-    //   title: "Status",
-    //   width: 120,
-    //   dataIndex: "status_permohonan",
-    //   key: "status_permohonan",
-    //   render: (status) => (
-    //     <p>
-    //       {parseInt(status) === 1 ? "Sudah di approve" : "Belum di approve"}
-    //     </p>
-    //   ),
-    // },
     {
       title: "Action",
       key: "action",
@@ -88,65 +87,18 @@ function KelolaPermohonanSurat() {
           >
             <MdDownload />
           </Button>
+          <Button
+            onClick={() => handleIsConfirmPersetujuan(data)}
+            className="bg-blusky hover:bg-white hover:border-pink-400 text-white "
+            type="default"
+          >
+            Persetujuan
+          </Button>
         </div>
       ),
     },
   ];
-  let value = {
-    namaLengkap: "Robetson",
-    tempatLahir: "kediri",
-    tanggalLahir: "18 - mei - 1999",
-    jenisKelamin: "Laki-Laki",
-    statusPerkawinan: "Lajang",
-    NIK: "6214141414535",
-    KK: "547548",
-    agama: "Katholik",
-    pekerjaan: "software developer",
-    alamatTinggal: "JL. Temanggung Tilung ",
-    jenisSurat: "surat rekomendasi kerja",
-    RT: "001",
-    RW: "002",
-    currentTime: "18 - mei - 2023",
-  };
   // functions
-
-  // async function generateDocument(dataDocx) {
-  //   // return <PDFDocument data={dataDocx} />;
-  //   try {
-  //     let response = await fetch(templatePath);
-  //     let data = await response.arrayBuffer();
-  //     let zip = PizZip(data);
-  //     let templateDoc = new Docxtemplater(zip, {
-  //       paragraphLoop: true,
-  //       linebreaks: true,
-  //       syntax: {
-  //         allowUnopenedTag: true,
-  //       },
-  //     });
-  //     templateDoc.render(dataDocx);
-  //     let generatedDoc = templateDoc.getZip().generate({
-  //       type: "blob",
-  //       mimeType:
-  //         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  //       compression: "DEFLATE",
-  //     });
-
-  //     saveAs(
-  //       generatedDoc,
-  //       `Surat Pengantar - ${dataDocx.jenis_surat}-${dataDocx.nama}.docx`
-  //     );
-  //     message.success("Berhasil mengunduh surat");
-  //   } catch (error) {
-  //     message.error("Error", JSON.stringify(error));
-  //     console.log("Error: " + error);
-  //   }
-  // }
-
-  // async function generatePDF() {
-  //   return (
-   
-  //   );
-  // }
 
   const handleGetDataPermohonanSurat = async () => {
     const url =
@@ -197,14 +149,14 @@ function KelolaPermohonanSurat() {
           open={isModalOpen}
           onCancel={handleCancel}
           footer={[
-              <Button
-                block
-                className="bg-pink-400 px-4 text-white mt-6 hover:bg-blusky hover:border flex justify-center items-center"
-              >
-                <Link state={dataDownload} to="/Dashboard/Kelola-surat/pdf">
-                  Lihat pdf
-                </Link>
-              </Button>
+            <Button
+              block
+              className="bg-green-600 px-4 text-white mt-6 hover:bg-white hover:border flex justify-center items-center"
+            >
+              <Link state={dataDownload} to="/Dashboard/Kelola-surat/pdf">
+                Lihat surat
+              </Link>
+            </Button>,
           ]}
         >
           <div className="grid grid-cols-2 border p-3 gap-3">
@@ -240,6 +192,13 @@ function KelolaPermohonanSurat() {
             </p>
           </div>
         </Modal>
+
+        {/* modal persetujuan */}
+        <ModalCofirmPersetujuan
+          isOpen={isModalConfirmSurat}
+          handleOpen={setisModalConfirmSurat}
+          dataConfirm={dataConfirm}
+        />
       </>
     </div>
   );

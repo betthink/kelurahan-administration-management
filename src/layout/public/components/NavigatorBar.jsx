@@ -13,8 +13,8 @@ export default function NavigatorBar() {
 
   const handleLogout = () => {
     dispatch(logOut());
-    navigate("/");
     message.info("Anda sudah log out");
+    navigate("/");
   };
   const items = [
     // {
@@ -30,6 +30,10 @@ export default function NavigatorBar() {
       key: "3",
       // danger: true,
       label: <Link to="/Homepage/Permohonan-Surat">Permohonan surat</Link>,
+    },
+    {
+      key: "5",
+      label: <Link to="/List-surat">Lihat surat</Link>,
     },
     {
       key: "4",
