@@ -115,7 +115,7 @@ export default function SuratViewer() {
                       }}
                     >
                       <Text style={styles.text}>
-                        <Text style={styles.text}>No. 00011</Text>
+                        {/* <Text style={styles.text}>No. </Text> */}
                       </Text>
                     </View>
                   </View>
@@ -192,13 +192,11 @@ export default function SuratViewer() {
                     }}
                   >
                     <View>
-                      <Text>No. ......</Text>
                       <Text>Pengurus RT</Text>
                       <Text style={styles.signPlace}>....................</Text>
                     </View>
-                    <View>
-                      <Text>No. ......</Text>
-                      <Text>Pengurus RW</Text>
+                    <View style={{ display: 'flex', justifyContent: 'center' }}>
+                      <Text>{dataLoc.nama}</Text>
                       <Text style={styles.signPlace}>....................</Text>
                     </View>
                   </View>
