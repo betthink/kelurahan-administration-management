@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Breadcrumb, Button, Input, message as mes, ButtonGroup } from "antd";
 import { Link } from "react-router-dom";
-import { EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { Header } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import { useDebounce } from "use-debounce";
@@ -80,7 +80,7 @@ function KelolaPenduduk() {
       const response = await axiosInstance.get(url);
       setdataPenduduk(
         response.data.map((item, index) => {
-          return { ...item, key: index.toString() };
+          return { ...item, key: index };
         })
       );
       setIsloading(false);
@@ -124,17 +124,28 @@ function KelolaPenduduk() {
               // enterButton
             />
           </div>
-          {user.role === "admin" ? (
-            <Button
-              className="flex flex-row   cursor-pointer bg-third hover:text-third hover:bg-white  hover:border-third text-white items-center "
-              type="default"
+
+          <Button
+            className="flex flex-row   cursor-pointer bg-third hover:text-third hover:bg-white  hover:border-third text-white items-center "
+            type="default"
+          >
+            <Link className="pr-{item.}" to={"/Dashboard/Tambah-Penduduk"}>
+              Tambah Penduduk
+            </Link>
+            <PlusOutlined />
+          </Button>
+          <Button
+            className="flex flex-row   cursor-pointer bg-green-600 hover:text-third hover:bg-white  hover:border-green-600 text-white items-center "
+            type="default"
+          >
+            <Link
+              className="pr-{item.}"
+              to={"/Dashboard/Kelola-Penduduk/verifikasi-penduduk"}
             >
-              <Link className="pr-{item.}" to={"/Dashboard/Tambah-Penduduk"}>
-                Tambah Penduduk
-              </Link>
-              <PlusOutlined />
-            </Button>
-          ) : null}
+              Verifikasi akun
+            </Link>
+            <PlusOutlined />
+          </Button>
         </Header>
         {/* admin view */}
         <AdminView

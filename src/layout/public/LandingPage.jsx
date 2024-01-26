@@ -7,7 +7,6 @@ import { axiosWithMultipart } from "../../utils/axioswithmultipart";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logIn } from "../../app/feature/user/userSlice";
-import BannerWarga from "../../assets/png/bannerWarga.png";
 function LandingPage() {
   // variables
   const dispatch = useDispatch();
@@ -70,76 +69,85 @@ function LandingPage() {
   return (
     <Layout className="w-full h-screen bg-whiteSmoke ">
       <Content className=" h-screen px-2 md:px-0 text-black gap-10 w-full md:w-1/2 mx-auto my-20 ">
-          <div className="w-full container  py-6 flex justify-center px-3 md:px-0 bg-white border shadow-md  flex-col items-center">
-            <div className="font-semibold text-base md:text-2xl text-green-600">
-              Masuk Sebagai warga
-            </div>
-            <Form
-              onFinish={formik.handleSubmit}
-              className="w-full md:w-1/2 py-10"
+        <div className="w-full container  py-6 flex justify-center px-3 md:px-0 bg-white border shadow-md  flex-col items-center">
+          <div className="font-semibold text-base md:text-2xl text-green-600">
+            Masuk Sebagai warga
+          </div>
+          <Form
+            onFinish={formik.handleSubmit}
+            className="w-full md:w-1/2 py-10"
+          >
+            <Form.Item
+              name="nama"
+              rules={[
+                {
+                  required: true,
+                  message: "Nama tidak boleh kosong",
+                },
+              ]}
             >
-              <Form.Item
+              <Input
                 name="nama"
-                rules={[
-                  {
-                    required: true,
-                    message: "Nama tidak boleh kosong",
-                  },
-                ]}
-              >
-                <Input
-                  name="nama"
-                  onChange={handleChange}
-                  className=" py-3   border"
-                  placeholder="Masukkan Nama"
-                />
-              </Form.Item>
-              <Form.Item
-                name="nik"
-                rules={[
-                  {
-                    required: true,
-                    message: "NIK tidak boleh kosong",
-                  },
-                  {
-                    min: 16,
-                    message: "NIK minimal setidaknya 16 characters",
-                  },
-                  {
-                    pattern: /^[0-9]+$/,
-                    message: "NIK hanya boleh berisi angka",
-                  },
-                ]}
-              >
-                <Input
+                onChange={handleChange}
+                className=" py-3   border"
+                placeholder="Masukkan Nama"
+              />
+            </Form.Item>
+            <Form.Item
+              name="nik"
+              rules={[
+                {
+                  required: true,
+                  message: "NIK tidak boleh kosong",
+                },
+                {
+                  min: 16,
+                  message: "NIK minimal setidaknya 16 characters",
+                },
+                {
+                  pattern: /^[0-9]+$/,
+                  message: "NIK hanya boleh berisi angka",
+                },
+              ]}
+            >
+              <Input
                 maxLength={17}
-                  name="nik"
-                  onChange={handleChange}
-                  className="py-3  border"
-                  placeholder="Masukkan NIK"
-                />
-              </Form.Item>
-              <Form.Item>
-                <Button
-                  htmlType="submit"
-                  type="primary"
-                  // shape="default"
-                  block
-                  className="bg-green-600 py-5 justify-center flex items-center"
-                >
-                  Log in
-                </Button>
-              </Form.Item>
-            </Form>
-            <div className="">
-              <span>Apakah anda admin RT ?</span>
+                name="nik"
+                onChange={handleChange}
+                className="py-3  border"
+                placeholder="Masukkan NIK"
+              />
+            </Form.Item>
+            <Form.Item>
               <Button
-                className="border-none self-end text-md text-green-600 font-bold"
-                onClick={() => navigate("/login-admin")}
+                htmlType="submit"
+                type="primary"
+                // shape="default"
+                block
+                className="bg-green-600 py-5 justify-center flex items-center"
               >
-                Login di sini
+                Log in
               </Button>
-            </div>
+            </Form.Item>
+          </Form>
+          <div className="">
+            <span>Apakah anda admin RT ?</span>
+            <Button
+              className="border-none self-end text-md text-green-600 font-bold"
+              onClick={() => navigate("/login-admin")}
+            >
+              Login di sini
+            </Button>
+          </div>
+          <div className="">
+            <span> Belum terdaftar? Ajukan pendaftaran</span>
+            <Button
+              className="border-none self-end text-md text-green-600 font-bold"
+              onClick={() => navigate("/Registrasi")}
+            >
+              Registrasi disini
+            </Button>
+          </div>
           {/* </div> */}
         </div>
       </Content>

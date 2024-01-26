@@ -31,6 +31,8 @@ import Pdfgenerator from "./layout/admin/Pages/Surat/PdfViewer";
 import PdfViewer from "./layout/admin/Pages/Surat/PdfViewer";
 import LihatSuratPage from "./layout/public/pages/LihatSurat";
 import SuratViewer from "./layout/public/pages/SuratViewer";
+import RegistrasiPenduduk from "./layout/public/pages/RegistrasiPenduduk";
+import VerifikasiPenduduk from "./layout/admin/Pages/penduduk/VerifikasiPenduduk";
 
 const App = () => {
   const user = useSelector((state) => state.userReducer.value);
@@ -59,11 +61,17 @@ const App = () => {
         <Route path="Informasi-Iuran" element={<InformasiIuran />} />
         <Route path="/List-surat" element={<LihatSuratPage />} />
         <Route path="/Lihat-surat" element={<SuratViewer />} />
+        <Route path="/Registrasi" element={<RegistrasiPenduduk />} />
 
         {/* Cms */}
         <Route path="Dashboard" element={<CmsLayouts />}>
           <Route path="Landingpage" element={<Dashboard />} />
           <Route path="Kelola-Penduduk" element={<KelolaPenduduk />} />
+          <Route
+            path="Kelola-Penduduk/verifikasi-penduduk"
+            element={<VerifikasiPenduduk />}
+          />
+
           <Route path="Kelola-IPL" element={<KelolaIPL />} />
           <Route
             path="Kelola-IPL/DetailRiwayatPembayaran"
