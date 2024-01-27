@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logOut } from "../../../app/feature/user/userSlice";
 import { UserOutlined } from "@ant-design/icons";
-import { Dropdown, message, Avatar, Space } from "antd";
+import { Dropdown, message, Avatar, Space, Button } from "antd";
 import { PiBookThin } from "react-icons/pi";
 export default function NavigatorBar() {
   const user = useSelector((state) => state.userReducer.value);
@@ -38,7 +38,7 @@ export default function NavigatorBar() {
     {
       key: "4",
       danger: true,
-      label: <a onClick={handleLogout}>Log out</a>,
+      label: <button className="w-full" onClick={handleLogout}>Log out</button>,
     },
   ];
   return (

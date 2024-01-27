@@ -10,7 +10,7 @@ import {
   Space,
   message as mes,
 } from "antd";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // components
 import { axiosWithMultipart } from "../../../utils/axioswithmultipart";
 function RegistrasiPenduduk() {
@@ -54,7 +54,7 @@ function RegistrasiPenduduk() {
       statusPenduduk,
       tempatLahir,
       kepalaKeluarga,
-      rt
+      rt,
     } = e;
     const date = `${tanggalLahir.$d.getFullYear()}-${(
       tanggalLahir.$d.getMonth() + 1
@@ -82,7 +82,7 @@ function RegistrasiPenduduk() {
       status_diri: status,
       nomor_telp: nomorTelp,
       jenis_kelamin: jenisKelamin,
-      rt
+      rt,
     });
   };
   const agamaOption = [
@@ -128,14 +128,15 @@ function RegistrasiPenduduk() {
   };
   useEffect(() => {}, []);
   return (
-    <div className="flex justify-center items-center mt-12 w-full">
-      <div className="h-full self-center flex justify-between items-center mx-20  border-2 bg-white p-20 w-full">
+    <div className="flex justify-center items-center h-screen w-full">
+      <div className="h-full   container w-full">
         {/* form */}
+
         <Form
           onFinish={onFinish}
           layout="vertical"
           size={"medium"}
-          className="w-full justify-center flex  flex-col "
+          className="w-full justify-center flex  flex-col bg-white border-2 p-10 mt-10 "
         >
           <Space
             direction="vertical"
@@ -421,7 +422,7 @@ function RegistrasiPenduduk() {
           </Space>
           <Form.Item className="rounded-md shadow-md mt-6">
             <Button
-              className="h-16 font-semibold hover:font-bold hover:translate-y-[.1rem] bg-third hover:bg-none"
+              className="h-12 font-semibold hover:font-bold hover:translate-y-[.1rem] bg-third hover:bg-none"
               block
               type="primary"
               htmlType="submit"

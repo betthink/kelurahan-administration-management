@@ -88,7 +88,7 @@ export default function InformasiIuran() {
   }
   useEffect(() => {
     handleGetIpl();
-  }, []);
+  }, );
   if (parts !== "undefined") {
     const yearMatch = parseInt(parts?.[0]) === otherYear;
     const monthMatch = parseInt(parts?.[1]) === otherMonth;

@@ -1,17 +1,11 @@
-import { Button, Spin, Table, message } from "antd";
+import { Spin, Table } from "antd";
 import { Content } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { logOut } from "../../../app/feature/user/userSlice";
-import NavigatorBar from "../components/NavigatorBar";
+import {  useSelector } from "react-redux";
 import { axiosInstance } from "../../../utils/axiosInstance";
-import { CgDetailsMore } from "react-icons/cg";
-import { TiDocumentText } from "react-icons/ti";
+import NavigatorBar from "../components/NavigatorBar";
 const HomePage = () => {
   const user = useSelector((state) => state.userReducer.value);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [data, setdata] = useState([]);
   const [isLoading, setisLoading] = useState(true);
   const column = [
@@ -51,11 +45,6 @@ const HomePage = () => {
       }
     },
   ];
-  const handleLogout = () => {
-    dispatch(logOut());
-    navigate("/");
-    message.info("Anda sudah log out");
-  };
 
   const handleGetDataIPL = async () => {
     const url =
@@ -76,7 +65,7 @@ const HomePage = () => {
   };
   useEffect(() => {
     handleGetDataIPL();
-  }, []);
+  }, );
   return (
     <div className=" h-screen text-lg bg-primary w-full flex flex-col text-white overflow-hidden ">
       <NavigatorBar />

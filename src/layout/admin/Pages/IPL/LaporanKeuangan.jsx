@@ -79,7 +79,7 @@ export default function LaporanKeuangan() {
   const cardData = [
     {
       icon: <MdAttachMoney size={28} />,
-      bgColor: "bg-gradient-to-l from-green-400 to-green-500",
+      bgColor: "bg-gradient-to-l from-green-300 to-green-400",
       text: (
         <span>
           Total pemasukan Rp.
@@ -179,11 +179,10 @@ export default function LaporanKeuangan() {
         />
         <div className="flex gap-6 justify-between items-center">
           <span className="text-blusky">RT</span>
-          
-            <span className="text-green-600 font-bold text-xl">
-              {dataLoc ? dataLoc.rt : rt}
-            </span>
-         
+
+          <span className="text-green-600 font-bold text-xl">
+            {dataLoc ? dataLoc.rt : rt}
+          </span>
         </div>
       </Header>
       <Content className="mt-5 bg-white p-10">
@@ -245,10 +244,10 @@ export default function LaporanKeuangan() {
                     avatar={<span className="text-blusky">{i + 1}</span>}
                     title={
                       <div className="flex gap-5 w-56 justify-between ">
-                        <span>Verifikator </span>
+                        <span>{item?.nama ? "Nama Penduduk" : "Nama pengguna"} </span>
                         <span>: </span>
                         <span className="font-semibold text-blusky">
-                          {item.verifikator}
+                          {item?.nama ? item?.nama : "Admin"}
                         </span>
                       </div>
                     }

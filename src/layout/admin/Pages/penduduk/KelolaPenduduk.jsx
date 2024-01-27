@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import ModalTampilkanData from "../posyandu/components/ModalTampilkanData";
 import AdminView from "./components/AdminView";
 import SuperAdminView from "./components/SuperAdminView";
+import { MdInfo } from "react-icons/md";
 // components
 function KelolaPenduduk() {
   // variables --
@@ -144,7 +145,7 @@ function KelolaPenduduk() {
             >
               Verifikasi akun
             </Link>
-            <PlusOutlined />
+            <MdInfo />
           </Button>
         </Header>
         {/* admin view */}

@@ -2,13 +2,44 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { IoIosPeople } from "react-icons/io";
 import { MdHome } from "react-icons/md";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Pie } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  BarElement,
+  Title,
+  LinearScale,
+  CategoryScale,
+} from "chart.js";
+import { Pie, Bar } from "react-chartjs-2";
 import { axiosInstance } from "../../../utils/axiosInstance";
 import { formatUmur } from "../../../utils/formatUmur";
+import { faker } from "@faker-js/faker";
 ChartJS.register(ArcElement, Tooltip, Legend);
-
+export const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "top",
+    },
+    title: {
+      display: true,
+      // text: "Chart.js Bar Chart",
+    },
+  },
+};
 const Dashboard = () => {
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+
+
   const user = useSelector((state) => state.userReducer.value);
   const [dataPenduduk, setdataPenduduk] = useState([]);
   async function handleGetDataPenduduk() {
@@ -33,20 +64,6 @@ const Dashboard = () => {
   const pendudukSementara = dataPenduduk.filter(
     (penduduk) => penduduk.status_tinggal === "Sementara"
   );
-
-  const data = {
-    labels: ["Penduduk Tetap", "Penduduk Sementara"],
-    datasets: [
-      {
-        label: "Populasi warga ",
-        data: [pendudukTetap.length, pendudukSementara.length],
-
-        backgroundColor: ["#FF9296", "#78D8CF"],
-        borderColor: ["#FE7C96", "#1BCFB4"],
-        borderWidth: 2,
-      },
-    ],
-  };
   const pendudukDikelompokkan = dataPenduduk?.map((penduduk) => {
     const umur = formatUmur(penduduk.tanggal_lahir);
 
@@ -70,6 +87,38 @@ const Dashboard = () => {
   const pendudukBalita = pendudukDikelompokkan.filter(
     (penduduk) => penduduk.kelompok === "Balita"
   );
+
+  const data = {
+    labels: [
+      // "Penduduk",
+      "Tetap",
+      "Sementara",
+      "Lansia",
+      "Dewasa",
+      "Balita",
+    ],
+    datasets: [
+      {
+        label: "Populasi warga ",
+        data: [
+          pendudukTetap.length,
+          pendudukSementara.length,
+          pendudukLansia.length,
+          pendudukDewasa.length,
+          pendudukBalita.length,
+        ],
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.5)",
+          "#0891b2",
+          "#14b8a6",
+          "#c084fc",
+          "#FF90BC",
+        ],
+       
+      },
+    ],
+  };
+
   const cardData = [
     {
       icon: <IoIosPeople size={28} />,
@@ -86,7 +135,7 @@ const Dashboard = () => {
 
     {
       icon: <IoIosPeople size={28} />,
-      bgColor: "bg-gradient-to-r from-primary_green to-cyan-400",
+      bgColor: "bg-[#0891b2]",
       text: "    Jumlah Warga Tinggal Sementara",
       total: `${pendudukSementara.length}`,
     },
@@ -104,7 +153,7 @@ const Dashboard = () => {
     },
     {
       icon: <IoIosPeople size={28} />,
-      bgColor: "bg-gradient-to-r from-[#FF90BC] to-[#FF9BD2]",
+      bgColor: "bg-[#FF90BC]",
       text: " Jumlah penduduk balita",
       total: `${pendudukBalita.length}`,
     },
@@ -134,7 +183,9 @@ const Dashboard = () => {
         ))}
       </div>
       <div className="flex md:justify-between lg:justify-between flex-col  mt-6 md:flex-row lg:flex-row  gap-3">
-        <div className="bg-white w-full   "></div>
+        <div className="bg-white w-full   ">
+          <Bar options={options} data={data} />
+        </div>
         <div className="bg-white  flex justify-center items-center w-full md:w-1/2 h-80 rounded-md   ">
           <Pie data={data} />
         </div>

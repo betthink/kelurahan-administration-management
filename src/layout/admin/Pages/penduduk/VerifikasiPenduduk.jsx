@@ -11,7 +11,8 @@ export default function VerifikasiPenduduk() {
   const [openDetail, setopenDetail] = useState(null);
   const [dataDetail, setdataDetail] = useState(null);
   // atributes modal
-  const [IsModalConfirmPersetujuanAkun, setIsModalConfirmPersetujuanAkun] = useState(false);
+  const [IsModalConfirmPersetujuanAkun, setIsModalConfirmPersetujuanAkun] =
+    useState(false);
   const [dataConfirm, setdataConfirm] = useState(false);
 
   const handleGetPendudukRegister = async () => {
@@ -19,7 +20,7 @@ export default function VerifikasiPenduduk() {
     const response = await axiosInstance.get(url);
     const data = response.data;
     setData(
-     data.map((item, index) => {
+      data.map((item, index) => {
         return { ...item, key: index.toString() };
       })
     );
@@ -87,14 +88,14 @@ export default function VerifikasiPenduduk() {
         <div className="flex text-white gap-3">
           <Button
             onClick={() => handleOpenDetail(data)}
-            className="bg-green-600 hover:bg-white hover:border-green-600 text-white "
+            className="bg-blusky hover:bg-white hover:border-green-600 text-white "
             type="default"
           >
             Detail
           </Button>
           <Button
             onClick={() => handleIsConfirmPersetujuan(data)}
-            className="bg-blusky hover:bg-white hover:border-pink-400 text-white "
+            className="bg-green-600 hover:bg-white hover:border-pink-400 text-white "
             type="default"
           >
             Persetujuan
@@ -111,10 +112,17 @@ export default function VerifikasiPenduduk() {
     <section className="mx-20">
       <Header className="header-breadcrump">
         <Breadcrumb
-          className=""
+          className="w-full"
           items={[
             { title: "Admin" },
-            { title: <Link to={"/Dashboard/Kelola-IPL"}>Kelola IPL</Link> },
+            {
+              title: (
+                <Link to={"/Dashboard/Kelola-Penduduk"}>Kelola Penduduk</Link>
+              ),
+            },
+            {
+              title: <p>Verifikasi Penduduk</p>,
+            },
           ]}
         />
       </Header>
