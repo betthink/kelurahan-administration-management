@@ -20,10 +20,9 @@ export default function ModalPersetujuanAkun({
     });
     const data = response.data;
     const { message, value } = data;
-    console.log(data);
-    if (value == 1) {
-      mes.success(message);
+    if (value === 1) {
       window.location.reload();
+      mes.success(message);
     } else {
       mes.success(message);
     }
@@ -33,7 +32,7 @@ export default function ModalPersetujuanAkun({
       <Modal
         footer={null}
         title={
-          dataConfirm?.valid !== "0" ? (
+          dataConfirm?.valid !== 0 ? (
             <p>
               Apakah anda ingin{" "}
               <span className="text-green-600">menyetujui</span> permohonan

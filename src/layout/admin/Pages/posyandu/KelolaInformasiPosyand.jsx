@@ -1,4 +1,4 @@
-import { Breadcrumb, Button, Space, Table, message as mes } from "antd";
+import { Breadcrumb, Button,  Table, message as mes } from "antd";
 import ButtonGroup from "antd/es/button/button-group";
 import { Content, Header } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
@@ -125,7 +125,7 @@ const KelolaInformasiPosyand = () => {
       <Header 
         style={{
           position: "sticky",
-          top: 0,
+          // top: 0,
         }}
         className="header-breadcrump justify-between 0 w-full border-b"
       >

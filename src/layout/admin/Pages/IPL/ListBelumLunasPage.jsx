@@ -1,18 +1,53 @@
-import { Breadcrumb } from "antd";
-import { Header } from "antd/es/layout/layout";
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Breadcrumb, Button, Table } from "antd";
+import { Content, Header } from "antd/es/layout/layout";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { axiosInstance } from "../../../../utils/axiosInstance";
+import { useSelector } from "react-redux";
 
 export default function ListBelumLunasPage() {
+  const user = useSelector((state) => state.userReducer.value);
+  const location = useLocation();
+  const dataRoute = location.state;
+  const rt = user.rt == "" ? dataRoute.rt : user.rt;
+  const [data, setData] = useState([]);
+  const column = [
+    {
+      title: "Nama",
+      width: 100,
+      dataIndex: "user_name",
+      key: "user_name",
+    },
+    {
+      title: "#",
+      width: 100,
+      key: "action",
+      render: (data) => (
+        <Button className="bg-purp text-white hover:bg-white hover:border-purp">
+          <Link
+            state={{ data: data }}
+            to={"/Dashboard/Kelola-IPL/DetailRiwayatPembayaran"}
+          >
+            Riwayat pembayaran
+          </Link>
+        </Button>
+      ),
+    },
+  ];
   const handleGetListPembayaranBelumLunas = async () => {
-    const url = "";
-    const response = await axiosInstance.get(url);
-    const data = response.data;
-    // console.log(data);
+    const url = `/administrasikelurahan/src/api/ipl/list-belum-lunas-by-rt.php?rt=${rt}`;
+
+    try {
+      const response = await axiosInstance.get(url);
+      const data = response.data;
+      setData(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
+  const belumLunas = data?.filter((item) => item.status === "belum lunas");
   useEffect(() => {
-    // handleGetListPembayaranBelumLunas();
+    handleGetListPembayaranBelumLunas();
   }, []);
   return (
     <section className="mx-20">
@@ -33,6 +68,9 @@ export default function ListBelumLunasPage() {
           ]}
         />
       </Header>
+      <Content className="p-6 bg-white min-h-[30rem]">
+        <Table columns={column} dataSource={belumLunas} />
+      </Content>
     </section>
   );
 }

@@ -52,19 +52,18 @@ export default function AdminView({data, loading, handleOpen, handleDelete}) {
 
             <Button
               className="border-none text-manggo"
-              onClick={() => 
-              handleOpen(item)}
+              onClick={() => handleOpen(item)}
               type="default"
             >
               <CgDetailsMore size={22} />
             </Button>
             <Button className="border-none">
-              <Link state={{ data: item }} to={"/Dashboard/Detail-keluarga"}>
-                <GrHomeOption
-                  style={{ fontSize: "1.2rem" }}
-                  className="text-red-600"
-                  k
-                />
+              <Link
+                className=" text-purple-500"
+                state={{ data: item }}
+                to={"/Dashboard/Detail-keluarga"}
+              >
+                <GrHomeOption style={{ fontSize: "1.2rem" }} />
               </Link>
             </Button>
             <Button

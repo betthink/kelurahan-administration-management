@@ -1,6 +1,7 @@
 // lib
 import React, { useEffect, useState } from "react";
-import { Breadcrumb, Button, Input, message as mes, ButtonGroup } from "antd";
+import { Breadcrumb, Button, Input, message as mes } from "antd";
+import ButtonGroup from "antd/es/button/button-group";
 import { Link } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import { Header } from "antd/es/layout/layout";
@@ -91,7 +92,7 @@ function KelolaPenduduk() {
   };
   useEffect(() => {
     handleGetDataPenduduk();
-  }, []);
+  },);
   if (user.role === "admin") {
     return (
       <div className="mx-20">
@@ -99,7 +100,7 @@ function KelolaPenduduk() {
         <Header
           style={{
             position: "sticky",
-            top: 0,
+            // top: 0,
             zIndex: 99,
           }}
           className="hidden  header-breadcrump bg-white items-center md:flex  "
@@ -125,28 +126,29 @@ function KelolaPenduduk() {
               // enterButton
             />
           </div>
-
-          <Button
-            className="flex flex-row   cursor-pointer bg-third hover:text-third hover:bg-white  hover:border-third text-white items-center "
-            type="default"
-          >
-            <Link className="pr-{item.}" to={"/Dashboard/Tambah-Penduduk"}>
-              Tambah Penduduk
-            </Link>
-            <PlusOutlined />
-          </Button>
-          <Button
-            className="flex flex-row   cursor-pointer bg-green-600 hover:text-third hover:bg-white  hover:border-green-600 text-white items-center "
-            type="default"
-          >
-            <Link
-              className="pr-{item.}"
-              to={"/Dashboard/Kelola-Penduduk/verifikasi-penduduk"}
+          <ButtonGroup>
+            <Button
+              className="flex flex-row   cursor-pointer bg-third hover:text-third hover:bg-white  hover:border-third text-white items-center "
+              type="default"
             >
-              Verifikasi akun
-            </Link>
-            <MdInfo />
-          </Button>
+              <Link className="pr-{item.}" to={"/Dashboard/Tambah-Penduduk"}>
+                Tambah Penduduk
+              </Link>
+              <PlusOutlined />
+            </Button>
+            <Button
+              className="flex flex-row   cursor-pointer bg-green-600 hover:text-third hover:bg-white  hover:border-green-600 text-white items-center "
+              type="default"
+            >
+              <Link
+                className="pr-{item.}"
+                to={"/Dashboard/Kelola-Penduduk/verifikasi-penduduk"}
+              >
+                Verifikasi akun
+              </Link>
+              <MdInfo />
+            </Button>
+          </ButtonGroup>
         </Header>
         {/* admin view */}
         <AdminView

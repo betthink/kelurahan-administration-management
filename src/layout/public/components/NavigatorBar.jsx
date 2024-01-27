@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logOut } from "../../../app/feature/user/userSlice";
 import { UserOutlined } from "@ant-design/icons";
-import { Dropdown, message, Avatar, Space, Button } from "antd";
+import { Dropdown, message, Avatar, Space, Button, } from "antd";
 import { PiBookThin } from "react-icons/pi";
 export default function NavigatorBar() {
   const user = useSelector((state) => state.userReducer.value);
   const dispatch = useDispatch();
-  const [openBar, setopenBar] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -38,7 +37,7 @@ export default function NavigatorBar() {
     {
       key: "4",
       danger: true,
-      label: <button className="w-full" onClick={handleLogout}>Log out</button>,
+      label: <button className="w-full " onClick={handleLogout}>Log out</button>,
     },
   ];
   return (
@@ -53,7 +52,7 @@ export default function NavigatorBar() {
         <li>
           <div className="flex  items-center justify-center gap-6 cursor-pointer">
             <Dropdown trigger={["click"]} menu={{ items }}>
-              <a className="" onClick={(e) => e.preventDefault()}>
+              <Button className="w-full flex justify-between items-center border-none" onClick={(e) => e.preventDefault()}>
                 <Space>
                   <Avatar className="bg-white   align-middle" size="large">
                     <UserOutlined
@@ -63,7 +62,7 @@ export default function NavigatorBar() {
                   </Avatar>
                   <span className="text-white">{user.username}</span>
                 </Space>
-              </a>
+              </Button>
             </Dropdown>
           </div>
         </li>

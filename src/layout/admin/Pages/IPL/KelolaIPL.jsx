@@ -41,7 +41,7 @@ function KelolaIPL() {
         <Header
           style={{
             position: "sticky",
-            top: 0,
+            // top: 0,
             zIndex: 99,
           }}
           className="header-breadcrump hidden md:flex border-b-2"
@@ -73,12 +73,12 @@ function KelolaIPL() {
           />
 
           <ButtonGroup>
-            <Button className="bg-green-500 text-white hover:bg-white hover:border-green-600 hover:text-green-600">
+            <Button className="bg-green-600 text-white hover:bg-white hover:border-green-600 hover:text-green-600">
               <Link to="/Dashboard/Laporan-keuangan" className="text-green-600">
                 Riwayat keuangan
               </Link>
             </Button>
-            <Button className="bg-pink-500 text-white hover:bg-white hover:red-green-600 hover:text-green-600">
+            <Button className="bg-purp text-white hover:bg-white hover:red-green-600 hover:text-green-600">
               <Link
                 to="/Dashboard/Kelola-IPL/list-belum-lunas"
                 className="text-green-600"

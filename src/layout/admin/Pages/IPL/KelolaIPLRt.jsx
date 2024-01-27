@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import ListPesertaIPL from "./components/ListPesertaIPL";
 import { Link, useLocation } from "react-router-dom";
 import { axiosInstance } from "../../../../utils/axiosInstance";
+import ButtonGroup from "antd/es/button/button-group";
 
 export default function KelolaIPLRt() {
   const location = useLocation();
@@ -23,7 +24,7 @@ export default function KelolaIPLRt() {
       throw error;
     }
   };
-  
+
   useEffect(() => {
     handleGetDataIPL();
   }, []);
@@ -37,11 +38,26 @@ export default function KelolaIPLRt() {
             { title: <Link to={"/Dashboard/Kelola-IPL"}>Kelola IPL</Link> },
           ]}
         />
-        <Button className="bg-green-500 text-white hover:bg-white hover:border-green-600 hover:text-green-600">
-          <Link state={dataLoc} to="/Dashboard/Laporan-keuangan" className="text-green-600">
-            Riwayat keuangan
-          </Link>
-        </Button>
+        <ButtonGroup>
+          <Button className="bg-green-500 text-white hover:bg-white hover:border-green-600 hover:text-green-600">
+            <Link
+              state={dataLoc}
+              to="/Dashboard/Laporan-keuangan"
+              className="text-green-600"
+            >
+              Riwayat keuangan
+            </Link>
+          </Button>
+          <Button className="bg-purp text-white hover:bg-white hover:red-green-600 hover:text-green-600">
+            <Link
+              state={dataLoc}
+              to="/Dashboard/Kelola-IPL/list-belum-lunas"
+              className="text-green-600"
+            >
+              Belum lunas
+            </Link>
+          </Button>
+        </ButtonGroup>
       </Header>
       <ListPesertaIPL data={data} />
     </div>

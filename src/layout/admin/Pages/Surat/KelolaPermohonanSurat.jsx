@@ -112,17 +112,17 @@ function KelolaPermohonanSurat() {
           return { ...item, key: index.toString() };
         })
       );
-    } catch (error) {}
+    } catch (error) {throw error}
   };
   useEffect(() => {
     handleGetDataPermohonanSurat();
-  }, []);
+  },);
   return (
     <div className="mx-20">
       <Header
         style={{
           position: "sticky",
-          top: 0,
+          // top: 0,
         }}
         className="header-breadcrump border-b-2"
       >

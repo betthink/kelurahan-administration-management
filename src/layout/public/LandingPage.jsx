@@ -133,13 +133,13 @@ function LandingPage() {
           <div className="flex justify-between items-center">
             <span>Admin RT ?</span>
             <Button
-              className="border-none self-end text-md text-green-600 font-bold"
+              className="border-none self-end text-md text-third font-bold"
               onClick={() => navigate("/login-admin")}
             >
               Login di sini
             </Button>
             <Button
-              className="border-none self-end text-md text-pink-600 font-bold "
+              className="border-none self-end text-md text-green-600 font-bold "
               onClick={() => navigate("/Registrasi")}
             >
               Registrasi disini
