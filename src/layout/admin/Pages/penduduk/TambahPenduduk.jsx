@@ -266,7 +266,8 @@ function TambahPenduduk() {
                 },
               ]}
             >
-              <Input maxLength={14}
+              <Input
+                maxLength={14}
                 placeholder="Masukan Npmor Telp Penduduk"
                 value={dataEntry.nomor_telp}
               />
