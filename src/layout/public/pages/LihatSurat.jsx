@@ -18,7 +18,7 @@ export default function LihatSuratPage() {
   };
   useEffect(() => {
     handleGetAllPermohonan();
-  }, );
+  },[] );
 
   return (
     <section className="">

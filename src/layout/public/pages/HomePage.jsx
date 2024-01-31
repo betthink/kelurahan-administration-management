@@ -65,7 +65,7 @@ const HomePage = () => {
   };
   useEffect(() => {
     handleGetDataIPL();
-  }, );
+  }, []);
   return (
     <div className=" h-screen text-lg bg-primary w-full flex flex-col text-white overflow-hidden ">
       <NavigatorBar />

@@ -15,7 +15,7 @@ import {
 import { Pie, Bar } from "react-chartjs-2";
 import { axiosInstance } from "../../../utils/axiosInstance";
 import { formatUmur } from "../../../utils/formatUmur";
-import { faker } from "@faker-js/faker";
+// import { faker } from "@faker-js/faker";
 ChartJS.register(ArcElement, Tooltip, Legend);
 export const options = {
   responsive: true,
@@ -38,7 +38,6 @@ const Dashboard = () => {
     Tooltip,
     Legend
   );
-
 
   const user = useSelector((state) => state.userReducer.value);
   const [dataPenduduk, setdataPenduduk] = useState([]);
@@ -114,7 +113,6 @@ const Dashboard = () => {
           "#c084fc",
           "#FF90BC",
         ],
-       
       },
     ],
   };
@@ -163,7 +161,7 @@ const Dashboard = () => {
     handleGetDataPenduduk();
   }, []);
   return (
-    <section className="mx-20 m-6 gap-6 flex flex-col">
+    <section className="mx-20 m-6 gap-6 flex flex-col overflow-x-hidden ">
       <div className="flex gap-4 items-center ">
         <div className=" bg-third p-3 rounded-sm   text-secondary ">
           <MdHome size={18} />
@@ -182,11 +180,11 @@ const Dashboard = () => {
           </div>
         ))}
       </div>
-      <div className="flex md:justify-between lg:justify-between flex-col  mt-6 md:flex-row lg:flex-row  gap-3">
-        <div className="bg-white w-full   ">
+      <div className=" grid grid-cols-3 mt-6  m  gap-3 w-full ">
+        <div className="bg-white  w-full  col-span-2 ">
           <Bar options={options} data={data} />
         </div>
-        <div className="bg-white  flex justify-center items-center w-full md:w-1/2 h-80 rounded-md   ">
+        <div className="bg-white  flex justify-center items-center w-full h-full rounded-md col-span-1">
           <Pie data={data} />
         </div>
       </div>

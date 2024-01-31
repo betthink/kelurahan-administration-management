@@ -116,7 +116,7 @@ function KelolaPermohonanSurat() {
   };
   useEffect(() => {
     handleGetDataPermohonanSurat();
-  },);
+  },[]);
   return (
     <div className="mx-20">
       <Header

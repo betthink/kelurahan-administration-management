@@ -92,7 +92,7 @@ function KelolaPenduduk() {
   };
   useEffect(() => {
     handleGetDataPenduduk();
-  },);
+  },[]);
   if (user.role === "admin") {
     return (
       <div className="mx-20">
