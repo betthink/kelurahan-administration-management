@@ -19,7 +19,7 @@ export default function DetailPendudukRT() {
     try {
       const response = await axiosInstance.get(url);
       if (response.status === 200) {
-        console.log(response.data);
+        // console.log(response.data);
 
         setdataPenduduk(
           response.data?.map((item, index) => {
