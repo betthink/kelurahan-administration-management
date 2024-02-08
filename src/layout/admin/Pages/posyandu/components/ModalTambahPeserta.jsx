@@ -43,24 +43,7 @@ export default function ModalTambahPeserta({
       setkepalaKeluarga(data)
     }
   };
-  // const kepalaKeluarga = [
-  //   {
-  //     value: "jack",
-  //     label: "Jack",
-  //   },
-  //   {
-  //     value: "lucy",
-  //     label: "Lucy",
-  //   },
-  //   {
-  //     value: "Yiminghe",
-  //     label: "yiminghe",
-  //   },
-  //   {
-  //     value: "disabled",
-  //     label: "Disabled",
-  //   },
-  // ];
+ 
   useEffect(()=> {
     handleGetWakil()
   }, [])
@@ -96,9 +79,9 @@ export default function ModalTambahPeserta({
             placeholder="Pilih wakil / kepala keluarga"
           >
             {kepalaKeluarga.map((item, i) => (
-              <Option key={i} value={item.nama}>
+              <Select.Option key={i} value={item.nama}>
                 {item.nama}
-              </Option>
+              </Select.Option>
             ))}
           </Select>
         </Form.Item>

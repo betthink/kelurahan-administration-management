@@ -168,7 +168,7 @@ export default function DetailRiwayatPembayaran() {
           data.map((item, index) => {
             return {
               ...item,
-              key: index.toString(),
+              key:parseInt(index),
             };
           })
         );

@@ -109,14 +109,16 @@ function KelolaPermohonanSurat() {
       const response = await axiosInstance.get(url);
       setdataPemohonSurat(
         response.data.map((item, index) => {
-          return { ...item, key: index.toString() };
+          return { ...item, key: parseInt(index) };
         })
       );
-    } catch (error) {throw error}
+    } catch (error) {
+      throw error;
+    }
   };
   useEffect(() => {
     handleGetDataPermohonanSurat();
-  },[]);
+  }, []);
   return (
     <div className="mx-20">
       <Header
@@ -144,7 +146,7 @@ function KelolaPermohonanSurat() {
       {/* modal */}
       <>
         <Modal
-          key={dataDownload?.id_penduduk}
+          key={dataDownload?.key}
           title="Apakah anda data sudah sesuai? "
           open={isModalOpen}
           onCancel={handleCancel}

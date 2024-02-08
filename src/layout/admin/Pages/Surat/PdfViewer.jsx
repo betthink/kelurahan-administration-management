@@ -82,12 +82,12 @@ export default function PdfViewer(data) {
                 </View>
                 <View style={styles.section}>
                   <Text style={styles.text}>Kecamatan</Text>
-                
+
                   <Text style={styles.text}>Jekan Raya</Text>
                 </View>
                 <View style={styles.section}>
                   <Text style={styles.text}>Kelurahan</Text>
-               
+
                   <Text style={styles.text}>Menteng</Text>
                 </View>
                 <View style={styles.section}>
@@ -110,7 +110,7 @@ export default function PdfViewer(data) {
                   }}
                 >
                   <Text style={styles.text}>
-                    <Text style={styles.text}>No. 00011</Text>
+                    {/* <Text style={styles.text}>No. </Text> */}
                   </Text>
                 </View>
               </View>
@@ -187,13 +187,11 @@ export default function PdfViewer(data) {
                 }}
               >
                 <View>
-                  <Text>No. ......</Text>
                   <Text>Pengurus RT</Text>
                   <Text style={styles.signPlace}>....................</Text>
                 </View>
-                <View>
-                  <Text>No. ......</Text>
-                  <Text>Pengurus RW</Text>
+                <View style={{ display: "flex", justifyContent: "center" }}>
+                  <Text>{dataLoc.nama}</Text>
                   <Text style={styles.signPlace}>....................</Text>
                 </View>
               </View>

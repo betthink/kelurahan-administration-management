@@ -28,7 +28,7 @@ export default function ListBelumLunasPage() {
             state={{ data: data }}
             to={"/Dashboard/Kelola-IPL/DetailRiwayatPembayaran"}
           >
-            Riwayat pembayaran
+            Lihat Riwayat
           </Link>
         </Button>
       ),
@@ -40,7 +40,14 @@ export default function ListBelumLunasPage() {
     try {
       const response = await axiosInstance.get(url);
       const data = response.data;
-      setData(data);
+      setData(
+        data.map((item, index) => {
+          return {
+            ...item,
+            key: parseInt(index),
+          };
+        })
+      );
     } catch (error) {
       console.error(error);
     }
