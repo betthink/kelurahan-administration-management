@@ -24,6 +24,7 @@ function LandingPage() {
           },
         }
       );
+      
       const { data, message, value } = res.data;
       if (value === 1) {
         mes.success(message);
@@ -52,7 +53,7 @@ function LandingPage() {
     },
     onSubmit: handleLogin,
     validationSchema: yup.object().shape({
-      nama: yup.string().required().min(3),
+      nama: yup.string().required().min(1),
       nik: yup
         .string()
         .required()
@@ -78,6 +79,7 @@ function LandingPage() {
             className="w-full md:w-1/2 py-10"
           >
             <Form.Item
+            
               name="nama"
               rules={[
                 {
@@ -87,6 +89,7 @@ function LandingPage() {
               ]}
             >
               <Input
+              minLength={1}
                 name="nama"
                 onChange={handleChange}
                 className=" py-3   border"
