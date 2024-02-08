@@ -76,6 +76,7 @@ export default function PdfViewer(data) {
                   justifyContent: "space-between",
                 }}
               >
+           
                 <View style={styles.section}>
                   <Text style={styles.text}>Kota</Text>
                   <Text style={styles.text}>Palangka Raya</Text>

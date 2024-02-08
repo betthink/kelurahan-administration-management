@@ -144,7 +144,7 @@ export default function LaporanKeuangan() {
     const response = await axiosInstance.get(url);
     const data = response.data;
     if (response.status === 200) {
-      setdataRiwayatTransaksi(data);
+      setdataRiwayatTransaksi(data.slice().reverse());
       setLoading(false);
     }
   };
