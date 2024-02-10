@@ -33,3 +33,7 @@ Kemudian ini adalah halaman admin untuk menangani administrasi iuran warga yang 
 Ini adalah modal yang menampilkan detail dari data yang sudah di input
 
 ![administrasi-kelurahan - detail pembayaran](https://github.com/betthink/kelurahan-administration-management/assets/80962857/00b9b551-13b2-4ef1-935a-f156a10cdcfd)
+
+Berikut adalah halaman yang menampilkan history keuangan dari iuran warga
+
+![History - administrasi kelurahan](https://github.com/betthink/kelurahan-administration-management/assets/80962857/1dd03d33-89fe-4183-a709-c2f868388fd1)
