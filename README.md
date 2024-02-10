@@ -68,3 +68,17 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+###Looks
+This UI is dashboard admin for this website
+
+![administrasi-kelurahan](https://github.com/betthink/kelurahan-administration-management/assets/80962857/9a7df66c-4643-4962-b51f-89c539ab4aa4)
+
+And this is a verification iuran payment that handle by admin
+
+![administrasi-kelurahan - verifikasi](https://github.com/betthink/kelurahan-administration-management/assets/80962857/6599f9df-bd04-4322-b338-2b3e0d465a2e)
+
+This is UI that showing detail of verification payment
+
+![administrasi-kelurahan - detail pembayaran](https://github.com/betthink/kelurahan-administration-management/assets/80962857/00b9b551-13b2-4ef1-935a-f156a10cdcfd)
