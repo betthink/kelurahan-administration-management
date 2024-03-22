@@ -86,29 +86,34 @@ const Dashboard = () => {
   const pendudukBalita = pendudukDikelompokkan.filter(
     (penduduk) => penduduk.kelompok === "Balita"
   );
-
   const data = {
+    labels: ["Tetap", "Sementara"],
+    datasets: [
+      {
+        label: "Populasi warga by status tinggal ",
+        data: [pendudukTetap.length, pendudukSementara.length],
+        backgroundColor: ["rgba(255, 99, 132, 0.5)", "#0891b2"],
+      },
+    ],
+  };
+
+  const dataUmur = {
     labels: [
-      // "Penduduk",
-      "Tetap",
-      "Sementara",
+   
       "Lansia",
       "Dewasa",
       "Balita",
     ],
     datasets: [
       {
-        label: "Populasi warga ",
+        label: "Populasi warga by usia ",
         data: [
-          pendudukTetap.length,
-          pendudukSementara.length,
+        
           pendudukLansia.length,
           pendudukDewasa.length,
           pendudukBalita.length,
         ],
         backgroundColor: [
-          "rgba(255, 99, 132, 0.5)",
-          "#0891b2",
           "#14b8a6",
           "#c084fc",
           "#FF90BC",
@@ -116,7 +121,20 @@ const Dashboard = () => {
       },
     ],
   };
-
+  const dataPieUsia = {
+    labels: ["Lansia", "Dewasa", "Balita"],
+    datasets: [
+      {
+        label: "Populasi warga by usia ",
+        data: [
+          pendudukLansia.length,
+          pendudukDewasa.length,
+          pendudukBalita.length,
+        ],
+        backgroundColor: ["#14b8a6", "#c084fc", "#FF90BC"],
+      },
+    ],
+  };
   const cardData = [
     {
       icon: <IoIosPeople size={28} />,
@@ -161,7 +179,7 @@ const Dashboard = () => {
     handleGetDataPenduduk();
   }, []);
   return (
-    <section className="mx-20 m-6 gap-6 flex flex-col overflow-x-hidden ">
+    <section className="mx-20 m-6 gap-6 flex flex-col  overflow-x-hidden ">
       <div className="flex gap-4 items-center ">
         <div className=" bg-third p-3 rounded-sm   text-secondary ">
           <MdHome size={18} />
@@ -180,13 +198,23 @@ const Dashboard = () => {
           </div>
         ))}
       </div>
-      <div className=" grid grid-cols-3 mt-6  m  gap-3 w-full ">
-        <div className="bg-white  w-full  col-span-2 ">
-          <Bar options={options} data={data} />
+        {/* status tinggal */}
+        <div className=" grid grid-cols-3 mt-6   gap-3 w-full ">
+          <div className="bg-white  w-full  col-span-2 ">
+            <Bar options={options} data={data} />
+          </div>
+          <div className="bg-white  flex justify-center items-center w-full h-full rounded-md col-span-1">
+            <Pie data={data} />
+          </div>
         </div>
-        <div className="bg-white  flex justify-center items-center w-full h-full rounded-md col-span-1">
-          <Pie data={data} />
-        </div>
+        {/* usia */}
+        <div className=" grid grid-cols-3 gap-3 w-full ">
+          <div className="bg-white  w-full  col-span-2 ">
+            <Bar options={options} data={dataUmur} />
+          </div>
+          <div className="bg-white  flex justify-center items-center w-full h-full rounded-md col-span-1">
+            <Pie data={dataPieUsia} />
+          </div>
       </div>
     </section>
   );

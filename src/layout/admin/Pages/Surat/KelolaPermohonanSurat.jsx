@@ -147,7 +147,7 @@ function KelolaPermohonanSurat() {
       <>
         <Modal
           key={dataDownload?.key}
-          title="Apakah anda data sudah sesuai? "
+          title="Apakah  data sudah sesuai? "
           open={isModalOpen}
           onCancel={handleCancel}
           footer={[

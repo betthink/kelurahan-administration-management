@@ -1,68 +1,32 @@
-// function solution(tinggi) {
-//   for (let i = 0; i <= tinggi; i++) {
-//     const space = " ".repeat(tinggi - i);
-//       const star = "*".repeat(i)
-//       console.log( star+space);
-//   }
-// }
-// solution(5);
-
-// function solutionRemove(kata) {
-//   const array = kata.split("");
-//   const uniqueArray = [...new Set(array)];
-//   return uniqueArray;
-// }
-// const result = solutionRemove("imaginatioin");
-// console.log(result);
-
-// function solution(hargaProduk) {
-//   const total = hargaProduk.reduce(
-//     (accumulator, currentValue) => accumulator + currentValue,
-//     0
-//   );
-//   let diskon;
-//   if (total <= 200000) {
-//     diskon = (5 / 100) * total;
-//     const acumate = total - diskon;
-//     return acumate;
-//   } else if (total > 200000 && total <= 400000) {
-//     diskon = (7 / 100) * total;
-//     const acumate = total - diskon;
-//     return acumate;
-//   } else {
-//     diskon = (10 / 100) * total;
-//     const acumate = total - diskon;
-//     return acumate;
-//   }
-// }
-// const array = [2000, 50000, 200000];
-// const result = solution(array);
-// console.log(result);
-// function solution(noAkun, nominal) {
-//   const sameIdx = noAkun === nominal && noAkun - nominal;
-//   console.log(sameIdx);
-// }
-
-function solution(hargaProduk) {
-    const total = hargaProduk.reduce(
-      (accumulator, currentValue) => accumulator + currentValue,
-      0
-    );
-    let diskon;
-    if (total <= 200000) {
-      diskon = (5 / 100) * total;
-      const acumate = total - diskon;
-      return acumate;
-    } else if (total > 200000 && total <= 400000) {
-      diskon = (7 / 100) * total;
-      const acumate = total - diskon;
-      return acumate;
-    } else {
-      diskon = (10 / 100) * total;
-      const acumate = total - diskon;
-      return acumate;
-    }
+// function give disocunt
+function handleDiscount(cart, promocode, disountpecent) {
+  let result = 0;
+  let maximalPrice = 0;
+  for (let i = 0; i < cart.length; i++) {
+    if (promocode === "promocode" && cart[i].price >= 100000) {
+   maximalPrice += cart[i].price > maximalPrice ? maximalPrice : cart[i].price; 
+      result += maximalPrice;
+    }
   }
-  const array = [2000, 50000, 200000];
-  const result = solution(array);
-  console.log(result);
+  return result;
+}
+// result
+const cart = [
+  {
+    name: "Wireless Mouse",
+    qty: 2,
+    price: 80000,
+  },
+  {
+    name: "Bluetooth Speaker",
+    qty: 3,
+    price: 300000,
+  },
+  {
+    name: '21" Monitor',
+    qty: 3,
+    price: 1500000,
+  },
+];
+const result = handleDiscount(cart, "promocode", 10);
+console.log(result);

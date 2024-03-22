@@ -9,18 +9,21 @@ import {
   Avatar,
   Skeleton,
   Divider,
+  Table,
 } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
 import { useSelector } from "react-redux";
 import { MdAttachMoney } from "react-icons/md";
 import { formatAngka } from "../../../../utils/formatAngkaUang";
+import { DownloadTableExcel } from "react-export-table-to-excel";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function LaporanKeuangan() {
+  const tableRef = useRef(null);
   const [dataPemasukan, setdataPemasukan] = useState(0);
   const [dataPengeluaran, setdataPengeluaran] = useState(0);
   const [dataRiwayatTransaksi, setdataRiwayatTransaksi] = useState([]);
@@ -135,6 +138,45 @@ export default function LaporanKeuangan() {
   };
 
   // atributes history
+  const columns = [
+    {
+      title: "Nama",
+      dataIndex: "nama",
+      key: "nama",
+      render: (nama) => (
+        <span className={!nama ? "text-blue-600" : "text-purple-600"}>
+          {nama ? nama : "Admin"}
+        </span>
+      ),
+    },
+    {
+      title: "Waktu verifikasi",
+      dataIndex: "waktu_verifikasi",
+      key: "waktu_verifikasi",
+    },
+    {
+      title: "Jenis transaksi",
+      dataIndex: "jenis_transaksi",
+      key: "jenis_transaksi",
+    },
+    {
+      title: "Jumlah",
+      key: "jumlah_transaksi",
+      render: (item) => {
+        return (
+          <span
+            className={`${
+              item.jenis_transaksi === "pengeluaran"
+                ? "text-red-600"
+                : "text-green-600"
+            } text-right`}
+          >
+            Rp.{item && formatAngka(item.jumlah_transaksi)}
+          </span>
+        );
+      },
+    },
+  ];
   const [loading, setLoading] = useState(false);
   const handleGetRiwayatTransaksi = async () => {
     if (loading) {
@@ -177,6 +219,7 @@ export default function LaporanKeuangan() {
             margin: "16px 0",
           }}
         />
+
         <div className="flex gap-6 justify-between items-center">
           <span className="text-blusky">RT</span>
 
@@ -187,7 +230,7 @@ export default function LaporanKeuangan() {
       </Header>
       <Content className="mt-5 bg-white p-10">
         {user.role === "admin" ? (
-          <div className="w-full flex  my-6 ">
+          <div className="w-full flex justify-between  my-6 ">
             <Button
               onClick={showModal}
               className="flex  border-green-600 bg-green-400  text-white hover:bg-white  py-4 justify-between items-center "
@@ -210,6 +253,16 @@ export default function LaporanKeuangan() {
         </div>
 
         {/* history */}
+        <div className="my-4 w-fit ">
+        <DownloadTableExcel
+          filename="Laporan keuangan"
+          sheet="laporan keuangan"
+          currentTableRef={tableRef.current}
+        >
+          <Button className="flex  border-purple-500 bg-blusky text-white hover:bg-white  py-4 justify-between items-center ">
+            Export riwayat
+          </Button>
+        </DownloadTableExcel></div>
         <div
           className="mt-6"
           id="scrollableDiv"
@@ -220,64 +273,11 @@ export default function LaporanKeuangan() {
             border: "1px solid rgba(140, 140, 140, 0.35)",
           }}
         >
-          <InfiniteScroll
-            dataLength={dataRiwayatTransaksi.length}
-            next={handleGetRiwayatTransaksi}
-            hasMore={dataRiwayatTransaksi.length < 1}
-            loader={
-              <Skeleton
-                avatar
-                paragraph={{
-                  rows: 1,
-                }}
-                active
-              />
-            }
-            // endMessage={<Divider plain>Semua data sudah di tampilkan</Divider>}
-            scrollableTarget="scrollableDiv"
-          >
-            <List
-              dataSource={dataRiwayatTransaksi}
-              renderItem={(item, i) => (
-                <List.Item key={i}>
-                  <List.Item.Meta
-                    avatar={<span className="text-blusky">{i + 1}</span>}
-                    title={
-                      <div className="flex gap-5 w-56 justify-between ">
-                        <span>{item?.nama ? "Nama Penduduk" : "Nama pengguna"} </span>
-                        <span>: </span>
-                        <span className="font-semibold text-blusky">
-                          {item?.nama ? item?.nama : "Admin"}
-                        </span>
-                      </div>
-                    }
-                    description={
-                      <div className="flex gap-5 w-56 justify-between ">
-                        <span>Waktu transaksi: </span>
-                        <span className="font-semibold">
-                          {item.waktu_verifikasi}
-                        </span>
-                      </div>
-                    }
-                  />
-                  <div className="flex flex-col justify-end">
-                    <span className="font-bold text-lg">
-                      {item.jenis_transaksi}
-                    </span>
-                    <span
-                      className={`${
-                        item.jenis_transaksi === "pengeluaran"
-                          ? "text-red-600"
-                          : "text-green-600"
-                      } text-right`}
-                    >
-                      Rp.{item && formatAngka(item.jumlah_transaksi)}
-                    </span>
-                  </div>
-                </List.Item>
-              )}
-            />
-          </InfiniteScroll>
+          <Table pagination={false}
+            ref={tableRef} bordered
+            dataSource={dataRiwayatTransaksi}
+            columns={columns}
+          />
         </div>
       </Content>
       <>
