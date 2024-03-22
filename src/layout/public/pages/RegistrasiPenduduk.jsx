@@ -151,12 +151,12 @@ function RegistrasiPenduduk() {
   }, []);
   return (
     <Space
-      className="h-fullcontainer flex justify-center items-center bg-primary"
+      className="h-full w-full container flex justify-center items-center bg-primary"
       direction="vertical"
       size={16}
     >
       <Card
-        className=""
+        className="w-full  px-20"
         title="Selamat datang di halaman registrasi penduduk"
         extra={
           <Link
@@ -205,7 +205,7 @@ function RegistrasiPenduduk() {
                     },
                     {
                       min: 16,
-                      message: "NIK minimal setidaknya 16 karakter",
+                      message: "NIK minimal 16 karakter",
                     },
                     {
                       pattern: /^[0-9]+$/,
@@ -230,7 +230,7 @@ function RegistrasiPenduduk() {
                     },
                     {
                       min: 16,
-                      message: "Nomor KK minimal setidaknya 16 karakter",
+                      message: "Nomor KK minimal 16 karakter",
                     },
                     {
                       pattern: /^[0-9]+$/,
@@ -313,7 +313,7 @@ function RegistrasiPenduduk() {
                 >
                   <Input
                     maxLength={14}
-                    placeholder="Masukan Npmor Telp Penduduk"
+                    placeholder="Masukan Nomor Telpon"
                     value={dataEntry.nomor_telp}
                   />
                 </Form.Item>
@@ -416,7 +416,7 @@ function RegistrasiPenduduk() {
                     },
                   ]}
                 >
-                  <Select placeholder="Pilih Status Tinggal Penduduk">
+                  <Select placeholder="Pilih Status Tinggal   ">
                     <Select.Option value="Tetap">Tetap</Select.Option>
                     <Select.Option value="Sementara">Sementara</Select.Option>
                   </Select>
@@ -432,7 +432,7 @@ function RegistrasiPenduduk() {
                   ]}
                 >
                   <Select
-                    placeholder="Pilih Status kepala keluarga"
+                    placeholder="Kepala keluarga?"
                     value={dataEntry.kepala_keluarga}
                   >
                     <Select.Option value={1}>Benar</Select.Option>
