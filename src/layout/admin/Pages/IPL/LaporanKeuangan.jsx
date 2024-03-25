@@ -174,6 +174,20 @@ export default function LaporanKeuangan() {
         </span>
       ),
     },
+    // {
+    //   title: "Waktu Pembayaran",
+    //   dataIndex: "waktu_pembayaran",
+    //   key: "waktu_pembayaran",
+    //   filters: yearFilters,
+    //   onFilter: (value, record) => {
+    //     const [recordYear, recordMonth] = record.waktu_pembayaran.split("-");
+    //     return (
+    //       recordYear === value.substring(0, 4) &&
+    //       recordMonth === value.substring(5)
+    //     ); // Lakukan pengecekan apakah tahun dan bulan cocok dengan nilai yang dipilih
+    //   },
+    //   render: (value) => <span className={!value? 'text-red-400' : ''}>{value ? value: 'Pengeluaran'}</span>,
+    // },
     {
       title: "Waktu verifikasi",
       dataIndex: "waktu_verifikasi",
@@ -232,6 +246,7 @@ export default function LaporanKeuangan() {
     const url = `/administrasikelurahan/src/api/ipl/riwayat-transaksi-keuangan-ipl-by-rt.php?rt=${rt}`;
     const response = await axiosInstance.get(url);
     const data = response.data;
+   
     if (response.status === 200) {
       setdataRiwayatTransaksi(data.slice().reverse());
       setLoading(false);

@@ -72,7 +72,7 @@ function VerifikasiPembayaran() {
 
         data: formData,
       });
-      // console.log(res.data);
+      console.log(res.data);
       const { value, message } = res.data;
       if (parseInt(value) === 1) {
         mes.success(message);
