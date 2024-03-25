@@ -21,6 +21,7 @@ import { MdAttachMoney } from "react-icons/md";
 import { formatAngka } from "../../../../utils/formatAngkaUang";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { monthsData } from "../../utils/monthData";
 
 export default function LaporanKeuangan() {
   const tableRef = useRef(null);
@@ -136,13 +137,37 @@ export default function LaporanKeuangan() {
       throw error;
     }
   };
+  // Buat variabel untuk menyimpan data tahun unik dari kolom "Waktu Verifikasi" =====================
+  const uniqueYears = [
+    ...new Set(
+      dataRiwayatTransaksi.map((item) => item.waktu_verifikasi.split("-")[0])
+    ),
+  ];
 
+  // Buat filter berdasarkan tahun
+  const yearFilters = uniqueYears.map((year) => ({
+    text: year,
+    value: year,
+    children: monthsData.map((month) => ({
+      text: month.text,
+      value: `${year}-${month.value}`, // Gabungkan tahun dan bulan menjadi satu string
+    })),
+  }));
   // atributes history
   const columns = [
     {
       title: "Nama",
       dataIndex: "nama",
       key: "nama",
+      filters: [
+        {
+          text: "Admin",
+          value: null,
+        },
+      ],
+      onFilter: (value, record) => {
+        return record.nama === value;
+      },
       render: (nama) => (
         <span className={!nama ? "text-blue-600" : "text-purple-600"}>
           {nama ? nama : "Admin"}
@@ -153,6 +178,14 @@ export default function LaporanKeuangan() {
       title: "Waktu verifikasi",
       dataIndex: "waktu_verifikasi",
       key: "waktu_verifikasi",
+      filters: yearFilters,
+      onFilter: (value, record) => {
+        const [recordYear, recordMonth] = record.waktu_verifikasi.split("-");
+        return (
+          recordYear === value.substring(0, 4) &&
+          recordMonth === value.substring(5)
+        ); // Lakukan pengecekan apakah tahun dan bulan cocok dengan nilai yang dipilih
+      },
     },
     {
       title: "Jenis transaksi",
@@ -162,6 +195,20 @@ export default function LaporanKeuangan() {
     {
       title: "Jumlah",
       key: "jumlah_transaksi",
+      filters: [
+        {
+          text: "Pengeluaran",
+          value: "pengeluaran",
+        },
+        {
+          text: "Pemasukan",
+          value: "pemasukan",
+        },
+      ],
+      onFilter: (value, record) => {
+        return record.jenis_transaksi === value;
+      },
+
       render: (item) => {
         return (
           <span
@@ -254,15 +301,16 @@ export default function LaporanKeuangan() {
 
         {/* history */}
         <div className="my-4 w-fit ">
-        <DownloadTableExcel
-          filename="Laporan keuangan"
-          sheet="laporan keuangan"
-          currentTableRef={tableRef.current}
-        >
-          <Button className="flex  border-purple-500 bg-blusky text-white hover:bg-white  py-4 justify-between items-center ">
-            Export riwayat
-          </Button>
-        </DownloadTableExcel></div>
+          <DownloadTableExcel
+            filename="Laporan keuangan"
+            sheet="laporan keuangan"
+            currentTableRef={tableRef.current}
+          >
+            <Button className="flex  border-purple-500 bg-blusky text-white hover:bg-white  py-4 justify-between items-center ">
+              Export riwayat
+            </Button>
+          </DownloadTableExcel>
+        </div>
         <div
           className="mt-6"
           id="scrollableDiv"
@@ -273,8 +321,10 @@ export default function LaporanKeuangan() {
             border: "1px solid rgba(140, 140, 140, 0.35)",
           }}
         >
-          <Table pagination={false}
-            ref={tableRef} bordered
+          <Table
+            pagination={false}
+            ref={tableRef}
+            bordered
             dataSource={dataRiwayatTransaksi}
             columns={columns}
           />
