@@ -51,22 +51,32 @@ const CmsLayouts = () => {
       icon: TeamOutlined,
     },
   ];
-  const menuItems = [
-    ...atributeMenu.map((item, i) =>
-      getItem(<Link to={item.link}>{item.title}</Link>, `${i}`, <item.icon />, [
-        getItem(i, i),
-        getItem(i, i),
-      ])
-    ),
-    user.role === "super_admin"
-      ? getItem(
-          <Link to={"/Dashboard/Kelola-Admin"}>Kelola Admin</Link>,
-          "sub3",
-          <TeamOutlined />,
-          [getItem("a", "7"), getItem("b", "9")]
-        )
-      : null,
-  ];
+ const menuItems = [
+   ...atributeMenu.map((item, i) =>
+     getItem(<Link to={item.link}>{item.title}</Link>, `${i}`, <item.icon />, [
+       getItem(i, i),
+       getItem(i, i),
+     ])
+   ),
+   // Perbaiki logika kondisi agar sesuai dengan penulisan yang benar
+   ...(user.role === "super_admin"
+     ? [
+         getItem(
+           <Link to={"/Dashboard/Kelola-Admin"}>Kelola Admin</Link>,
+           "sub3",
+           <TeamOutlined />,
+           [getItem("a", "7"), getItem("b", "9")]
+         ),
+        //  getItem(
+        //    <Link to={"/Dashboard/Kelola-RW"}>Kelola RW</Link>,
+        //    "sub4",
+        //    <TeamOutlined />,
+        //    [getItem("a", "8"), getItem("b", "10")]
+        //  ),
+       ]
+     : []),
+ ];
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogOut = () => {

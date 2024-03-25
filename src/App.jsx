@@ -34,6 +34,7 @@ import SuratViewer from "./layout/public/pages/SuratViewer";
 import RegistrasiPenduduk from "./layout/public/pages/RegistrasiPenduduk";
 import VerifikasiPenduduk from "./layout/admin/Pages/penduduk/VerifikasiPenduduk";
 import ListBelumLunasPage from "./layout/admin/Pages/IPL/ListBelumLunasPage";
+import TambahRw from "./layout/admin/Pages/admin/TambahRw";
 
 const App = () => {
   const user = useSelector((state) => state.userReducer.value);
@@ -74,7 +75,10 @@ const App = () => {
           />
 
           <Route path="Kelola-IPL" element={<KelolaIPL />} />
-          <Route path="Kelola-IPL/list-belum-lunas" element={<ListBelumLunasPage />} />
+          <Route
+            path="Kelola-IPL/list-belum-lunas"
+            element={<ListBelumLunasPage />}
+          />
 
           <Route
             path="Kelola-IPL/DetailRiwayatPembayaran"
@@ -118,6 +122,10 @@ const App = () => {
             element={<VerifikasiPembayaran />}
           />
           <Route path="Kelola-surat/pdf" element={<PdfViewer />} />
+          <Route
+            path="/Dashboard/Kelola-Admin/Tambah-RW"
+            element={<TambahRw />}
+          />
         </Route>
       </Routes>
     </>
