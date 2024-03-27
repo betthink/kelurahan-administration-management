@@ -2,11 +2,19 @@ import React from "react";
 import { PDFViewer } from "@react-pdf/renderer";
 // import PDFDocument from "./PDFDocument";
 import { useLocation } from "react-router-dom";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
-
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+} from "@react-pdf/renderer";
+import ttd from "../../../../assets/png/ttd.png";
 export default function PdfViewer(data) {
   const location = useLocation();
   const dataLoc = location.state;
+  // console.log(dataLoc);
   // Create styles
   const styles = StyleSheet.create({
     page: {
@@ -76,7 +84,6 @@ export default function PdfViewer(data) {
                   justifyContent: "space-between",
                 }}
               >
-           
                 <View style={styles.section}>
                   <Text style={styles.text}>Kota</Text>
                   <Text style={styles.text}>Palangka Raya</Text>
@@ -184,16 +191,32 @@ export default function PdfViewer(data) {
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
-                  marginTop: "3cm",
+                  marginTop: "2cm",
                 }}
               >
                 <View>
                   <Text>Pengurus RT</Text>
                   <Text style={styles.signPlace}>....................</Text>
                 </View>
-                <View style={{ display: "flex", justifyContent: "center" }}>
-                  <Text>{dataLoc.nama}</Text>
-                  <Text style={styles.signPlace}>....................</Text>
+                <View
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    position: "relative",
+                  }}
+                >
+                  <Text>Pengurus RW</Text>
+                  {dataLoc?.persetujuan_rw == "1" ? (
+                    <Image src={ttd} style={{ width: 70 }} />
+                  ) : null}
+
+                  <Text
+                    style={
+                      (styles.signPlace, { position: "absolute", bottom: 5 })
+                    }
+                  >
+                    ....................
+                  </Text>
                 </View>
               </View>
             </View>

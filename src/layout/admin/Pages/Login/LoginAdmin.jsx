@@ -101,7 +101,7 @@ const LoginAdmin = () => {
               ]}
             >
               <Input
-                name="password"
+                name="password" type="password"
                 onChange={handleChange}
                 className="py-3 border"
                 placeholder="Masukkan password"

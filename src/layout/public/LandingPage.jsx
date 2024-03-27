@@ -101,16 +101,16 @@ function LandingPage() {
               rules={[
                 {
                   required: true,
-                  message: "NIK tidak boleh kosong",
+                  message: "NIK atau password tidak boleh kosong",
                 },
-                {
-                  min: 16,
-                  message: "NIK minimal setidaknya 16 characters",
-                },
-                {
-                  pattern: /^[0-9]+$/,
-                  message: "NIK hanya boleh berisi angka",
-                },
+                // {
+                //   min: 16,
+                //   message: "NIK minimal setidaknya 16 characters",
+                // },
+                // {
+                //   pattern: /^[0-9]+$/,
+                //   message: "NIK hanya boleh berisi angka",
+                // },
               ]}
             >
               <Input
@@ -118,7 +118,7 @@ function LandingPage() {
                 name="nik"
                 onChange={handleChange}
                 className="py-3  border"
-                placeholder="Masukkan NIK"
+                placeholder="Masukkan NIK / password"
               />
             </Form.Item>
             <Form.Item>

@@ -7,12 +7,14 @@ import { axiosInstance } from "../../../../utils/axiosInstance";
 import { useSelector } from "react-redux";
 import { MdDownload } from "react-icons/md";
 import ModalCofirmPersetujuan from "./components/ModalCofirmPersetujuan";
+import ModalConfirmTTDRW from "./components/ModalConfirmTTDRW";
 
 // components
 function KelolaPermohonanSurat() {
   // atributes modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalConfirmSurat, setisModalConfirmSurat] = useState(false);
+  const [isMOdalConfirmRW, setisMOdalConfirmRW] = useState(false);
   const [dataConfirm, setdataConfirm] = useState(false);
   const [dataDownload, setdataDownload] = useState(false);
   const isConfirmDownload = (data) => {
@@ -21,6 +23,10 @@ function KelolaPermohonanSurat() {
   };
   const handleIsConfirmPersetujuan = (data) => {
     setisModalConfirmSurat(true);
+    setdataConfirm(data);
+  };
+  const handleConfirmRW = (data) => {
+    setisMOdalConfirmRW(true);
     setdataConfirm(data);
   };
   const handleCancel = () => {
@@ -59,18 +65,31 @@ function KelolaPermohonanSurat() {
       title: "Status",
       width: 50,
       key: "isSetuju",
-      render: (data) => (
-        <span
-          className={`
-            ${
-              data.status_permohonan == 1
-                ? "text-green-500 bg-green-100  "
-                : "text-red-400 bg-red-200 "
-            } p-1 rounded-sm w-fit `}
-        >
-          {data.status_permohonan == 1 ? "Disetujui" : "Belum"}
-        </span>
-      ),
+      render: (data) => {
+        return user.role === "adminRW" ? (
+          <span
+            className={`
+          ${
+            data.persetujuan_rw == 1
+              ? "text-green-500 bg-green-100"
+              : "text-red-400 bg-red-200"
+          } p-1 rounded-sm w-fit `}
+          >
+            {data.persetujuan_rw == 1 ? "Disetujui" : "Belum"}
+          </span>
+        ) : (
+          <span
+            className={`
+          ${
+            data.status_permohonan == 1
+              ? "text-green-500 bg-green-100"
+              : "text-red-400 bg-red-200"
+          } p-1 rounded-sm w-fit `}
+          >
+            {data.status_permohonan == 1 ? "Disetujui" : "Belum"}
+          </span>
+        );
+      },
     },
 
     {
@@ -87,13 +106,23 @@ function KelolaPermohonanSurat() {
           >
             <MdDownload />
           </Button>
-          <Button
-            onClick={() => handleIsConfirmPersetujuan(data)}
-            className="bg-blusky hover:bg-white hover:border-pink-400 text-white "
-            type="default"
-          >
-            Persetujuan
-          </Button>
+          {user?.role === "adminRW" ? (
+            <Button
+              onClick={() => handleConfirmRW(data)}
+              className="bg-violet-600 hover:bg-white hover:border-pink-400 text-white "
+              type="default"
+            >
+              Persetujuan RW
+            </Button>
+          ) : (
+            <Button
+              onClick={() => handleIsConfirmPersetujuan(data)}
+              className="bg-blusky hover:bg-white hover:border-pink-400 text-white "
+              type="default"
+            >
+              Persetujuan RT
+            </Button>
+          )}
         </div>
       ),
     },
@@ -199,6 +228,12 @@ function KelolaPermohonanSurat() {
         <ModalCofirmPersetujuan
           isOpen={isModalConfirmSurat}
           handleOpen={setisModalConfirmSurat}
+          dataConfirm={dataConfirm}
+        />
+        {/* modal persetujuan */}
+        <ModalConfirmTTDRW
+          isOpen={isMOdalConfirmRW}
+          handleOpen={setisMOdalConfirmRW}
           dataConfirm={dataConfirm}
         />
       </>
