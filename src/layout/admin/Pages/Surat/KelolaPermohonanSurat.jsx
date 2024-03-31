@@ -184,7 +184,7 @@ function KelolaPermohonanSurat() {
               block
               className="bg-green-600 px-4 text-white mt-6 hover:bg-white hover:border flex justify-center items-center"
             >
-              <Link state={dataDownload} to="/Dashboard/Kelola-surat/pdf">
+              <Link state={{ data: dataDownload }} to="/Kelola-surat/pdf">
                 Lihat surat
               </Link>
             </Button>,

@@ -9,11 +9,14 @@ import {
   View,
   StyleSheet,
   PDFViewer,
+  Image,
 } from "@react-pdf/renderer";
-
+import ttdrw from "../../../assets/png/ttd.png";
+// import ttdrt from "../../../assets/png/ttd.png";
 export default function SuratViewer() {
   const location = useLocation();
   const dataLoc = location.state.data;
+  console.log(dataLoc);
   // Create styles
   const styles = StyleSheet.create({
     page: {
@@ -188,16 +191,43 @@ export default function SuratViewer() {
                     style={{
                       flexDirection: "row",
                       justifyContent: "space-between",
-                      marginTop: "3cm",
+                      marginTop: "2cm",
                     }}
                   >
                     <View>
                       <Text>Pengurus RT</Text>
                       <Text style={styles.signPlace}>....................</Text>
                     </View>
-                    <View style={{ display: 'flex', justifyContent: 'center' }}>
-                      <Text>{dataLoc.nama}</Text>
-                      <Text style={styles.signPlace}>....................</Text>
+                    <View
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        position: "relative",
+                      }}
+                    >
+                      <Text>Pengurus RW</Text>
+                      {dataLoc?.persetujuan_rw == "1" ? (
+                        <React.Fragment>
+                          <Image src={ttdrw} style={{ width: 70 }} />
+                          <Text
+                            style={
+                              (styles.signPlace,
+                              { position: "absolute", bottom: 5 })
+                            }
+                          >
+                            ....................
+                          </Text>
+                        </React.Fragment>
+                      ) : null}
+
+                      <Text
+                        style={
+                          (styles.signPlace,
+                          { position: "absolute", bottom: 5 })
+                        }
+                      >
+                        ....................
+                      </Text>
                     </View>
                   </View>
                 </View>

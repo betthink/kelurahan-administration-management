@@ -1,8 +1,10 @@
 import { Button, Form, Modal, Select, message as mes } from "antd";
 import React, { useState } from "react";
 import { axiosWithMultipart } from "../../../../../utils/axioswithmultipart";
+import { useSelector } from "react-redux";
 
 export default function ModalConfirmTTDRW({ handleOpen, isOpen, dataConfirm }) {
+    const user = useSelector((state) => state.userReducer.value);
   const [isSetuju, setisSetuju] = useState();
   const handleConfirmPermohonanSurat = async () => {
     const url =
@@ -10,6 +12,7 @@ export default function ModalConfirmTTDRW({ handleOpen, isOpen, dataConfirm }) {
 
     const response = await axiosWithMultipart({
       data: {
+        iduser: user?.iduser,
         id_pemohon: dataConfirm?.id_pemohon,
         isConfirm: isSetuju,
       },
@@ -17,6 +20,7 @@ export default function ModalConfirmTTDRW({ handleOpen, isOpen, dataConfirm }) {
       url,
     });
     const data = response.data;
+    // console.log(data);
     const { message, value } = data;
     if (value == 1) {
       mes.success(message);

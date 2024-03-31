@@ -121,12 +121,13 @@ const App = () => {
             path="Kelola-IPL/Verifikasi-Pembayaran"
             element={<VerifikasiPembayaran />}
           />
-          <Route path="Kelola-surat/pdf" element={<PdfViewer />} />
+
           <Route
             path="/Dashboard/Kelola-Admin/Tambah-RW"
             element={<TambahRw />}
           />
         </Route>
+        <Route path="/Kelola-surat/pdf" element={<PdfViewer />} />
       </Routes>
     </>
   );

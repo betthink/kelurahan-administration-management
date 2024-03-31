@@ -10,10 +10,11 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
-import ttd from "../../../../assets/png/ttd.png";
-export default function PdfViewer(data) {
+import ttdrw from "../../../../assets/png/ttd.png";
+import { useSelector } from "react-redux";
+export default function PdfViewer() {
   const location = useLocation();
-  const dataLoc = location.state;
+  const dataLoc = location.state.data;
   // console.log(dataLoc);
   // Create styles
   const styles = StyleSheet.create({
@@ -71,6 +72,8 @@ export default function PdfViewer(data) {
       marginTop: 30,
     },
   });
+   const user = useSelector((state) => state.userReducer.value);
+  //  console.log(user);
   return (
     <div>
       <PDFViewer className="w-full h-screen">
@@ -194,9 +197,36 @@ export default function PdfViewer(data) {
                   marginTop: "2cm",
                 }}
               >
-                <View>
+              
+                <View
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    position: "relative",
+                  }}
+                >
                   <Text>Pengurus RT</Text>
-                  <Text style={styles.signPlace}>....................</Text>
+                  {dataLoc?.status_permohonan == "1" ? (
+                    <React.Fragment>
+                      <Image src={ttdrw} style={{ width: 70 }} />
+                      <Text
+                        style={
+                          (styles.signPlace,
+                          { position: "absolute", bottom: 5 })
+                        }
+                      >
+                        ....................
+                      </Text>
+                    </React.Fragment>
+                  ) : null}
+
+                  <Text
+                    style={
+                      (styles.signPlace, { position: "absolute", bottom: 5 })
+                    }
+                  >
+                    ....................
+                  </Text>
                 </View>
                 <View
                   style={{
@@ -207,7 +237,17 @@ export default function PdfViewer(data) {
                 >
                   <Text>Pengurus RW</Text>
                   {dataLoc?.persetujuan_rw == "1" ? (
-                    <Image src={ttd} style={{ width: 70 }} />
+                    <React.Fragment>
+                      <Image src={ttdrw} style={{ width: 70 }} />
+                      <Text
+                        style={
+                          (styles.signPlace,
+                          { position: "absolute", bottom: 5 })
+                        }
+                      >
+                        ....................
+                      </Text>
+                    </React.Fragment>
                   ) : null}
 
                   <Text

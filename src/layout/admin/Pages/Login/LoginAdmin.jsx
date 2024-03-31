@@ -28,9 +28,12 @@ const LoginAdmin = () => {
         }
       );
       const { data, message, value } = res.data;
+      // console.log(data[0]);
+      // console.log(data[0].id_admin);
       if (value === 1) {
         dispatch(
           logIn({
+            iduser: data[0].id_admin,
             username: data[0].username,
             nik: data[0].nik,
             role: data[0].role,
@@ -101,7 +104,8 @@ const LoginAdmin = () => {
               ]}
             >
               <Input
-                name="password" type="password"
+                name="password"
+                type="password"
                 onChange={handleChange}
                 className="py-3 border"
                 placeholder="Masukkan password"
@@ -125,7 +129,7 @@ const LoginAdmin = () => {
               className="border-none self-end text-md text-third font-bold"
               onClick={() => navigate("/Landingpage")}
             >
-              Login  di sini
+              Login di sini
             </Button>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { Button, Form, Modal, Select, message as mes } from "antd";
 import React, { useState } from "react";
 import { axiosWithMultipart } from "../../../../../utils/axioswithmultipart";
+import { useSelector } from "react-redux";
 
 export default function ModalCofirmPersetujuan({
   handleOpen,
@@ -8,12 +9,14 @@ export default function ModalCofirmPersetujuan({
   dataConfirm,
 }) {
   const [isSetuju, setisSetuju] = useState();
+     const user = useSelector((state) => state.userReducer.value);
   const handleConfirmPermohonanSurat = async () => {
     const url =
       "/administrasikelurahan/src/update/update-persetujuan-surat.php";
 
     const response = await axiosWithMultipart({
       data: {
+        iduser: user?.iduser,
         id_pemohon: dataConfirm?.id_pemohon,
         isConfirm: isSetuju,
       },

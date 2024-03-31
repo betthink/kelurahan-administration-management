@@ -12,13 +12,14 @@ export default function LihatSuratPage() {
     const url = `/administrasikelurahan/src/api/surat/surat-by-user.php?id_user=${user.id}`;
     const response = await axiosInstance.get(url);
     const data = response.data;
+    // console.log(data);
     if (response.status === 200) {
       setdatapermohonanSurat(data);
     }
   };
   useEffect(() => {
     handleGetAllPermohonan();
-  },[] );
+  }, []);
 
   return (
     <section className="">
@@ -43,10 +44,13 @@ export default function LihatSuratPage() {
                   <div className="flex justify-between ">
                     <span>{item.tanggal_permohonan}</span>
                     <Button
-                      disabled={item.status_permohonan !== "1"}
+                      disabled={
+                        item.status_permohonan  && item.persetujuan_rw !== "1"
+                       
+                      }
                       className="bg-green-600 text-white hover:bg-white !hover:border-green-600 !hover:text-green-600"
                     >
-                      <Link state={{ data: item }} to="/Lihat-surat">
+                      <Link state={{ data: item }} to="/Kelola-surat/pdf">
                         Lihat
                       </Link>
                     </Button>

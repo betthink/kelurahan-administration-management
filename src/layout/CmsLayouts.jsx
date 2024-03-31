@@ -30,26 +30,29 @@ const CmsLayouts = () => {
       title: "Dashboard",
       icon: PieChartOutlined,
     },
-    {
-      link: "/Dashboard/Kelola-Penduduk",
-      title: "Kelola penduduk",
-      icon: TeamOutlined,
-    },
-    {
-      link: "/Dashboard/Kelola-IPL",
-      title: "Kelola IPL",
-      icon: DesktopOutlined,
-    },
+    ...(user.role !== "adminRW" ? [
+      {
+        link: "/Dashboard/Kelola-Penduduk",
+        title: "Kelola penduduk",
+        icon: TeamOutlined,
+      },
+
+      {
+        link: "/Dashboard/Kelola-IPL",
+        title: "Kelola IPL",
+        icon: DesktopOutlined,
+      },
+    ] : []),
     {
       link: "/Dashboard/kelola-Surat",
       title: "Kelola surat",
       icon: UserOutlined,
     },
-    {
-      link: "/Dashboard/Informasi-PosyandPage",
-      title: "Kelola posyandu",
-      icon: TeamOutlined,
-    },
+    // {
+    //   link: "/Dashboard/Informasi-PosyandPage",
+    //   title: "Kelola posyandu",
+    //   icon: TeamOutlined,
+    // },
   ];
  const menuItems = [
    ...atributeMenu.map((item, i) =>
