@@ -136,6 +136,7 @@ function KelolaPermohonanSurat() {
         : `/administrasikelurahan/src/api/fetchDataPermohonanSuratJoinPenduduk.php`;
     try {
       const response = await axiosInstance.get(url);
+      console.log(response.data);
       setdataPemohonSurat(
         response.data.map((item, index) => {
           return { ...item, key: parseInt(index) };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PDFViewer } from "@react-pdf/renderer";
 // import PDFDocument from "./PDFDocument";
 import { useLocation } from "react-router-dom";
@@ -12,10 +12,13 @@ import {
 } from "@react-pdf/renderer";
 import ttdrw from "../../../../assets/png/ttd.png";
 import { useSelector } from "react-redux";
+import { axiosInstance } from "../../../../utils/axiosInstance";
 export default function PdfViewer() {
   const location = useLocation();
   const dataLoc = location.state.data;
   // console.log(dataLoc);
+  const [datauserRW, setdatauserRW] = useState([]);
+  const [datauserRT, setdatauserRT] = useState([]);
   // Create styles
   const styles = StyleSheet.create({
     page: {
@@ -72,8 +75,27 @@ export default function PdfViewer() {
       marginTop: 30,
     },
   });
-   const user = useSelector((state) => state.userReducer.value);
+  const user = useSelector((state) => state.userReducer.value);
   //  console.log(user);
+
+  async function handleGetVerifikatorRW() {
+    const url = `administrasikelurahan/src/api/admin/fetchAccountAdminRWbyId.php?iduUserRW=${dataLoc.rw_verifikator}`;
+    const response = await axiosInstance.get(url);
+    const data = response.data[0];
+    // console.log(data);
+    setdatauserRW(data);
+  }
+  async function handleGetVerifikatorRT() {
+    const url = `administrasikelurahan/src/api/admin/fetchAccountAdminRTById.php?iduUserRT=${dataLoc.rt_verifikator}`;
+    const response = await axiosInstance.get(url);
+    const data = response.data[0];
+    console.log(data);
+    setdatauserRT(data);
+  }
+  useEffect(() => {
+    handleGetVerifikatorRW();
+    handleGetVerifikatorRT();
+  }, []);
   return (
     <div>
       <PDFViewer className="w-full h-screen">
@@ -197,12 +219,12 @@ export default function PdfViewer() {
                   marginTop: "2cm",
                 }}
               >
-              
                 <View
                   style={{
                     display: "flex",
                     justifyContent: "center",
                     position: "relative",
+                    marginTop: dataLoc?.status_permohonan === "1" ? 60 : null,
                   }}
                 >
                   <Text>Pengurus RT</Text>
@@ -215,18 +237,19 @@ export default function PdfViewer() {
                           { position: "absolute", bottom: 5 })
                         }
                       >
-                        ....................
+                        {datauserRT?.username}
                       </Text>
                     </React.Fragment>
-                  ) : null}
-
-                  <Text
-                    style={
-                      (styles.signPlace, { position: "absolute", bottom: 5 })
-                    }
-                  >
-                    ....................
-                  </Text>
+                  ) : (
+                    <Text
+                      style={
+                        (styles.signPlace,
+                        { position: "absolute", bottom: -30 })
+                      }
+                    >
+                      ....................
+                    </Text>
+                  )}
                 </View>
                 <View
                   style={{
@@ -242,21 +265,22 @@ export default function PdfViewer() {
                       <Text
                         style={
                           (styles.signPlace,
-                          { position: "absolute", bottom: 5 })
+                          { position: "absolute", bottom: 3, left: 20 })
                         }
                       >
-                        ....................
+                        {datauserRW?.username}
                       </Text>
                     </React.Fragment>
-                  ) : null}
-
-                  <Text
-                    style={
-                      (styles.signPlace, { position: "absolute", bottom: 5 })
-                    }
-                  >
-                    ....................
-                  </Text>
+                  ) : (
+                    <Text
+                      style={
+                        (styles.signPlace,
+                        { position: "absolute", bottom: dataLoc?.persetujuan_rw !== "1" ? -30  : -10})
+                      }
+                    >
+                      ....................
+                    </Text>
+                  )}
                 </View>
               </View>
             </View>

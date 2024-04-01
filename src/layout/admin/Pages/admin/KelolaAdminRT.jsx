@@ -66,7 +66,6 @@ export default function KelolaAdminRT() {
     },
   ];
   const columnDataRW = [
-   
     {
       title: "Username",
       key: "username",
@@ -79,7 +78,7 @@ export default function KelolaAdminRT() {
       dataIndex: "password",
       width: 50,
     },
-    
+
     {
       title: "RW",
       key: "rw",
@@ -105,7 +104,7 @@ export default function KelolaAdminRT() {
             </Link>
           </Button>
           <Button
-            onClick={() => handleDeleteAdminById(data.id_admin)}
+            onClick={() => handleDeleteAdminRWById(data.id_admin)}
             className="bg-danger  text-white"
           >
             Hapus
@@ -130,7 +129,7 @@ export default function KelolaAdminRT() {
     } catch (error) {}
   };
   const handleGetRW = async () => {
-    const url = `administrasikelurahan/src/api/admin/fetchAccountAdminRT.php`;
+    const url = `administrasikelurahan/src/api/admin/fetchAccountAdminRW.php`;
     try {
       const res = await axiosInstance.get(url);
       const { status, data } = res;
@@ -147,6 +146,25 @@ export default function KelolaAdminRT() {
     try {
       const res = await axiosWithMultipart({
         url: `/administrasikelurahan/src/delete/delDataAkunAdmin.php`,
+        method: "POST",
+        data: {
+          id_admin: id,
+        },
+      });
+      const { value, message } = res.data;
+      console.log(res);
+      if (value === 1) {
+        mes.success(message);
+        window.location.reload();
+      } else {
+        mes.error(message);
+      }
+    } catch (error) {}
+  };
+  const handleDeleteAdminRWById = async (id) => {
+    try {
+      const res = await axiosWithMultipart({
+        url: `/administrasikelurahan/src/delete/delDataAkunAdminRW.php`,
         method: "POST",
         data: {
           id_admin: id,
