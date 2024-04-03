@@ -35,6 +35,7 @@ import RegistrasiPenduduk from "./layout/public/pages/RegistrasiPenduduk";
 import VerifikasiPenduduk from "./layout/admin/Pages/penduduk/VerifikasiPenduduk";
 import ListBelumLunasPage from "./layout/admin/Pages/IPL/ListBelumLunasPage";
 import TambahRw from "./layout/admin/Pages/admin/TambahRw";
+import ProfilePage from "./layout/public/pages/ProfilePage";
 
 const App = () => {
   const user = useSelector((state) => state.userReducer.value);
@@ -63,6 +64,7 @@ const App = () => {
         <Route path="Informasi-Iuran" element={<InformasiIuran />} />
         <Route path="/List-surat" element={<LihatSuratPage />} />
         <Route path="/Lihat-surat" element={<SuratViewer />} />
+        <Route path="/Profile" element={<ProfilePage />} />
         <Route path="/Registrasi" element={<RegistrasiPenduduk />} />
 
         {/* Cms */}

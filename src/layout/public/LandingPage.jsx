@@ -24,9 +24,10 @@ function LandingPage() {
           },
         }
       );
-      
+
       const { data, message, value } = res.data;
       if (value === 1) {
+        // console.log(data[0]);
         mes.success(message);
         dispatch(
           logIn({
@@ -35,6 +36,7 @@ function LandingPage() {
             nik: data[0].nik,
             role: "penduduk",
             isLoggin: true,
+            data: data[0],
           })
         );
         navigate("/Informasi-iuran", { state: { data } });
@@ -79,7 +81,6 @@ function LandingPage() {
             className="w-full md:w-1/2 py-10"
           >
             <Form.Item
-            
               name="nama"
               rules={[
                 {
@@ -89,7 +90,7 @@ function LandingPage() {
               ]}
             >
               <Input
-              minLength={1}
+                minLength={1}
                 name="nama"
                 onChange={handleChange}
                 className=" py-3   border"
