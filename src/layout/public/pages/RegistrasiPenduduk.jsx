@@ -39,6 +39,7 @@ function RegistrasiPenduduk() {
     nomor_telp: "",
     jenis_kelamin: "",
     rt: "",
+    password: "",
   });
 
   const handleGetLembaga = async () => {
@@ -75,6 +76,7 @@ function RegistrasiPenduduk() {
       tempatLahir,
       kepalaKeluarga,
       rt,
+      password,
     } = e;
     const date = `${tanggalLahir.$d.getFullYear()}-${(
       tanggalLahir.$d.getMonth() + 1
@@ -103,6 +105,7 @@ function RegistrasiPenduduk() {
       nomor_telp: nomorTelp,
       jenis_kelamin: jenisKelamin,
       rt,
+      password,
     });
   };
   const agamaOption = [
@@ -122,8 +125,8 @@ function RegistrasiPenduduk() {
           data: { ...dataEntry, rw: "001" },
         }
       );
-      console.log(response.data);
       const { value, message } = response.data;
+      // console.log(response.data);
       if (value === 1) {
         mes.success(message);
         navigate("/Landingpage");
@@ -157,11 +160,11 @@ function RegistrasiPenduduk() {
     >
       <Card
         className="w-full  px-20"
-        title="Selamat datang di halaman registrasi penduduk"
+        title={<p className="text-xl text-green-600">Selamat datang <span className="text-sm text-black">di halaman registrasi penduduk</span> </p>}
         extra={
           <Link
             to={"/Landingpage"}
-            className="text-green-600 border border-green-600"
+            className="text-green-600 border p-2 rounded-md border-green-600"
           >
             Kembali
           </Link>
@@ -458,6 +461,21 @@ function RegistrasiPenduduk() {
                     ))}
                   </Select>
                 </Form.Item>
+                <Form.Item
+                  name="password"
+                  label="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Password tidak boleh kosong",
+                    },
+                  ]}
+                >
+                  <Input.Password
+                    placeholder="Masukan password"
+                    value={dataEntry.password}
+                  />
+                </Form.Item>
               </Space>
               <Form.Item className="rounded-md shadow-md mt-6">
                 <Button
@@ -494,18 +512,32 @@ function RegistrasiPenduduk() {
                 ]}
                 onCancel={handleCancel}
               >
-                <p>nama: {dataEntry.nama}</p>
-                <p>nik: {dataEntry.nik}</p>
-                <p>noKK: {dataEntry.no_kk}</p>
-                <p>alamat: {dataEntry.alamat}</p>
-                <p>nomorTelp: {dataEntry.nomor_telp}</p>
-                <p>tempat_lahir: {dataEntry.tempat_lahir}</p>
-                <p>kepala Keluarga: {dataEntry.kepala_keluarga}</p>
-                <p>darah: {dataEntry.darah}</p>
-                <p>tangga lLahir: {dataEntry.tanggal_lahir}</p>
-                <p>jenis Kelamin: {dataEntry.jenis_kelamin}</p>
-                <p>status: {dataEntry.status_diri}</p>
-                <p>status Penduduk: {dataEntry.status_tinggal}</p>
+                <div className="grid grid-cols-2">
+                  <span>nik:</span>
+                  <p class="text-green-600">{dataEntry.nik}</p>
+                  <span>nama:</span>
+                  <p class="text-green-600">{dataEntry.nama}</p>
+                  <span>noKK:</span>
+                  <p class="text-green-600">{dataEntry.no_kk}</p>
+                  <span>alamat:</span>
+                  <p class="text-green-600">{dataEntry.alamat}</p>
+                  <span>nomorTelp:</span>
+                  <p class="text-green-600">{dataEntry.nomor_telp}</p>
+                  <span>tempat_lahir:</span>
+                  <p class="text-green-600">{dataEntry.tempat_lahir}</p>
+                  <span>kepala Keluarga:</span>
+                  <p class="text-green-600">{dataEntry.kepala_keluarga}</p>
+                  <span>darah:</span>
+                  <p class="text-green-600">{dataEntry.darah}</p>
+                  <span>tangga lLahir:</span>
+                  <p class="text-green-600">{dataEntry.tanggal_lahir}</p>
+                  <span>jenis Kelamin:</span>
+                  <p class="text-green-600">{dataEntry.jenis_kelamin}</p>
+                  <span>status:</span>
+                  <p class="text-green-600">{dataEntry.status_diri}</p>
+                  <span>status Penduduk:</span>
+                  <p class="text-green-600">{dataEntry.status_tinggal}</p>
+                </div>
               </Modal>
             </>
           </div>

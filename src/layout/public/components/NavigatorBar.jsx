@@ -5,7 +5,6 @@ import { logOut } from "../../../app/feature/user/userSlice";
 import { UserOutlined } from "@ant-design/icons";
 import { Dropdown, message, Avatar, Space, Button, Modal, Card } from "antd";
 import { PiBookThin } from "react-icons/pi";
-import ButtonGroup from "antd/es/button/button-group";
 export default function NavigatorBar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // modal profile

@@ -20,12 +20,13 @@ function LandingPage() {
           method: "post",
           data: {
             nama,
-            nik,
+            password: nik,
           },
         }
       );
 
       const { data, message, value } = res.data;
+      // console.log(res);
       if (value === 1) {
         // console.log(data[0]);
         mes.success(message);
@@ -58,9 +59,9 @@ function LandingPage() {
       nama: yup.string().required().min(1),
       nik: yup
         .string()
-        .required()
-        .min(16)
-        .matches(/^[0-9]+$/, "NIK hanya boleh berisi angka"),
+        // .required()
+        // .min(16)
+        // .matches(/^[0-9]+$/, "NIK hanya boleh berisi angka"),
     }),
   });
   // functions
@@ -101,8 +102,8 @@ function LandingPage() {
               name="nik"
               rules={[
                 {
-                  required: true,
-                  message: "NIK atau password tidak boleh kosong",
+                  // required: true,
+                  // message: "NIK atau password tidak boleh kosong",
                 },
                 // {
                 //   min: 16,
@@ -114,8 +115,9 @@ function LandingPage() {
                 // },
               ]}
             >
-              <Input
-                maxLength={17}
+              <Input 
+                // maxLength={17}
+                value={''}
                 name="nik"
                 onChange={handleChange}
                 className="py-3  border"

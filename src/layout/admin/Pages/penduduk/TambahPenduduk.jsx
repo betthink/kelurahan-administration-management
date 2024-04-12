@@ -95,14 +95,17 @@ function TambahPenduduk() {
   ];
   const handleAddPenduduk = async () => {
     try {
+      // console.log(dataEntry);
+      // return;
       const response = await axiosWithMultipart(
-        "/administrasikelurahan/src/post/addDataPenduduk.php",
+        "/administrasikelurahan/src/post/penduduk/tambahpenduduk.php",
         {
           method: "post",
           data: { ...dataEntry, rt: user.rt, rw: user.rw },
         }
       );
       const { value, message } = response.data;
+      // console.log(response.data);
       if (value === 1) {
         mes.success(message);
         navigate("/Dashboard/Kelola-Penduduk");

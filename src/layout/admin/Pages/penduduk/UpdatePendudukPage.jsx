@@ -28,7 +28,7 @@ const UpdatePendudukPage = () => {
   } else {
     dataPenduduk.kepala_keluarga = 0;
   }
-  const [dataEntry, setdataEntry] = useState(dataPenduduk);
+  const [dataEntry, setdataEntry] = useState({...dataPenduduk, password: ''});
   const agamaOption = [
     "Islam",
     "Kristen",
@@ -57,6 +57,7 @@ const UpdatePendudukPage = () => {
       status_diri,
       tempat_lahir,
       kepala_keluarga,
+      password,
     } = e;
     // const date = `${tanggalLahir.$d.getFullYear()}-${
     //   tanggalLahir.$d.getMonth() + 1
@@ -78,6 +79,7 @@ const UpdatePendudukPage = () => {
       status_diri,
       nomor_telp,
       jenis_kelamin,
+      password,
     });
     showModal();
   };
@@ -89,12 +91,13 @@ const UpdatePendudukPage = () => {
         method: "post",
         data: dataEntry,
       });
-      const { data, status } = res;
-      if (status === 200) {
-        mes.success(data.message);
+      const { value, message } = res.data;
+      console.log(res.data);
+      if (value == 1) {
+        mes.success(message);
         navigate("/Dashboard/Kelola-Penduduk");
       } else {
-        mes.error(data.message);
+        mes.error(message);
       }
     } catch (error) {
       console.log(error);
@@ -226,17 +229,6 @@ const UpdatePendudukPage = () => {
               <Input placeholder="Masukan Npmor Telp Penduduk" />
             </Form.Item>
 
-            {/* <Form.Item
-              name="tanggal_lahir"
-              label="Tanggal Lahir"
-              required
-            >
-              <DatePicker
-                placeholder="Pilih Kelahiran Tanggal"
-                style={{ width: "100%" }}
-              />
-            </Form.Item> */}
-
             <Form.Item name="tempat_lahir" label="Tempat Lahir" required>
               <Input placeholder="Masukan Tempat Lahir Sesuai KTP" />
             </Form.Item>
@@ -274,6 +266,9 @@ const UpdatePendudukPage = () => {
                 <Select.Option value={1}>Benar</Select.Option>
                 <Select.Option value={0}>Tidak</Select.Option>
               </Select>
+            </Form.Item>
+            <Form.Item name="password" label="Password" required>
+              <Input.Password placeholder="Isi password baru di sini" />
             </Form.Item>
           </Space>
           <Form.Item className="bg-purp rounded-md">
