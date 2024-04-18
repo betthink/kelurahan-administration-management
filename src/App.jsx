@@ -130,6 +130,7 @@ const App = () => {
           />
         </Route>
         <Route path="/Kelola-surat/pdf" element={<PdfViewer />} />
+        {/* <Route path="/Kelola-surat/pdf" element={<PdfViewer />} /> */}
       </Routes>
     </>
   );

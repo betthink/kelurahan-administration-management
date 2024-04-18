@@ -15,6 +15,7 @@ const PermohonanSurat = () => {
       const res = await axiosInstance.get(
         "/administrasikelurahan/src/api/fetchDataJenisSurat.php"
       );
+      console.log(res.data);
       res.status === 200
         ? setjenisSurat(res.data)
         : console.log("Network Error");
@@ -31,12 +32,14 @@ const PermohonanSurat = () => {
           method: "post",
           data: {
             nik: user.nik,
+            id_surat: surat, // Menggunakan nilai surat langsung
+            nama_surat: jenisSurat.find((item) => item.id_surat === surat).nama_surat, // Mendapatkan nama_surat dari jenisSurat berdasarkan id surat
             id_penduduk: user.id,
-            jenis_surat: surat,
           },
         }
       );
       const { message, value } = res.data;
+      // console.log(res.data);
       if (value === 1) {
         mes.success(message);
         navigate("/List-surat");
@@ -48,6 +51,7 @@ const PermohonanSurat = () => {
       throw error;
     }
   };
+
   useEffect(() => {
     handleGetJenisSurat();
   }, []);
@@ -58,7 +62,7 @@ const PermohonanSurat = () => {
         <Form
           layout="vertical"
           onFinish={handlePermohonanPembuatanSurat}
-          className="w-1/2 border container py-12 flex flex-col   gap-6  mt-20 bg-white  shadow-md  "
+          className="w-1/2 border container py-12 flex flex-col   gap-6  mt-20 bg-white  shadow-md"
         >
           <Form.Item
             rules={[{ required: true }]}
@@ -70,13 +74,14 @@ const PermohonanSurat = () => {
             name="surat"
           >
             <Select placeholder="Pilih jenis permohonan surat">
-              {jenisSurat.map((item, i) => (
-                <Select.Option className="py-3" key={i} value={item.nama_surat}>
+              {jenisSurat.map((item) => (
+                <Select.Option className="py-3" key={item.id} value={item.id_surat}>
                   {item.nama_surat}
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
+
           <Form.Item>
             <Button
               block

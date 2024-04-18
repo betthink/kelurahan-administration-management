@@ -9,6 +9,20 @@ import { MdDownload } from "react-icons/md";
 import ModalCofirmPersetujuan from "./components/ModalCofirmPersetujuan";
 import ModalConfirmTTDRW from "./components/ModalConfirmTTDRW";
 
+// lib docx
+import Docxtemplater from "docxtemplater";
+import PizZip from "pizzip";
+import PizZipUtils from "pizzip/utils/index.js";
+import { saveAs } from "file-saver";
+function loadFile(url, callback) {
+  PizZipUtils.getBinaryContent(url, callback);
+}
+const docxTemplates = {
+  1: require(`../../../../assets/docx/templete/1.docx`),
+  2: require(`../../../../assets/docx/templete/2.docx`),
+  3: require(`../../../../assets/docx/templete/3.docx`),
+  4: require(`../../../../assets/docx/templete/4.docx`),
+};
 // components
 function KelolaPermohonanSurat() {
   // atributes modal
@@ -16,8 +30,10 @@ function KelolaPermohonanSurat() {
   const [isModalConfirmSurat, setisModalConfirmSurat] = useState(false);
   const [isMOdalConfirmRW, setisMOdalConfirmRW] = useState(false);
   const [dataConfirm, setdataConfirm] = useState(false);
+  const [userAdmin, setuserAdmin] = useState([]);
   const [dataDownload, setdataDownload] = useState(false);
   const isConfirmDownload = (data) => {
+    console.log(data);
     setIsModalOpen(true);
     setdataDownload(data);
   };
@@ -34,6 +50,73 @@ function KelolaPermohonanSurat() {
   };
   const [dataPemohonSurat, setdataPemohonSurat] = useState([]);
   const user = useSelector((state) => state.userReducer.value);
+
+  // handle download surat
+  function formatDate(date) {
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+    const formattedDate = date.toLocaleDateString("id-ID", options);
+    return formattedDate.replace(/\//g, "-"); // Mengganti tanda "/" menjadi "-"
+  }
+
+  const today = new Date();
+  // const formattedDate = formatDate(today);
+
+  function generateDocument(data) {
+    // return console.log(
+    //   userAdmin.find((item) => item.id_admin === data?.rt_verifikator).username
+    // );
+    const docxFilePath = docxTemplates[data?.id_surat];
+
+    if (!docxFilePath) {
+      console.error("File template for the given id_surat not found.");
+      return;
+    }
+
+    loadFile(docxFilePath, function (error, content) {
+      if (error) {
+        throw error;
+      }
+      const zip = new PizZip(content);
+      const doc = new Docxtemplater(zip, {
+        paragraphLoop: true,
+        linebreaks: true,
+      });
+
+      // Di sini Anda bisa menambahkan logika lain sesuai kebutuhan
+      const formattedDate = formatDate(new Date()); // Mendapatkan tanggal saat ini
+
+      doc.render({
+        nama: data?.nama,
+        jenis_kelamin: data?.jenis_kelamin,
+        tempatlahir: data?.tempat_lahir,
+        tanggal_lahir: data?.tanggal_lahir,
+        status_diri: data?.status_diri,
+        agama: data?.agama,
+        pekerjaan: data?.pekerjaan,
+        noktp: data?.nomor_telp,
+        nokk: data?.no_kk,
+        alamat: data?.alamat,
+        rt: data?.rt,
+        rw: data?.rw,
+        now: formattedDate,
+        adminrt: userAdmin.find(
+          (item) => item.id_admin === data?.rt_verifikator
+        ).username,
+      });
+
+      const out = doc.getZip().generate({
+        type: "blob",
+        mimeType:
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      });
+
+      // Output the document using Data-URI
+      saveAs(out, `${data?.nama}-${data?.nama_surat}.docx`);
+    });
+  }
+
+  // Panggil fungsi generateDocument dengan nama file yang diinginkan
+
   // column ------------------------------
   const columnPermohonanSurat = [
     {
@@ -46,8 +129,8 @@ function KelolaPermohonanSurat() {
     {
       title: "Jenis Surat",
       width: 100,
-      dataIndex: "jenis_surat",
-      key: "jenis_surat",
+      dataIndex: "nama_surat",
+      key: "nama_surat",
     },
     {
       title: "Tanggal Permohonan",
@@ -136,7 +219,7 @@ function KelolaPermohonanSurat() {
         : `/administrasikelurahan/src/api/fetchDataPermohonanSuratJoinPenduduk.php`;
     try {
       const response = await axiosInstance.get(url);
-      console.log(response.data);
+      // console.log(response.data);
       setdataPemohonSurat(
         response.data.map((item, index) => {
           return { ...item, key: parseInt(index) };
@@ -146,8 +229,21 @@ function KelolaPermohonanSurat() {
       throw error;
     }
   };
+  const handleGetAdmin = async () => {
+    try {
+      const url =
+        "/administrasikelurahan/src/api/admin/fetchaAllAccountAdmin.php";
+      const response = await axiosInstance.get(url);
+      const data = response.data;
+      setuserAdmin(data);
+      // console.log(data);
+    } catch (error) {
+      throw error;
+    }
+  };
   useEffect(() => {
     handleGetDataPermohonanSurat();
+    handleGetAdmin();
   }, []);
   return (
     <div className="mx-20">
@@ -182,12 +278,18 @@ function KelolaPermohonanSurat() {
           onCancel={handleCancel}
           footer={[
             <Button
+              disabled={
+                dataDownload?.rt_verifikator === null ||
+                dataDownload?.rw_verifikator === null
+              }
+              onClick={() => generateDocument(dataDownload)}
               block
               className="bg-green-600 px-4 text-white mt-6 hover:bg-white hover:border flex justify-center items-center"
             >
-              <Link state={{ data: dataDownload }} to="/Kelola-surat/pdf">
+              Unduh
+              {/* <Link state={{ data: dataDownload }} to="/Kelola-surat/pdf">
                 Lihat surat
-              </Link>
+              </Link> */}
             </Button>,
           ]}
         >
@@ -204,7 +306,7 @@ function KelolaPermohonanSurat() {
             </p>
             <span>Jenis surat</span>
             <p className="text-blusky font-semibold ">
-              {dataDownload.jenis_surat}
+              {dataDownload.nama_surat}
             </p>
             <span>Pekerjaan</span>
             <p className="text-blusky font-semibold ">
