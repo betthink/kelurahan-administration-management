@@ -33,7 +33,7 @@ function KelolaPermohonanSurat() {
   const [userAdmin, setuserAdmin] = useState([]);
   const [dataDownload, setdataDownload] = useState(false);
   const isConfirmDownload = (data) => {
-    console.log(data);
+    // console.log(data);
     setIsModalOpen(true);
     setdataDownload(data);
   };
@@ -50,17 +50,13 @@ function KelolaPermohonanSurat() {
   };
   const [dataPemohonSurat, setdataPemohonSurat] = useState([]);
   const user = useSelector((state) => state.userReducer.value);
-
+  // console.log(user);
   // handle download surat
   function formatDate(date) {
     const options = { day: "2-digit", month: "2-digit", year: "numeric" };
     const formattedDate = date.toLocaleDateString("id-ID", options);
     return formattedDate.replace(/\//g, "-"); // Mengganti tanda "/" menjadi "-"
   }
-
-  const today = new Date();
-  // const formattedDate = formatDate(today);
-
   function generateDocument(data) {
     // return console.log(
     //   userAdmin.find((item) => item.id_admin === data?.rt_verifikator).username
@@ -216,7 +212,10 @@ function KelolaPermohonanSurat() {
     const url =
       user.role === "admin"
         ? `/administrasikelurahan/src/api/fetchDataPermohonanSuratJoinPendudukByRT.php?rt=${user.rt}`
+        : user.role == "adminRW"
+        ? `/administrasikelurahan/src/api/fetchDataPermohonanSuratJoinPendudukByRW.php?rw=${user.rw}`
         : `/administrasikelurahan/src/api/fetchDataPermohonanSuratJoinPenduduk.php`;
+
     try {
       const response = await axiosInstance.get(url);
       // console.log(response.data);

@@ -100,6 +100,7 @@ export default function LihatSuratPage() {
         "/administrasikelurahan/src/api/admin/fetchaAllAccountAdmin.php";
       const response = await axiosInstance.get(url);
       const data = response.data;
+      // console.log(data);
       setuserAdmin(data);
       // console.log(data);
     } catch (error) {
