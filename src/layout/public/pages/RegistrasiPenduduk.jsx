@@ -39,6 +39,7 @@ function RegistrasiPenduduk() {
     nomor_telp: "",
     jenis_kelamin: "",
     rt: "",
+    rw: "",
     password: "",
   });
 
@@ -77,6 +78,7 @@ function RegistrasiPenduduk() {
       kepalaKeluarga,
       rt,
       password,
+      rw
     } = e;
     const date = `${tanggalLahir.$d.getFullYear()}-${(
       tanggalLahir.$d.getMonth() + 1
@@ -105,6 +107,7 @@ function RegistrasiPenduduk() {
       nomor_telp: nomorTelp,
       jenis_kelamin: jenisKelamin,
       rt,
+      rw,
       password,
     });
   };
@@ -122,7 +125,8 @@ function RegistrasiPenduduk() {
         "/administrasikelurahan/src/post/addDataPenduduk.php",
         {
           method: "post",
-          data: { ...dataEntry, rw: "001" },
+          data: { ...dataEntry},
+          // data: { ...dataEntry, rw: "001" },
         }
       );
       const { value, message } = response.data;
@@ -160,7 +164,14 @@ function RegistrasiPenduduk() {
     >
       <Card
         className="w-full  px-20"
-        title={<p className="text-xl text-green-600">Selamat datang <span className="text-sm text-black">di halaman registrasi penduduk</span> </p>}
+        title={
+          <p className="text-xl text-green-600">
+            Selamat datang{" "}
+            <span className="text-sm text-black">
+              di halaman registrasi penduduk
+            </span>{" "}
+          </p>
+        }
         extra={
           <Link
             to={"/Landingpage"}
@@ -453,10 +464,28 @@ function RegistrasiPenduduk() {
                     },
                   ]}
                 >
-                  <Select placeholder="Pilih RT" value={dataEntry.darah}>
+                  <Select placeholder="Pilih RT" value={dataEntry.rt}>
                     {dataLembaga.map((item, i) => (
                       <Select.Option key={i} value={item.rt}>
                         {item.rt}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  name="rw"
+                  label="RW"
+                  rules={[
+                    {
+                      required: true,
+                      message: "RW tidak boleh kosong",
+                    },
+                  ]}
+                >
+                  <Select placeholder="Pilih RW" value={dataEntry.rw}>
+                    {["001", "002", "003", "004", "005"].map((item, i) => (
+                      <Select.Option key={i} value={item}>
+                        {item}
                       </Select.Option>
                     ))}
                   </Select>

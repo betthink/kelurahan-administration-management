@@ -1,4 +1,4 @@
-import { Breadcrumb, Button, Table } from "antd";
+import { Breadcrumb, Button, Card, List, Table } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -40,6 +40,7 @@ export default function ListBelumLunasPage() {
     try {
       const response = await axiosInstance.get(url);
       const data = response.data;
+      console.log(data);
       setData(
         data.map((item, index) => {
           return {
@@ -76,7 +77,36 @@ export default function ListBelumLunasPage() {
         />
       </Header>
       <Content className="p-6 bg-white min-h-[30rem]">
-        <Table columns={column} dataSource={belumLunas} />
+        <List
+          grid={{
+            gutter: 16,
+            column: 2,
+          }}
+          dataSource={belumLunas}
+          renderItem={(item) => (
+            <List.Item>
+              <Card
+                className=""
+                title={<span className="text-red-600">{item?.status}</span>}
+              >
+                <div className="grid grid-cols-2 ">
+                  <div>
+                    <span className="text-lg">{item.user_name}</span>
+                  </div>
+                  <Button className="bg-purp text-white hover:bg-white hover:border-purp">
+                    <Link
+                      state={{ data: item }}
+                      to={"/Dashboard/Kelola-IPL/DetailRiwayatPembayaran"}
+                    >
+                      Lihat Riwayat
+                    </Link>
+                  </Button>
+                </div>
+              </Card>
+            </List.Item>
+          )}
+        />
+        {/* <Table columns={column} dataSource={belumLunas} /> */}
       </Content>
     </section>
   );

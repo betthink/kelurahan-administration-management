@@ -15,7 +15,7 @@ import InformasiIuran from "./layout/public/pages/InformasiIuran";
 import PermohonanSurat from "./layout/public/pages/PermohonanSurat";
 import Dashboard from "./layout/admin/Pages/Dashboard";
 import LoginAdmin from "./layout/admin/Pages/Login/LoginAdmin";
-import KelolaAdminRT from "./layout/admin/Pages/admin/KelolaAdminRT";
+import KelolaAdmin from "./layout/admin/Pages/admin/KelolaAdmin";
 import { useSelector } from "react-redux";
 import TambahAdmin from "./layout/admin/Pages/admin/TambahAdmin";
 import DetailRiwayatPembayaran from "./layout/admin/Pages/IPL/DetailRiwayatPembayaran";
@@ -99,7 +99,7 @@ const App = () => {
             path="Tambah-peserta-posyandu"
             element={<TambahPesertaImunisasi />}
           />
-          <Route path="Kelola-Admin" element={<KelolaAdminRT />} />
+          <Route path="Kelola-Admin" element={<KelolaAdmin />} />
           <Route path="Kelola-Admin/Tambah-Admin" element={<TambahAdmin />} />
           <Route
             path="Kelola-Admin/UpdateAkunAdmin"

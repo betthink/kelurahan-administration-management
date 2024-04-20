@@ -8,7 +8,7 @@ import { axiosInstance } from "../../../../utils/axiosInstance";
 import ButtonGroup from "antd/es/button/button-group";
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
 
-export default function KelolaAdminRT() {
+export default function KelolaAdmin() {
   const [dataAccountAdmin, setdataAccountAdmin] = useState([]);
   const [dataAccountRW, setdataAccountRW] = useState([]);
   const columnDataAdmin = [

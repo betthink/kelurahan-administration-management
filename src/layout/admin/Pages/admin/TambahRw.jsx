@@ -81,8 +81,7 @@ function TambahRw() {
             >
               <Input placeholder="Masukan Nama Admin" />
             </Form.Item>
-            <Form.Item 
-            
+            <Form.Item
               rules={[
                 {
                   required: true,
@@ -91,7 +90,7 @@ function TambahRw() {
               name="password"
               label="password"
             >
-              <Input type='password' placeholder="Masukan Nama Admin" />
+              <Input type="password" placeholder="Masukan Nama Admin" />
             </Form.Item>
             <Form.Item
               name="nik"
@@ -168,7 +167,7 @@ function TambahRw() {
               </Select>
             </Form.Item>
           </Space>
-          <Form.Item className="bg-success">
+          <Form.Item className="bg-emerald-600">
             <Button
               className="h-10"
               block

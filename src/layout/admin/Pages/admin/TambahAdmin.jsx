@@ -211,7 +211,7 @@ export default function TambahAdmin() {
               </Select>
             </Form.Item>
           </Space>
-          <Form.Item className="bg-success">
+          <Form.Item className="bg-third">
             <Button
               className="h-10"
               block
