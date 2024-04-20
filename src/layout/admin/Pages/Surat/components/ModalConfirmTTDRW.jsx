@@ -4,7 +4,7 @@ import { axiosWithMultipart } from "../../../../../utils/axioswithmultipart";
 import { useSelector } from "react-redux";
 
 export default function ModalConfirmTTDRW({ handleOpen, isOpen, dataConfirm }) {
-    const user = useSelector((state) => state.userReducer.value);
+  const user = useSelector((state) => state.userReducer.value);
   const [isSetuju, setisSetuju] = useState();
   const handleConfirmPermohonanSurat = async () => {
     const url =
@@ -34,18 +34,10 @@ export default function ModalConfirmTTDRW({ handleOpen, isOpen, dataConfirm }) {
       <Modal
         footer={null}
         title={
-          dataConfirm?.status_permohonan == "0" ? (
-            <p>
-              Apakah anda ingin{" "}
-              <span className="text-green-600">menyetujui</span> permohonan
-              surat dengan memberikan tanda tangan?
-            </p>
-          ) : (
-            <p>
-              Apakah anda ingin <span className="text-red-400">menolak</span>{" "}
-              permohonan surat?
-            </p>
-          )
+          <p>
+            Apakah anda ingin <span className="text-green-600">menyetujui</span>{" "}
+            permohonan surat?
+          </p>
         }
         open={isOpen}
         onCancel={() => handleOpen(false)}

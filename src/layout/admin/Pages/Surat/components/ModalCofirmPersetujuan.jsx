@@ -9,7 +9,7 @@ export default function ModalCofirmPersetujuan({
   dataConfirm,
 }) {
   const [isSetuju, setisSetuju] = useState();
-     const user = useSelector((state) => state.userReducer.value);
+  const user = useSelector((state) => state.userReducer.value);
   const handleConfirmPermohonanSurat = async () => {
     const url =
       "/administrasikelurahan/src/update/update-persetujuan-surat.php";
@@ -37,18 +37,11 @@ export default function ModalCofirmPersetujuan({
       <Modal
         footer={null}
         title={
-          dataConfirm?.status_permohonan == "0" ? (
-            <p>
-              Apakah anda ingin{" "}
-              <span className="text-green-600">menyetujui</span> permohonan
-              surat?
-            </p>
-          ) : (
-            <p>
-              Apakah anda ingin <span className="text-red-400">menolak</span>{" "}
-              permohonan surat?
-            </p>
-          )
+          <p>
+            Apakah anda ingin
+            <span className="text-green-600"> menyetujui</span> permohonan surat
+            dengan memberikan tanda tangan?
+          </p>
         }
         open={isOpen}
         onCancel={() => handleOpen(false)}
@@ -58,9 +51,9 @@ export default function ModalCofirmPersetujuan({
             <Select
               onChange={(e) => setisSetuju(e)}
               placeholder="Pilih"
-              value={dataConfirm ? "Setujui" : "Tidak Setujui"} 
+              value={dataConfirm ? "Setujui" : "Tidak Setujui"}
             >
-              <Select.Option  value={1}>Benar</Select.Option>
+              <Select.Option value={1}>Benar</Select.Option>
               <Select.Option value={0}>Tidak</Select.Option>
             </Select>
           </Form.Item>
