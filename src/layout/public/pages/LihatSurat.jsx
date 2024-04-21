@@ -20,6 +20,9 @@ const docxTemplates = {
   2: require(`../../../assets/docx/templete/2.docx`),
   3: require(`../../../assets/docx/templete/3.docx`),
   4: require(`../../../assets/docx/templete/4.docx`),
+  5: require(`../../../assets/docx/templete/5.docx`),
+  6: require(`../../../assets/docx/templete/6.docx`),
+  7: require(`../../../assets/docx/templete/7.docx`),
 };
 
 export default function LihatSuratPage() {
@@ -36,11 +39,30 @@ export default function LihatSuratPage() {
     }
   };
 
-    function formatDate(date) {
-      const options = { day: "2-digit", month: "2-digit", year: "numeric" };
-      const formattedDate = date.toLocaleDateString("id-ID", options);
-      return formattedDate.replace(/\//g, "-"); // Mengganti tanda "/" menjadi "-"
-    }
+  function formatDate() {
+    const date = new Date(); // Membuat objek Date saat ini
+    const day = date.getDate(); // Mendapatkan tanggal
+    const month = date.getMonth() + 1; // Mendapatkan bulan (dalam JavaScript, bulan dimulai dari 0)
+    const year = date.getFullYear(); // Mendapatkan tahun
+
+    const monthNames = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
+
+    const formattedDate = `${day} ${monthNames[month - 1]} ${year}`;
+    return formattedDate;
+  }
   function generateDocument(data) {
     // return console.log(
     //   userAdmin.find((item) => item.id_admin === data?.rt_verifikator).username
@@ -63,7 +85,7 @@ export default function LihatSuratPage() {
       });
 
       // Di sini Anda bisa menambahkan logika lain sesuai kebutuhan
-      const formattedDate = formatDate(new Date()); // Mendapatkan tanggal saat ini
+      const formattedDate = formatDate(); // Mendapatkan tanggal saat ini
 
       doc.render({
         nama: data?.nama,
