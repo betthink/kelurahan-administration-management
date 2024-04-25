@@ -19,8 +19,9 @@ function KelolaIPL() {
 
     try {
       const res = await axiosInstance.get(url);
+       const valid = res.data.filter((item) => item.verifikator !== null);
       setdata(
-        res.data.map((item, index) => {
+       valid.map((item, index) => {
           return { ...item, key: index.toString() };
         })
       );
@@ -84,6 +85,14 @@ function KelolaIPL() {
                 className="text-green-600"
               >
                 Belum lunas
+              </Link>
+            </Button>
+            <Button className="bg-pink-800 text-white hover:bg-white hover:red-green-600 hover:text-green-600">
+              <Link
+                to="/Dashboard/Kelola-IPL/Verifikasi-Pembayaran-Transfer"
+                className="text-green-600"
+              >
+                Verifikasi pembayaran transfer
               </Link>
             </Button>
           </ButtonGroup>

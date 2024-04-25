@@ -1,19 +1,21 @@
-import { Table } from "antd";
+import { Button, Table } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../../../utils/axiosInstance";
 import NavigatorBar from "../components/NavigatorBar";
 import { useSelector } from "react-redux";
 import { formatAngka } from "../../../utils/formatAngkaUang";
+import { Link } from "react-router-dom";
+import { PlusOutlined } from "@ant-design/icons";
 
 export default function InformasiIuran() {
   // variables
   const [dataRiwayatPembayaran, setdataRiwayatPembayaran] = useState([]);
   const lastData = dataRiwayatPembayaran[dataRiwayatPembayaran?.length - 1];
   const user = useSelector((state) => state.userReducer.value);
+  // console.log(user);
   // table column
   const columnRiwayatPembayaran = [
-
     {
       title: "Waktu pembayaran",
       dataIndex: "waktu_pembayaran",
@@ -72,9 +74,10 @@ export default function InformasiIuran() {
     try {
       const res = await axiosInstance.get(url);
       const { status, data } = res;
+      const valid = data.filter((item) => item.verifikator !== null);
       if (status === 200) {
         setdataRiwayatPembayaran(
-          data.map((item, index) => {
+          valid.map((item, index) => {
             return {
               ...item,
               key: index.toString(),
@@ -88,7 +91,7 @@ export default function InformasiIuran() {
   }
   useEffect(() => {
     handleGetIpl();
-  },[] );
+  }, []);
   if (parts !== "undefined") {
     const yearMatch = parseInt(parts?.[0]) === otherYear;
     const monthMatch = parseInt(parts?.[1]) === otherMonth;
@@ -97,20 +100,31 @@ export default function InformasiIuran() {
     const isMatch = yearMatch && monthMatch;
 
     return (
-      <section className="overflow-hidden">
+      <section className="overflow-y-auto">
         <NavigatorBar />
-        <div className="container"> 
-          <Header className="bg-white text-lg font-bold md:mx-10 md:pt-20 md:px-10  w-full p-0">
-            <span>Riwayat Pembayaran</span>
-            <div className="">
-              <span>Status : </span>{" "}
-              <span
-                className={`${isMatch ? "text-green-500" : "text-red-700"}`}
-              >
-                {" "}
-                {isMatch ? "Lunas" : "Belum Lunas"}
-              </span>
+        <div className="container mt-10">
+          <Header className="bg-white text-lg font-bold md:mx-10 md:pt-20 md:px-10  w-full p-0 flex items-center justify-between">
+            <div>
+              <span>Riwayat Pembayaran</span>
+              <div className="">
+                <span>Status : </span>{" "}
+                <span
+                  className={`${isMatch ? "text-green-500" : "text-red-700"}`}
+                >
+                  {" "}
+                  {isMatch ? "Lunas" : "Belum Lunas"}
+                </span>
+              </div>
             </div>
+            <Button
+              className="flex my-2 flex-row self-end  cursor-pointer bg-third hover:text-third hover:bg-white  hover:border-third text-white items-center "
+              type="default"
+            >
+              <Link className="" to={"/Upload-bukti"}>
+                upload bukti pembayaran
+              </Link>
+              <PlusOutlined />
+            </Button>
           </Header>
           <Content className="md:mx-20 mt-6 md:pt-20 overflow-x-auto">
             <Table

@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { axiosInstance } from "../../../utils/axiosInstance";
 import { Button, Card, List } from "antd";
-
 // docx
+
 // lib docx
 import Docxtemplater from "docxtemplater";
 import PizZip from "pizzip";
@@ -47,7 +47,6 @@ export default function LihatSuratPage() {
     const day = date.getDate(); // Mendapatkan tanggal
     const month = date.getMonth() + 1; // Mendapatkan bulan (dalam JavaScript, bulan dimulai dari 0)
     const year = date.getFullYear(); // Mendapatkan tahun
-
     const monthNames = [
       "Januari",
       "Februari",
@@ -62,7 +61,6 @@ export default function LihatSuratPage() {
       "November",
       "Desember",
     ];
-
     const formattedDate = `${day} ${monthNames[month - 1]} ${year}`;
     return formattedDate;
   }

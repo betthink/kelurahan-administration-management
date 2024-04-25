@@ -36,6 +36,8 @@ import VerifikasiPenduduk from "./layout/admin/Pages/penduduk/VerifikasiPenduduk
 import ListBelumLunasPage from "./layout/admin/Pages/IPL/ListBelumLunasPage";
 import TambahRw from "./layout/admin/Pages/admin/TambahRw";
 import ProfilePage from "./layout/public/pages/ProfilePage";
+import VerifikasiPembayaranPublic from "./layout/public/pages/VerifikasiPembayaranPublic";
+import VerifikasiPembayaranTransfer from "./layout/admin/Pages/IPL/VerifikasiPembayaranTransfer";
 
 const App = () => {
   const user = useSelector((state) => state.userReducer.value);
@@ -50,7 +52,7 @@ const App = () => {
               to={
                 user?.isLoggin
                   ? user?.role === "penduduk"
-                    ? "HomePage"
+                    ? "Informasi-Iuran"
                     : "Dashboard/Landingpage"
                   : "Landingpage"
               }
@@ -61,11 +63,12 @@ const App = () => {
         <Route path="Homepage" element={<HomePage />} />
         <Route path="Homepage/Permohonan-Surat" element={<PermohonanSurat />} />
         <Route path="login-admin" element={<LoginAdmin />} />
-        <Route path="Informasi-Iuran" element={<InformasiIuran />} />
+        <Route path="/Informasi-Iuran" element={<InformasiIuran />} />
         <Route path="/List-surat" element={<LihatSuratPage />} />
         <Route path="/Lihat-surat" element={<SuratViewer />} />
         <Route path="/Profile" element={<ProfilePage />} />
         <Route path="/Registrasi" element={<RegistrasiPenduduk />} />
+        <Route path="/Upload-bukti" element={<VerifikasiPembayaranPublic />} />
 
         {/* Cms */}
         <Route path="Dashboard" element={<CmsLayouts />}>
@@ -128,8 +131,13 @@ const App = () => {
             path="/Dashboard/Kelola-Admin/Tambah-RW"
             element={<TambahRw />}
           />
+          <Route
+            path="Kelola-IPL/Verifikasi-Pembayaran-Transfer"
+            element={<VerifikasiPembayaranTransfer />}
+          />
         </Route>
         <Route path="/Kelola-surat/pdf" element={<PdfViewer />} />
+
         {/* <Route path="/Kelola-surat/pdf" element={<PdfViewer />} /> */}
       </Routes>
     </>

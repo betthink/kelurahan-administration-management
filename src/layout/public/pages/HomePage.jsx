@@ -1,9 +1,11 @@
-import { Spin, Table } from "antd";
+import { Button, Spin, Table } from "antd";
 import { Content } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { axiosInstance } from "../../../utils/axiosInstance";
 import NavigatorBar from "../components/NavigatorBar";
+import { PlusOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 const HomePage = () => {
   const user = useSelector((state) => state.userReducer.value);
   const [data, setdata] = useState([]);
@@ -38,11 +40,9 @@ const HomePage = () => {
       width: 100,
       dataIndex: "status_pembayaran",
       key: "status",
-      render: ()=>{
-        return(
-          <span className="text-green-600 bg-green-200 p-1" >lunas</span>
-        )
-      }
+      render: () => {
+        return <span className="text-green-600 bg-green-200 p-1">lunas</span>;
+      },
     },
   ];
 
@@ -75,9 +75,20 @@ const HomePage = () => {
             <Spin />
           </div>
         ) : (
-          <div className="container  border shadow-md w-full">
-            <div className="min-w-full  rounded-md mb-10 overflow-x-auto ">
-              <Table columns={column} dataSource={data} />
+          <div className="flex flex-col mx-6">
+            <Button
+              className="flex my-2 flex-row self-end  cursor-pointer bg-third hover:text-third hover:bg-white  hover:border-third text-white items-center "
+              type="default"
+            >
+              <Link className="" to={"/Upload-bukti"}>
+                Verifikasi pembayaran
+              </Link>
+              <PlusOutlined />
+            </Button>
+            <div className="container  border shadow-md w-full">
+              <div className="min-w-full  rounded-md mb-10 overflow-x-auto ">
+                <Table columns={column} dataSource={data} />
+              </div>
             </div>
           </div>
         )}

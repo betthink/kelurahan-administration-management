@@ -1,30 +1,19 @@
-import React, { useState } from "react";
-import {
-  Breadcrumb,
-  Layout,
-  Form,
-  Input,
-  DatePicker,
-  Select,
-  Button,
-  Space,
-  Modal,
-  message as mes,
-  Upload,
-} from "antd";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
-import { useSelector } from "react-redux";
-import { currentDate } from "../../utils/currentDate";
 import { PlusOutlined } from "@ant-design/icons";
-const { Header, Content } = Layout;
-function VerifikasiPembayaran() {
+import { Button, DatePicker, Form, Input, Modal, Space, Upload, message as mes } from "antd";
+import { Content } from "antd/es/layout/layout";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { axiosWithMultipart } from "../../../utils/axioswithmultipart";
+import { currentDate } from "../../admin/utils/currentDate";
+import NavigatorBar from "../components/NavigatorBar";
+
+function VerifikasiPembayaranPublic() {
   const user = useSelector((state) => state.userReducer.value);
-  const location = useLocation();
-  const prePageState = location.state.data;
+  // console.log(user);
   const [dataPembayaran, setdataPembayaran] = useState({
-    nama: prePageState?.nama || "",
-    nik: prePageState?.nik || "",
+    nama: user?.username || "",
+    nik: user?.nik || "",
   });
 
   const navigate = useNavigate();
@@ -45,10 +34,13 @@ function VerifikasiPembayaran() {
     setdataPembayaran(e);
     setIsModalOpen(true);
   };
-  // upload
+  const [fileList, setFileList] = useState([]);
 
+  const handleChange = (info) => {
+    setFileList(info.fileList.slice(-1)); // Hanya menyimpan file terakhir
+  };
   const handleVerikifikasiPembayaran = async () => {
-    const url = `administrasikelurahan/src/post/addRiwayatPembayaran.php`;
+    const url = `administrasikelurahan/src/post/ipl/upload-bukti-pembayaran.php`;
     const date = `${dataPembayaran.waktu_pembayaran.$d.getFullYear()}-${
       dataPembayaran.waktu_pembayaran.$d.getMonth() + 1
     }-${dataPembayaran.waktu_pembayaran.$d.getDate()}`;
@@ -61,11 +53,11 @@ function VerifikasiPembayaran() {
     formData.append("nik", dataPembayaran.nik);
     formData.append("jumlah_transaksi", dataPembayaran.jumlah_transaksi);
     formData.append("waktu_pembayaran", date);
-    formData.append("metode", dataPembayaran.metode);
-    formData.append("rt", prePageState?.rt || user?.rt);
+    // formData.append("metode", dataPembayaran.metode);
+    formData.append("rt", user?.data.rt || user?.rt);
     formData.append("waktu_verifikasi", currentDate);
-    formData.append("verifikator", user.username);
-    formData.append("id_user", prePageState?.id_user);
+    // formData.append("verifikator", user.username);
+    formData.append("id_user", user?.id);
     try {
       const res = await axiosWithMultipart(url, {
         method: "POST",
@@ -75,50 +67,16 @@ function VerifikasiPembayaran() {
       const { value, message } = res.data;
       if (parseInt(value) === 1) {
         mes.success(message);
-        navigate("/Dashboard/Kelola-IPL");
+        navigate("/Informasi-iuran");
       }
     } catch (error) {
       console.log(error);
     }
   };
-
-  const [fileList, setFileList] = useState([]);
-  const [selectedMetode, setSelectedMetode] = useState(null);
-  const handleMetodeChange = (value) => {
-    setSelectedMetode(value);
-  };
-
-  const handleChange = (info) => {
-    setFileList(info.fileList.slice(-1)); // Hanya menyimpan file terakhir
-  };
-
   return (
-    <div className=" md:mx-20">
-      <Header
-        style={{
-          position: "sticky",
-          top: 20,
-          zIndex: 99,
-        }}
-        className="hidden  bg-white items-center md:flex mt-5 "
-      >
-        <Breadcrumb
-          items={[
-            { title: "Admin" },
-            { title: <Link to={"/KelolaIPL"}>Kelola IPL</Link> },
-
-            {
-              title: (
-                <Link to={"/VerifikasiPembayaran"}>Verifikasi Pembayaran</Link>
-              ),
-            },
-          ]}
-          style={{
-            margin: "16px 0",
-          }}
-        />
-      </Header>
-      <Content className="mt-5 bg-white p-10">
+    <section className="overscroll-y-auto bg-slate-100 h-screen">
+      <NavigatorBar />
+      <Content className="mt-20 container bg-white p-6 rounded-md ">
         <Form
           initialValues={dataPembayaran}
           onFinish={handleonFinish}
@@ -153,50 +111,34 @@ function VerifikasiPembayaran() {
                 placeholder="Pilih Tanggal Pembayaran"
               />
             </Form.Item>
-            <Form.Item name="metode" label="Metode pembayaran" required>
-              <Select
-                placeholder="Pilih metode pembayaran"
-                // value={dataPembayaran.metode}
-                value={selectedMetode}
-                onChange={handleMetodeChange}
-              >
-                {["Cash", "Transfer"].map((item, i) => (
-                  <Select.Option key={i} value={item}>
-                    {item}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
             {/* upload */}
-            {selectedMetode === "Transfer" ? (
-              <Form.Item label="Upload" name="file">
-                <Upload.Dragger
-                  beforeUpload={() => false}
-                  fileList={fileList}
-                  maxCount={1}
-                  action=""
-                  listType="picture"
-                  onChange={handleChange}
+            <Form.Item label="Upload" name="file">
+              <Upload.Dragger
+                beforeUpload={() => false}
+                fileList={fileList}
+                maxCount={1}
+                action=""
+                listType="picture"
+                onChange={handleChange}
+              >
+                <button
+                  style={{
+                    border: 0,
+                    background: "none",
+                  }}
+                  type="button"
                 >
-                  <button
+                  <PlusOutlined />
+                  <div
                     style={{
-                      border: 0,
-                      background: "none",
+                      marginTop: 8,
                     }}
-                    type="button"
                   >
-                    <PlusOutlined />
-                    <div
-                      style={{
-                        marginTop: 8,
-                      }}
-                    >
-                      Upload
-                    </div>
-                  </button>
-                </Upload.Dragger>
-              </Form.Item>
-            ) : null}
+                    Upload
+                  </div>
+                </button>
+              </Upload.Dragger>
+            </Form.Item>
           </Space>
           <Form.Item>
             <Button type="primary" className="bg-purp" block htmlType="submit">
@@ -234,15 +176,14 @@ function VerifikasiPembayaran() {
             <p> {dataPembayaran.nama}</p>
             <span> NIK: </span>
             <p> {dataPembayaran.nik}</p>
-            <span> Metode: </span>
-            <p> {dataPembayaran.metode}</p>
+
             <span> Jumlah: </span>
-            <p> {dataPembayaran.jumlah_pembayaran}</p>
+            <p> {dataPembayaran.jumlah_transaksi}</p>
           </div>
         </Modal>
       </>
-    </div>
+    </section>
   );
 }
 
-export default VerifikasiPembayaran;
+export default VerifikasiPembayaranPublic;

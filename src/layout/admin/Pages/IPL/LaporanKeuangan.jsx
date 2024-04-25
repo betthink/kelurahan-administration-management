@@ -245,10 +245,15 @@ export default function LaporanKeuangan() {
     }
     const url = `/administrasikelurahan/src/api/ipl/riwayat-transaksi-keuangan-ipl-by-rt.php?rt=${rt}`;
     const response = await axiosInstance.get(url);
-    const data = response.data;
-   
+    const res = response.data.map((item, index) => {
+      return {
+        ...item,
+        key: index.toString(),
+      };
+    });
+
     if (response.status === 200) {
-      setdataRiwayatTransaksi(data.slice().reverse());
+      setdataRiwayatTransaksi(res);
       setLoading(false);
     }
   };

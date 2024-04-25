@@ -164,11 +164,12 @@ export default function DetailRiwayatPembayaran() {
       const res = await axiosInstance.get(url);
       const { status, data } = res;
       if (status === 200) {
+           const valid = data.filter((item) => item.verifikator !== null);
         setdataRiwayatPembayaran(
-          data.map((item, index) => {
+          valid.map((item, index) => {
             return {
               ...item,
-              key:parseInt(index),
+              key: parseInt(index),
             };
           })
         );
