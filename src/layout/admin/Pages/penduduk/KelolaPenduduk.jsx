@@ -92,7 +92,7 @@ function KelolaPenduduk() {
   };
   useEffect(() => {
     handleGetDataPenduduk();
-  },[]);
+  }, []);
   if (user.role === "admin") {
     return (
       <div className="mx-20">
@@ -170,7 +170,7 @@ function KelolaPenduduk() {
         />
       </div>
     );
-  } else if (user.role === "super_admin") {
+  } else if (user.role === "super_admin" || "adminRW") {
     return (
       <div className="mx-20">
         {/* path */}
@@ -197,6 +197,7 @@ function KelolaPenduduk() {
               ]}
             />
           </div>
+        
         </Header>
         <SuperAdminView
           titlelink={"Lihat penduduk"}

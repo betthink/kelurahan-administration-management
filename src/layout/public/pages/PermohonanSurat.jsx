@@ -1,5 +1,5 @@
 import { Button, Form, Select, message as mes } from "antd";
-import { Content} from "antd/es/layout/layout";
+import { Content } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
 import { axiosWithMultipart } from "../../../utils/axioswithmultipart";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +15,7 @@ const PermohonanSurat = () => {
       const res = await axiosInstance.get(
         "/administrasikelurahan/src/api/fetchDataJenisSurat.php"
       );
-      console.log(res.data);
+      // console.log(res.data);
       res.status === 200
         ? setjenisSurat(res.data)
         : console.log("Network Error");
@@ -33,7 +33,8 @@ const PermohonanSurat = () => {
           data: {
             nik: user.nik,
             id_surat: surat, // Menggunakan nilai surat langsung
-            nama_surat: jenisSurat.find((item) => item.id_surat === surat).nama_surat, // Mendapatkan nama_surat dari jenisSurat berdasarkan id surat
+            nama_surat: jenisSurat.find((item) => item.id_surat === surat)
+              .nama_surat, // Mendapatkan nama_surat dari jenisSurat berdasarkan id surat
             id_penduduk: user.id,
           },
         }
@@ -74,8 +75,8 @@ const PermohonanSurat = () => {
             name="surat"
           >
             <Select placeholder="Pilih jenis permohonan surat">
-              {jenisSurat.map((item) => (
-                <Select.Option className="py-3" key={item.id} value={item.id_surat}>
+              {jenisSurat.map((item, i) => (
+                <Select.Option className="py-3" key={i} value={item.id_surat}>
                   {item.nama_surat}
                 </Select.Option>
               ))}

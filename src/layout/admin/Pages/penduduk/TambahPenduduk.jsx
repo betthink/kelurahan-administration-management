@@ -11,16 +11,20 @@ import {
   Space,
   message as mes,
 } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 // components
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
 import { useSelector } from "react-redux";
+import { axiosInstance } from "../../../../utils/axiosInstance";
 function TambahPenduduk() {
   // variables
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [dataLembaga, setdataLembaga] = useState([]);
   const navigate = useNavigate();
   const user = useSelector((state) => state.userReducer.value);
-
+  const location = useLocation();
+  const dataRoute = location.state;
+  // console.log(dataRoute);
   //   atribute form
   const [dataEntry, setdataEntry] = useState({
     nama: "",
@@ -37,6 +41,7 @@ function TambahPenduduk() {
     status_diri: "",
     nomor_telp: "",
     jenis_kelamin: "",
+    rt: "",
   });
 
   // functions
@@ -56,6 +61,7 @@ function TambahPenduduk() {
       statusPenduduk,
       tempatLahir,
       kepalaKeluarga,
+      rt,
     } = e;
     const date = `${tanggalLahir.$d.getFullYear()}-${(
       tanggalLahir.$d.getMonth() + 1
@@ -83,6 +89,7 @@ function TambahPenduduk() {
       status_diri: status,
       nomor_telp: nomorTelp,
       jenis_kelamin: jenisKelamin,
+      rt,
     });
   };
   const agamaOption = [
@@ -101,7 +108,10 @@ function TambahPenduduk() {
         "/administrasikelurahan/src/post/penduduk/tambahpenduduk.php",
         {
           method: "post",
-          data: { ...dataEntry, rt: user.rt, rw: user.rw },
+          data:
+            user?.role === "admin"
+              ? { ...dataEntry, rt: user.rt, rw: user.rw }
+              : { ...dataEntry, rt: dataRoute?.rt, rw: dataRoute?.rw },
         }
       );
       const { value, message } = response.data;
@@ -117,6 +127,21 @@ function TambahPenduduk() {
       throw error;
     }
   };
+
+  // handle lembaga
+  const handleGetLembaga = async () => {
+    const url = `/administrasikelurahan/src/api/lembaga/fetch_lembaga_by_rw.php?rw=${user?.rw}`;
+    try {
+      const response = await axiosInstance.get(url);
+      const data = response.data;
+      if (response.status === 200) {
+        // console.log(data);
+        setdataLembaga(data);
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
   // modal
   const showModal = () => {
     setIsModalOpen(true);
@@ -128,7 +153,10 @@ function TambahPenduduk() {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // get lembaga
+    // user?.role === "adminRW" && handleGetLembaga();
+  }, []);
   return (
     <div className="mx-20">
       {/* path */}
@@ -334,6 +362,17 @@ function TambahPenduduk() {
                 <Select.Option value={0}>Tidak</Select.Option>
               </Select>
             </Form.Item>
+            {/* {user?.role === "adminRW" ? (
+              <Form.Item name="rt" label="RT" required>
+                <Select placeholder="Pilih RT" value={dataEntry.rt}>
+                  {dataLembaga?.map((item, i) => (
+                    <Select.Option key={i} value={item.rt}>
+                      {item.rt}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            ) : null} */}
           </Space>
           <Form.Item className="rounded-md shadow-md">
             <Button

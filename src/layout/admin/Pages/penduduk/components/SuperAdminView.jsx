@@ -1,15 +1,20 @@
-import {  Card,  List } from "antd";
+import { Card, List } from "antd";
 import { Content } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../../../../../utils/axiosInstance";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-export default function SuperAdminView({redirect , titlelink}) {
+export default function SuperAdminView({ redirect, titlelink }) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-
+  const user = useSelector((state) => state.userReducer.value);
+  // console.log(user);
   const handleGetLembaga = async () => {
-    const url = `/administrasikelurahan/src/api/lembaga/fetch_all_lembaga.php`;
+    const url =
+      user.role !== "adminRW"
+        ? `   /administrasikelurahan/src/api/lembaga/fetch_all_lembaga.php`
+        : `/administrasikelurahan/src/api/lembaga/fetch_lembaga_by_rw.php?rw=${user?.rw}`;
     if (loading) {
       return;
     }
