@@ -25,6 +25,9 @@ const docxTemplates = {
   5: require(`../../../../assets/docx/templete/5.docx`),
   6: require(`../../../../assets/docx/templete/6.docx`),
   7: require(`../../../../assets/docx/templete/7.docx`),
+  8: require(`../../../../assets/docx/templete/8.docx`),
+  9: require(`../../../../assets/docx/templete/9.docx`),
+  10: require(`../../../../assets/docx/templete/10.docx`),
 };
 // components
 function KelolaPermohonanSurat() {
@@ -55,32 +58,31 @@ function KelolaPermohonanSurat() {
   const user = useSelector((state) => state.userReducer.value);
   // console.log(user);
   // handle download surat
- function formatDate() {
-   const date = new Date(); // Membuat objek Date saat ini
-   const day = date.getDate(); // Mendapatkan tanggal
-   const month = date.getMonth() + 1; // Mendapatkan bulan (dalam JavaScript, bulan dimulai dari 0)
-   const year = date.getFullYear(); // Mendapatkan tahun
+  function formatDate() {
+    const date = new Date(); // Membuat objek Date saat ini
+    const day = date.getDate(); // Mendapatkan tanggal
+    const month = date.getMonth() + 1; // Mendapatkan bulan (dalam JavaScript, bulan dimulai dari 0)
+    const year = date.getFullYear(); // Mendapatkan tahun
 
-   const monthNames = [
-     "Januari",
-     "Februari",
-     "Maret",
-     "April",
-     "Mei",
-     "Juni",
-     "Juli",
-     "Agustus",
-     "September",
-     "Oktober",
-     "November",
-     "Desember",
-   ];
+    const monthNames = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
 
-   const formattedDate = `${day} ${monthNames[month - 1]} ${year}`;
-   return formattedDate;
- }
+    const formattedDate = `${day} ${monthNames[month - 1]} ${year}`;
+    return formattedDate;
+  }
 
-  
   function generateDocument(data) {
     // return console.log(
     //   userAdmin.find((item) => item.id_admin === data?.rt_verifikator).username
@@ -122,6 +124,9 @@ function KelolaPermohonanSurat() {
         adminrt: userAdmin.find(
           (item) => item.id_admin === data?.rt_verifikator
         ).username,
+        adminrw: userAdmin.find(
+          (item) => item.id_admin === data?.rw_verifikator
+        )?.username,
       });
 
       const out = doc.getZip().generate({

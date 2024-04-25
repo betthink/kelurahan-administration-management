@@ -74,7 +74,7 @@ const PermohonanSurat = () => {
             }
             name="surat"
           >
-            <Select placeholder="Pilih jenis permohonan surat">
+            <Select  placeholder="Pilih jenis permohonan surat">
               {jenisSurat.map((item, i) => (
                 <Select.Option className="py-3" key={i} value={item.id_surat}>
                   {item.nama_surat}

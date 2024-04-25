@@ -23,6 +23,9 @@ const docxTemplates = {
   5: require(`../../../assets/docx/templete/5.docx`),
   6: require(`../../../assets/docx/templete/6.docx`),
   7: require(`../../../assets/docx/templete/7.docx`),
+  8: require(`../../../assets/docx/templete/8.docx`),
+  9: require(`../../../assets/docx/templete/9.docx`),
+  10: require(`../../../assets/docx/templete/10.docx`),
 };
 
 export default function LihatSuratPage() {
@@ -103,6 +106,9 @@ export default function LihatSuratPage() {
         now: formattedDate,
         adminrt: userAdmin.find(
           (item) => item.id_admin === data?.rt_verifikator
+        )?.username,
+        adminrw: userAdmin.find(
+          (item) => item.id_admin === data?.rw_verifikator
         )?.username,
       });
 
