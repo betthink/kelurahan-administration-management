@@ -38,6 +38,7 @@ import TambahRw from "./layout/admin/Pages/admin/TambahRw";
 import ProfilePage from "./layout/public/pages/ProfilePage";
 import VerifikasiPembayaranPublic from "./layout/public/pages/VerifikasiPembayaranPublic";
 import VerifikasiPembayaranTransfer from "./layout/admin/Pages/IPL/VerifikasiPembayaranTransfer";
+import FormInputData from "./layout/admin/Pages/penduduk/FormInputData";
 
 const App = () => {
   const user = useSelector((state) => state.userReducer.value);
@@ -69,6 +70,7 @@ const App = () => {
         <Route path="/Profile" element={<ProfilePage />} />
         <Route path="/Registrasi" element={<RegistrasiPenduduk />} />
         <Route path="/Upload-bukti" element={<VerifikasiPembayaranPublic />} />
+        <Route path="/Form-input" element={<FormInputData />} />
 
         {/* Cms */}
         <Route path="Dashboard" element={<CmsLayouts />}>

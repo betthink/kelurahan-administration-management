@@ -1,8 +1,8 @@
 // library
 import React, { useEffect, useState } from "react";
 import {
+  Breadcrumb,
   Button,
-  Card,
   DatePicker,
   Form,
   Input,
@@ -11,38 +11,196 @@ import {
   Space,
   message as mes,
 } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 // components
-import { axiosWithMultipart } from "../../../utils/axioswithmultipart";
+import { useSelector } from "react-redux";
+import axios from "axios";
 import { axiosInstance } from "../../../utils/axiosInstance";
+import { Header } from "antd/es/layout/layout";
 function RegistrasiPenduduk() {
   // variables
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [dataLembaga, setDataLembaga] = useState([]);
+  const [formDataArray, setFormDataArray] = useState([
+    {
+      nama: "",
+      nik: "",
+      no_kk: "",
+      tanggal_lahir: "",
+      tempat_lahir: "",
+      jenis_kelamin: null,
+      pekerjaan: "",
+      agama: null,
+      alamat: "",
+      nomor_telp: "",
+      darah: null,
+      kepala_keluarga: null,
+      status_tinggal: null,
+      status_diri: null,
+      rt: null,
+      rw: null,
+    },
+  ]);
+  // const [formData, setFormData] = useState([{}]);
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.userReducer.value);
+  const location = useLocation();
+  const dataRoute = location.state;
+  // console.log(user);
+  // functions
 
-  //   atribute form
-  const [dataEntry, setdataEntry] = useState({
-    nama: "",
-    nik: "",
-    no_kk: "",
-    tanggal_lahir: "",
-    tempat_lahir: "",
-    alamat: "",
-    pekerjaan: "",
-    agama: "",
-    darah: "",
-    kepala_keluarga: "",
-    status_tinggal: "",
-    status_diri: "",
-    nomor_telp: "",
-    jenis_kelamin: "",
-    rt: "",
-    rw: "",
-    password: "",
-  });
+  const agamaOption = [
+    "Islam",
+    "Kristen",
+    "Katholik",
+    "Hindu",
+    "Budha",
+    "Lain-Lain",
+  ];
 
+  // handle new form
+  const handleAddForm = () => {
+    // Menambahkan formulir baru ke dalam formData
+    setFormDataArray([
+      ...formDataArray,
+      {
+        nama: "",
+        nik: "",
+        no_kk: "",
+        tanggal_lahir: null,
+        tempat_lahir: "",
+        jenis_kelamin: null,
+        pekerjaan: "",
+        agama: null,
+        alamat: "",
+        nomor_telp: "",
+        darah: null,
+        kepala_keluarga: 0,
+        status_tinggal: null,
+        status_diri: null,
+        rt: null,
+        rw: null,
+      },
+    ]);
+  };
+  const handleRemoveForm = (indexToRemove) => {
+    // Salin array formData agar tidak merusak state asli
+    const updatedFormData = [...formDataArray];
+
+    // Hapus item dengan index yang sesuai dari array formData
+    updatedFormData.splice(indexToRemove, 1);
+
+    // Perbarui state formData dengan array yang telah diperbarui
+    setFormDataArray(updatedFormData);
+  };
+
+  // on finish
+  const onFinish = async () => {
+    const formData = formDataArray.map((formDataItem, index) => {
+      const formDataInstance = new FormData();
+      const noKkDefault =
+        formDataArray.length > 0 ? formDataArray[0].no_kk : null;
+      const rtDefault = formDataArray.length > 0 ? formDataArray[0].rt : null;
+      const rwDefault = formDataArray.length > 0 ? formDataArray[0].rt : null;
+      if (index !== 0) {
+        formDataInstance.append("no_kk", noKkDefault);
+        formDataInstance.append("rt", rtDefault);
+        formDataInstance.append("rw", rwDefault);
+      } else {
+        formDataInstance.append("rt", formDataItem?.rt);
+        formDataInstance.append("rw", formDataItem?.rw);
+        formDataInstance.append("no_kk", formDataItem.no_kk);
+      }
+      if (formDataItem && formDataItem.tanggal_lahir) {
+        const date = `${formDataItem.tanggal_lahir.$d.getFullYear()}-${(
+          formDataItem.tanggal_lahir.$d.getMonth() + 1
+        )
+          .toString()
+          .padStart(2, "0")}-${formDataItem.tanggal_lahir.$d
+          .getDate()
+          .toString()
+          .padStart(2, "0")}`;
+        formDataInstance.append("tanggal_lahir", date);
+      }
+
+      // Membuat array dari properti yang akan di-append
+      const propertiesToAppend = [
+        "nama",
+        "nik",
+        // "no_kk",
+        // "tanggal_lahir",
+        "tempat_lahir",
+        "jenis_kelamin",
+        "pekerjaan",
+        "agama",
+        "alamat",
+        "nomor_telp",
+        "darah",
+        "kepala_keluarga",
+        "status_tinggal",
+        "status_diri",
+      ];
+      // Melakukan append pada formDataInstance berdasarkan properti yang memiliki nilai
+      propertiesToAppend.forEach((property) => {
+        if (formDataItem[property] !== null) {
+          formDataInstance.append(property, formDataItem[property]);
+        }
+      });
+      return formDataInstance;
+    });
+    // console.log(formData);
+    // return;
+    try {
+      const responses = await Promise.all(
+        formData.map(async (formDataItem) => {
+          try {
+            const response = await axios.post(
+              "http://localhost/administrasikelurahan/src/post/penduduk/tambahpendudukByPublic.php",
+              formDataItem,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  // Authorization: "Bearer your_token_here", // Tambahkan header Authorization di sini
+                },
+              }
+            );
+            return response.data;
+          } catch (error) {
+            console.error("Error:", error);
+            return {
+              value: 0,
+              message: "Terjadi kesalahan saat mengirim data",
+            };
+          }
+        })
+      );
+      // console.log(responses);
+      let isSuccess = false;
+      responses.forEach(({ value, message }) => {
+        if (value === 1) {
+          isSuccess = true; // Set variabel isSuccess menjadi true jika ada data yang berhasil ditambahkan
+        }
+      });
+      if (isSuccess) {
+        mes.success("Data berhasil ditambahkan");
+        navigate("/Landingpage"); // Menampilkan pesan sukses sekali saja jika ada setidaknya satu data yang berhasil ditambahkan
+      } else {
+        mes.error("Tidak ada data yang berhasil ditambahkan"); // Menampilkan pesan kesalahan jika tidak ada data yang berhasil ditambahkan
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      mes.error("Terjadi kesalahan saat menambahkan data penduduk");
+    }
+  };
+
+  // is COnfirm
+  const onFinishWithConfirmation = () => {
+    Modal.confirm({
+      title: "Tambahkan Data Penduduk?",
+      content: "Anda yakin ingin menambahkan data penduduk?",
+      onOk: onFinish, // Jika tombol OK ditekan, lanjutkan dengan onFinish
+    });
+  };
   const handleGetLembaga = async () => {
     const url = `/administrasikelurahan/src/api/lembaga/fetch_all_lembaga.php`;
     if (loading) {
@@ -59,141 +217,52 @@ function RegistrasiPenduduk() {
       throw error;
     }
   };
-  // functions
-  const onFinish = (e) => {
-    const {
-      nama,
-      nik,
-      noKK,
-      alamat,
-      pekerjaan,
-      agama,
-      nomorTelp,
-      tanggalLahir,
-      darah,
-      jenisKelamin,
-      status,
-      statusPenduduk,
-      tempatLahir,
-      kepalaKeluarga,
-      rt,
-      password,
-      rw
-    } = e;
-    const date = `${tanggalLahir.$d.getFullYear()}-${(
-      tanggalLahir.$d.getMonth() + 1
-    )
-      .toString()
-      .padStart(2, "0")}-${tanggalLahir.$d
-      .getDate()
-      .toString()
-      .padStart(2, "0")}`;
-
-    setdataEntry({
-      ...dataEntry,
-
-      nama,
-      nik,
-      no_kk: noKK,
-      tanggal_lahir: date,
-      tempat_lahir: tempatLahir,
-      alamat,
-      pekerjaan,
-      agama,
-      darah,
-      kepala_keluarga: kepalaKeluarga,
-      status_tinggal: statusPenduduk,
-      status_diri: status,
-      nomor_telp: nomorTelp,
-      jenis_kelamin: jenisKelamin,
-      rt,
-      rw,
-      password,
-    });
-  };
-  const agamaOption = [
-    "Islam",
-    "Kristen",
-    "Katholik",
-    "Hindu",
-    "Budha",
-    "Lain-Lain",
-  ];
-  const handleAddPenduduk = async () => {
-    try {
-      const response = await axiosWithMultipart(
-        "/administrasikelurahan/src/post/addDataPenduduk.php",
-        {
-          method: "post",
-          data: { ...dataEntry},
-          // data: { ...dataEntry, rw: "001" },
-        }
-      );
-      const { value, message } = response.data;
-      // console.log(response.data);
-      if (value === 1) {
-        mes.success(message);
-        navigate("/Landingpage");
-      } else {
-        mes.error(message);
-      }
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  };
-  // modal
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = async () => {
-    await handleAddPenduduk();
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
   useEffect(() => {
     handleGetLembaga();
   }, []);
   return (
-    <Space
-      className="h-full w-full container flex justify-center items-center bg-primary"
-      direction="vertical"
-      size={16}
-    >
-      <Card
-        className="w-full  px-20"
-        title={
-          <p className="text-xl text-green-600">
-            Selamat datang{" "}
-            <span className="text-sm text-black">
-              di halaman registrasi penduduk
-            </span>{" "}
-          </p>
-        }
-        extra={
-          <Link
-            to={"/Landingpage"}
-            className="text-green-600 border p-2 rounded-md border-green-600"
-          >
-            Kembali
-          </Link>
-        }
-      >
-        <div className="flex justify-center items-center  w-full">
-          <div className="h-full     w-full">
-            {/* form */}
-
-            <Form
-              onFinish={onFinish}
-              layout="vertical"
-              size={"medium"}
-              className="w-full justify-center flex  flex-col bg-white  "
-            >
+    <div className="mx-20">
+      {/* path */}
+      <div className="pt-6 flex justify-end px-20">
+        <Button
+          type="dashed"
+          className="p-3 bg-green-700 items-center flex text-white "
+        >
+          <Link to={"/Landingpage"}>Kembali</Link>
+        </Button>
+      </div>
+      <div className="h-full self-center flex  p-6 bg-white px-20">
+        {/* form */}
+        <Form
+          onFinish={onFinishWithConfirmation}
+          layout="vertical"
+          size={"medium"}
+          className="w-full justify-center flex  flex-col "
+        >
+          {formDataArray.map((_, index) => (
+            <React.Fragment key={index}>
+              <Form.Item
+                className={`${index !== 0 ? "mt-6  flex flex-row gap-3" : ""} `}
+              >
+                <span className="font-bold text-lg">
+                  Penduduk {parseInt(index) + 1}
+                </span>
+                {index !== 0 && ( // Tampilkan tombol hanya jika index bukan 0
+                  <Button
+                    type="dashed"
+                    onClick={() => handleRemoveForm(index)}
+                    size="small"
+                    className="p-2 bg-danger"
+                  >
+                    Hapus
+                  </Button>
+                )}
+              </Form.Item>
               <Space
                 direction="vertical"
-                className="grid md:grid-cols-3 grid-cols-1 gap-6"
+                className={`grid w-full md:grid-cols-3 border py-6 px-3 rounded-md shadow-inner ${
+                  index !== 0 ? "mt-6" : ""
+                }`}
               >
                 <Form.Item
                   rules={[
@@ -201,16 +270,21 @@ function RegistrasiPenduduk() {
                       required: true,
                     },
                   ]}
-                  name="nama"
                   label="Nama"
                 >
                   <Input
                     placeholder="Masukan Nama Penduduk"
-                    value={dataEntry.nama}
+                    value={formDataArray[index].nama}
+                    onChange={(e) => {
+                      const updatedFormData = [...formDataArray];
+                      updatedFormData[index].nama = e.target.value;
+                      setFormDataArray(updatedFormData);
+                    }}
                   />
                 </Form.Item>
                 <Form.Item
-                  name="nik"
+                  key={`nik_${index}`}
+                  // name={`nik_${index}`}
                   label="NIK"
                   rules={[
                     {
@@ -219,7 +293,7 @@ function RegistrasiPenduduk() {
                     },
                     {
                       min: 16,
-                      message: "NIK minimal 16 karakter",
+                      message: "NIK minimal setidaknya 16 karakter",
                     },
                     {
                       pattern: /^[0-9]+$/,
@@ -228,80 +302,104 @@ function RegistrasiPenduduk() {
                   ]}
                 >
                   <Input
-                    name="nik"
                     maxLength={17}
-                    placeholder="Masukan NIK Penduduk"
-                    value={dataEntry.nik}
+                    placeholder="Masukan NIK"
+                    value={formDataArray[index].nik}
+                    onChange={(e) => {
+                      const updatedFormData = [...formDataArray];
+                      updatedFormData[index].nik = e.target.value;
+                      setFormDataArray(updatedFormData);
+                    }}
                   />
                 </Form.Item>
+                {index === 0 && (
+                  <Form.Item
+                    key={`noKK${index}`}
+                    label="No. KK"
+                    rules={[
+                      index === 0
+                        ? [
+                            {
+                              required: true,
+                              message: "Nomor KK tidak boleh kosong",
+                            },
+                            {
+                              min: 16,
+                              message:
+                                "Nomor KK minimal setidaknya 16 karakter",
+                            },
+                            {
+                              pattern: /^[0-9]+$/,
+                              message: "Nomor KK hanya boleh berisi angka",
+                            },
+                          ]
+                        : null,
+                    ]}
+                  >
+                    <Input
+                      maxLength={17}
+                      placeholder="Masukan nomor KK"
+                      value={formDataArray[index].no_kk}
+                      onChange={(e) => {
+                        const updatedFormData = [...formDataArray];
+                        updatedFormData[index].no_kk = e.target.value;
+                        setFormDataArray(updatedFormData);
+                      }}
+                    />
+                  </Form.Item>
+                )}
                 <Form.Item
-                  name="noKK"
-                  label="No. KK"
                   rules={[
                     {
                       required: true,
                       message: "Nomor KK tidak boleh kosong",
                     },
-                    {
-                      min: 16,
-                      message: "Nomor KK minimal 16 karakter",
-                    },
-                    {
-                      pattern: /^[0-9]+$/,
-                      message: "Nomor KK hanya boleh berisi angka",
-                    },
                   ]}
-                >
-                  <Input
-                    maxLength={17}
-                    placeholder="Masukan Nomor KK Penduduk"
-                    value={dataEntry.no_kk}
-                  />
-                </Form.Item>
-                <Form.Item
-                  rules={[
-                    {
-                      required: true,
-                      message: "Nomor KK tidak boleh kosong",
-                    },
-                  ]}
-                  name="alamat"
+                  key={`alamat_${index}`}
+                  // name={`alamat_${index}`}
                   label="Alamat"
                 >
                   <Input
                     placeholder="Masukan Alamat Penduduk"
-                    value={dataEntry.alamat}
+                    value={formDataArray[index].alamat}
+                    onChange={(e) => {
+                      const updatedFormData = [...formDataArray];
+                      updatedFormData[index].alamat = e.target.value;
+                      setFormDataArray(updatedFormData);
+                    }}
                   />
                 </Form.Item>
                 <Form.Item
-                  name="pekerjaan"
+                  key={`pekerjaan_${index}`}
+                  name={`pekerjaan_${index}`}
                   label="Pekerjaan"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Pekerjaan tidak boleh kosong",
-                    },
-                  ]}
+                  required
                 >
                   <Input
                     placeholder="Masukan Pekerjaan Penduduk"
-                    value={dataEntry.pekerjaan}
+                    value={formDataArray[index].pekerjaan}
+                    onChange={(e) => {
+                      const updatedFormData = [...formDataArray];
+                      updatedFormData[index].pekerjaan = e.target.value;
+                      setFormDataArray(updatedFormData);
+                    }}
                   />
                 </Form.Item>
                 <Form.Item
-                  rules={[
-                    {
-                      required: true,
-                      message: "Agama tidak boleh kosong",
-                    },
-                  ]}
-                  name="agama"
+                  key={`agama_${index}`}
+                  // name={`agama_${index}`}
                   label="Agama"
                   required
                 >
                   <Select
-                    placeholder="Pilih Agama Penduduk"
-                    value={dataEntry.agama}
+                    placeholder="pilih agama"
+                    value={formDataArray[index].agama}
+                    onChange={(e) => {
+                      // console.log(e);
+                      const updatedFormData = [...formDataArray];
+                      updatedFormData[index].agama = e;
+                      setFormDataArray(updatedFormData);
+                    }}
                   >
                     {agamaOption.map((item, i) => (
                       <Select.Option key={i} value={item}>
@@ -311,14 +409,11 @@ function RegistrasiPenduduk() {
                   </Select>
                 </Form.Item>
                 <Form.Item
-                  name="nomorTelp"
+                  // name={`nomorTelp_${index}`}
+                  key={`nomorTelp_${index}`}
                   label="Nomor Telp"
                   required
                   rules={[
-                    {
-                      required: true,
-                      message: "Nomor telpon tidak boleh kosong",
-                    },
                     {
                       pattern: /^[0-9]+$/,
                       message: "Nomor Telepon hanya boleh berisi angka",
@@ -327,57 +422,70 @@ function RegistrasiPenduduk() {
                 >
                   <Input
                     maxLength={14}
-                    placeholder="Masukan Nomor Telpon"
-                    value={dataEntry.nomor_telp}
+                    placeholder="Masukan Npmor Telp Penduduk"
+                    value={formDataArray[index].nomor_telp}
+                    onChange={(e) => {
+                      const updatedFormData = [...formDataArray];
+                      updatedFormData[index].nomor_telp = e.target.value;
+                      setFormDataArray(updatedFormData);
+                    }}
+                    // value={dataEntry.nomor_telp}
                   />
                 </Form.Item>
 
                 <Form.Item
-                  name="tanggalLahir"
+                  key={`tanggalLahir_${index}`}
+                  // name={`tanggalLahir_${index}`}
                   label="Tanggal Lahir"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Tanggal lahir tidak boleh kosong",
-                    },
-                  ]}
+                  required
                 >
                   <DatePicker
                     placeholder="Pilih Kelahiran Tanggal"
                     style={{ width: "100%" }}
-                    value={dataEntry.tanggal_lahir}
+                    value={formDataArray[index].tanggal_lahir}
+                    onChange={(e) => {
+                      // console.log(e)
+                      const updatedFormData = [...formDataArray];
+                      updatedFormData[index].tanggal_lahir = e;
+                      setFormDataArray(updatedFormData);
+                    }}
+                    // value={dataEntry.tanggal_lahir}
                   />
                 </Form.Item>
 
                 <Form.Item
-                  name="tempatLahir"
+                  key={`tempatLahir_${index}`}
+                  // name={`tempatLahir_${index}`}
                   label="Tempat Lahir"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Tempat lahir tidak boleh kosong",
-                    },
-                  ]}
+                  required
                 >
                   <Input
                     placeholder="Masukan Tempat Lahir Sesuai KTP"
-                    value={dataEntry.tempat_lahir}
+                    // value={dataEntry.tempat_lahir}
+                    value={formDataArray[index].tempat_lahir}
+                    onChange={(e) => {
+                      const updatedFormData = [...formDataArray];
+                      updatedFormData[index].tempat_lahir = e.target.value;
+                      setFormDataArray(updatedFormData);
+                    }}
                   />
                 </Form.Item>
 
                 <Form.Item
-                  name="jenisKelamin"
+                  key={`jenisKelamin_${index}`}
+                  // name={`jenisKelamin_${index}`}
                   label="Jenis Kelamin"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Jenis kelamin tidak boleh kosong",
-                    },
-                  ]}
+                  required
                 >
                   <Select
                     placeholder="Pilih Jenis Kelamin"
-                    value={dataEntry.jenis_kelamin}
+                    // value={dataEntry.jenis_kelamin}
+                    value={formDataArray[index].jenis_kelamin}
+                    onChange={(e) => {
+                      const updatedFormData = [...formDataArray];
+                      updatedFormData[index].jenis_kelamin = e;
+                      setFormDataArray(updatedFormData);
+                    }}
                   >
                     <Select.Option value="Laki-Laki">Laki-Laki</Select.Option>
                     <Select.Option value="Perempuan">Perempuan</Select.Option>
@@ -385,18 +493,20 @@ function RegistrasiPenduduk() {
                 </Form.Item>
 
                 <Form.Item
-                  name="darah"
+                  key={`darah_${index}`}
+                  // name={`darah_${index}`}
                   label="Golongan darah"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Golongan darah tidak boleh kosong",
-                    },
-                  ]}
+                  required
                 >
                   <Select
                     placeholder="Pilih Golongan Darah"
-                    value={dataEntry.darah}
+                    value={formDataArray[index].darah}
+                    onChange={(e) => {
+                      const updatedFormData = [...formDataArray];
+                      updatedFormData[index].darah = e;
+                      setFormDataArray(updatedFormData);
+                    }}
+                    // value={dataEntry.darah}
                   >
                     {["A", "B", "AB", "O"].map((item, i) => (
                       <Select.Option key={i} value={item}>
@@ -406,173 +516,146 @@ function RegistrasiPenduduk() {
                   </Select>
                 </Form.Item>
                 <Form.Item
-                  name="status"
+                  key={`status_${index}`}
+                  // name={`status_${index}`}
                   label="Status"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Status tidak boleh kosong",
-                    },
-                  ]}
+                  required
                 >
-                  <Select placeholder="Pilih Status Diri Penduduk">
+                  <Select
+                    placeholder="Pilih Status Diri Penduduk"
+                    value={formDataArray[index].status_diri}
+                    onChange={(e) => {
+                      const updatedFormData = [...formDataArray];
+                      updatedFormData[index].status_diri = e;
+                      setFormDataArray(updatedFormData);
+                    }}
+                  >
                     <Select.Option value="Menikah">Menikah</Select.Option>
                     <Select.Option value="Lajang">Lajang</Select.Option>
                   </Select>
                 </Form.Item>
                 <Form.Item
-                  name={"statusPenduduk"}
+                  key={`statusPenduduk_${index}`}
+                  // name={`statusPenduduk_${index}`}
                   label="Status Penduduk"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Status Kependudukan boleh kosong",
-                    },
-                  ]}
+                  required
                 >
-                  <Select placeholder="Pilih Status Tinggal   ">
+                  <Select
+                    placeholder="Pilih Status Tinggal Penduduk"
+                    value={formDataArray[index].status_tinggal}
+                    onChange={(e) => {
+                      const updatedFormData = [...formDataArray];
+                      updatedFormData[index].status_tinggal = e;
+                      setFormDataArray(updatedFormData);
+                    }}
+                  >
                     <Select.Option value="Tetap">Tetap</Select.Option>
                     <Select.Option value="Sementara">Sementara</Select.Option>
                   </Select>
                 </Form.Item>
-                <Form.Item
-                  name="kepalaKeluarga"
-                  label="kepala Keluarga?"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Status kepala keluarga boleh kosong",
-                    },
-                  ]}
-                >
-                  <Select
-                    placeholder="Kepala keluarga?"
-                    value={dataEntry.kepala_keluarga}
-                  >
-                    <Select.Option value={1}>Benar</Select.Option>
-                    <Select.Option value={0}>Tidak</Select.Option>
-                  </Select>
-                </Form.Item>
-                {/* rt */}
-                <Form.Item
-                  name="rt"
-                  label="RT"
-                  rules={[
-                    {
-                      required: true,
-                      message: "RT tidak boleh kosong",
-                    },
-                  ]}
-                >
-                  <Select placeholder="Pilih RT" value={dataEntry.rt}>
-                    {dataLembaga.map((item, i) => (
-                      <Select.Option key={i} value={item.rt}>
-                        {item.rt}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-                <Form.Item
-                  name="rw"
-                  label="RW"
-                  rules={[
-                    {
-                      required: true,
-                      message: "RW tidak boleh kosong",
-                    },
-                  ]}
-                >
-                  <Select placeholder="Pilih RW" value={dataEntry.rw}>
-                    {["001", "002", "003", "004", "005"].map((item, i) => (
-                      <Select.Option key={i} value={item}>
-                        {item}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-                <Form.Item
-                  name="password"
-                  label="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Password tidak boleh kosong",
-                    },
-                  ]}
-                >
-                  <Input.Password
-                    placeholder="Masukan password"
-                    value={dataEntry.password}
-                  />
-                </Form.Item>
+
+                {index === 0 && (
+                  <>
+                    {/* rt */}
+
+                    <Form.Item
+                      name="rt"
+                      label="RT"
+                      rules={[
+                        {
+                          required: true,
+                          message: "RT tidak boleh kosong",
+                        },
+                      ]}
+                    >
+                      <Select
+                        placeholder="Pilih RT"
+                        value={formDataArray[index].rt}
+                        onChange={(e) => {
+                          const updatedFormData = [...formDataArray];
+                          updatedFormData[index].rt = e;
+                          setFormDataArray(updatedFormData);
+                        }}
+                      >
+                        {dataLembaga.map((item, i) => (
+                          <Select.Option key={i} value={item.rt}>
+                            {item.rt}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                    <Form.Item
+                      name="rw"
+                      label="RW"
+                      rules={[
+                        {
+                          required: true,
+                          message: "RW tidak boleh kosong",
+                        },
+                      ]}
+                    >
+                      <Select
+                        placeholder="Pilih RW"
+                        value={formDataArray[index].rw}
+                        onChange={(e) => {
+                          const updatedFormData = [...formDataArray];
+                          updatedFormData[index].rw = e;
+                          setFormDataArray(updatedFormData);
+                        }}
+                      >
+                        {["001", "002", "003", "004", "005"].map((item, i) => (
+                          <Select.Option key={i} value={item}>
+                            {item}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+
+                    <Form.Item
+                      key={`kepalaKeluarga_${index}`}
+                      // name={`kepalaKeluarga_${index}`}
+                      label="kepala Keluarga?"
+                      required
+                    >
+                      <Select
+                        placeholder="Pilih Status kepala keluarga"
+                        // value={dataEntry.kepala_keluarga}
+                        value={formDataArray[index].kepala_keluarga}
+                        onChange={(e) => {
+                          const updatedFormData = [...formDataArray];
+                          updatedFormData[index].kepala_keluarga = e;
+                          setFormDataArray(updatedFormData);
+                        }}
+                      >
+                        <Select.Option value={1}>Benar</Select.Option>
+                        <Select.Option value={0}>Tidak</Select.Option>
+                      </Select>
+                    </Form.Item>
+                  </>
+                )}
               </Space>
-              <Form.Item className="rounded-md shadow-md mt-6">
-                <Button
-                  className="h-12 font-semibold hover:font-bold hover:translate-y-[.1rem] bg-green-600  hover:bg-white hover:text-green-600"
-                  block
-                  type="primary"
-                  htmlType="submit"
-                  onClick={showModal}
-                >
-                  Daftar
-                </Button>
-              </Form.Item>
-            </Form>
-            <>
-              <Modal
-                title="Apakah Data Sudah Benar?"
-                open={isModalOpen}
-                footer={[
-                  <Button
-                    key="back"
-                    className="bg-danger text-white"
-                    onClick={handleCancel}
-                  >
-                    Batalkan
-                  </Button>,
-                  <Button
-                    className="bg-success"
-                    key="submit"
-                    type="primary"
-                    onClick={handleOk}
-                  >
-                    Submit
-                  </Button>,
-                ]}
-                onCancel={handleCancel}
+            </React.Fragment>
+          ))}
+          <Space>
+            <Form.Item className="rounded-md shadow-md">
+              <Button
+                className="h-10 font-semibold hover:font-bold hover:translate-y-[.1rem] bg-third hover:bg-none"
+                block
+                type="primary"
+                htmlType="submit"
               >
-                <div className="grid grid-cols-2">
-                  <span>nik:</span>
-                  <p class="text-green-600">{dataEntry.nik}</p>
-                  <span>nama:</span>
-                  <p class="text-green-600">{dataEntry.nama}</p>
-                  <span>noKK:</span>
-                  <p class="text-green-600">{dataEntry.no_kk}</p>
-                  <span>alamat:</span>
-                  <p class="text-green-600">{dataEntry.alamat}</p>
-                  <span>nomorTelp:</span>
-                  <p class="text-green-600">{dataEntry.nomor_telp}</p>
-                  <span>tempat_lahir:</span>
-                  <p class="text-green-600">{dataEntry.tempat_lahir}</p>
-                  <span>kepala Keluarga:</span>
-                  <p class="text-green-600">{dataEntry.kepala_keluarga}</p>
-                  <span>darah:</span>
-                  <p class="text-green-600">{dataEntry.darah}</p>
-                  <span>tangga lLahir:</span>
-                  <p class="text-green-600">{dataEntry.tanggal_lahir}</p>
-                  <span>jenis Kelamin:</span>
-                  <p class="text-green-600">{dataEntry.jenis_kelamin}</p>
-                  <span>status:</span>
-                  <p class="text-green-600">{dataEntry.status_diri}</p>
-                  <span>status Penduduk:</span>
-                  <p class="text-green-600">{dataEntry.status_tinggal}</p>
-                </div>
-              </Modal>
-            </>
-          </div>
-        </div>
-      </Card>
-    </Space>
+                Tambahkan
+              </Button>
+            </Form.Item>
+            <Form.Item>
+              <Button type="dashed" onClick={handleAddForm} block>
+                Tambahkan Form
+              </Button>
+            </Form.Item>
+          </Space>
+        </Form>
+      </div>
+    </div>
   );
 }
 
