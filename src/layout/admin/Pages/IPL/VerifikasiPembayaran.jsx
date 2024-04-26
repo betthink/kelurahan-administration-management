@@ -160,7 +160,7 @@ function VerifikasiPembayaran() {
                 value={selectedMetode}
                 onChange={handleMetodeChange}
               >
-                {["Cash", "Transfer"].map((item, i) => (
+                {["Cash"].map((item, i) => (
                   <Select.Option key={i} value={item}>
                     {item}
                   </Select.Option>

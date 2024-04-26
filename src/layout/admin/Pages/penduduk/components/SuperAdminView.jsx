@@ -12,22 +12,18 @@ export default function SuperAdminView({ redirect, titlelink }) {
   // console.log(user);
   const handleGetLembaga = async () => {
     const url =
-      user.role !== "adminRW"
-        ? `   /administrasikelurahan/src/api/lembaga/fetch_all_lembaga.php`
-        : `/administrasikelurahan/src/api/lembaga/fetch_lembaga_by_rw.php?rw=${user?.rw}`;
-    if (loading) {
-      return;
-    }
-    setLoading(true);
+      user.role === "adminRW"
+        ? `/administrasikelurahan/src/api/lembaga/fetch_lembaga_by_rw.php?rw=${user?.rw}`
+        : `/administrasikelurahan/src/api/lembaga/fetch_all_lembaga.php`;
+
     try {
       const response = await axiosInstance.get(url);
       const data = response.data;
       if (response.status === 200) {
         setData(data);
       }
-      setLoading(false);
     } catch (error) {
-      setLoading(false);
+      throw error;
     }
   };
   useEffect(() => {

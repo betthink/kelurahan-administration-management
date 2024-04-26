@@ -32,11 +32,11 @@ const CmsLayouts = () => {
     },
     ...(user.role !== "adminRW"
       ? [
-          {
-            link: "/Dashboard/Kelola-Penduduk",
-            title: "Kelola penduduk",
-            icon: TeamOutlined,
-          },
+          // {
+          //   link: "/Dashboard/Kelola-Penduduk",
+          //   title: "Kelola penduduk",
+          //   icon: TeamOutlined,
+          // },
 
           {
             link: "/Dashboard/Kelola-IPL",

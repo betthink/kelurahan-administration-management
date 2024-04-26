@@ -170,7 +170,7 @@ function KelolaPenduduk() {
         />
       </div>
     );
-  } else if (user.role === "super_admin" || "adminRW") {
+  } else if (user.role !== "admin") {
     return (
       <div className="mx-20">
         {/* path */}
