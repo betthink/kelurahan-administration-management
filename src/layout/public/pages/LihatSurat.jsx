@@ -65,9 +65,9 @@ export default function LihatSuratPage() {
     return formattedDate;
   }
   function generateDocument(data) {
-    // return console.log(
-    //   userAdmin.find((item) => item.id_admin === data?.rt_verifikator).username
-    // );
+    // console.log(data);
+    // return;
+
     const docxFilePath = docxTemplates[data?.id_surat];
 
     if (!docxFilePath) {
@@ -84,10 +84,8 @@ export default function LihatSuratPage() {
         paragraphLoop: true,
         linebreaks: true,
       });
-
       // Di sini Anda bisa menambahkan logika lain sesuai kebutuhan
       const formattedDate = formatDate(); // Mendapatkan tanggal saat ini
-
       doc.render({
         nama: data?.nama,
         jenis_kelamin: data?.jenis_kelamin,
@@ -108,6 +106,32 @@ export default function LihatSuratPage() {
         adminrw: userAdmin.find(
           (item) => item.id_admin === data?.rw_verifikator
         )?.username,
+        nama_lain: data?.nama_lain,
+        tempat_lahir_2nd: data?.tempat_lahir_2nd,
+        tanggal_lahir_2nd: data?.tanggal_lahir_2nd,
+        agama_2nd: data?.agama_2nd,
+        pendidikan_terakhir: data?.pendidikan_terakhir,
+        pekerjaan_2nd: data?.pekerjaan_2nd,
+        alamat_pekerjaan: data?.alamat_pekerjaan,
+        letak_object_tanah: data?.letak_object_tanah,
+        suku: data?.suku,
+        bangsa: data?.bangsa,
+        jenis_usaha: data?.jenis_usaha,
+        nama_anak: data?.nama_anak,
+        jurusan_anak: data?.jurusan_anak,
+        penghasilan_kotor: data?.penghasilan_kotor,
+        pengeluaran: data?.pengeluaran,
+        nim: data?.nim,
+        penghasilan_bersih: data?.penghasilan_bersih,
+        nama_ayah: data?.nama_ayah,
+        nama_ibu: data?.nama_ibu,
+        pekerjaan_ayah: data?.pekerjaan_ayah,
+        pekerjaan_ibu: data?.pekerjaan_ibu,
+        jalan: data?.jalan,
+        kecamatan: data?.kecamatan,
+        kota: data?.kota,
+        provinsi: data?.provinsi,
+        waktu_cerai: data?.waktu_cerai,
       });
 
       const out = doc.getZip().generate({
@@ -134,7 +158,7 @@ export default function LihatSuratPage() {
     }
   };
   useEffect(() => {
-      handleGetAllPermohonan();
+    handleGetAllPermohonan();
     handleGetAdmin();
   }, []);
   return (
