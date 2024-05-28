@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^5.2.5",
+    "@cyntler/react-doc-viewer": "^1.15.1",
     "@faker-js/faker": "^8.4.0",
     "@pdftron/webviewer": "^10.8.0",
     "@react-pdf/renderer": "^3.2.1",
@@ -15,11 +16,16 @@
     "antd": "^5.8.4",
     "axios": "^1.4.0",
     "chart.js": "^4.4.1",
+    "docx-pdf": "^0.0.1",
     "docxtemplater": "^3.39.1",
     "faker": "^6.6.6",
     "file-saver": "^2.0.5",
     "formik": "^2.4.3",
-    "pizzip": "^3.1.4",
+    "fs": "^0.0.1-security",
+    "mammoth": "^1.7.2",
+    "pdf-lib": "^1.17.1",
+    "pizzip": "^3.1.7",
+    "puppeteer": "^22.10.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
@@ -46,6 +52,11 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
   },
   "browserslist": {
     "production": [

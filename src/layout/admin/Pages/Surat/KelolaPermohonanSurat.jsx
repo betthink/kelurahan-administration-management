@@ -1,7 +1,6 @@
 // libb
 import React, { useEffect, useState } from "react";
 import { Breadcrumb, Button, Table, Modal } from "antd";
-import { Link } from "react-router-dom";
 import { Content, Header } from "antd/es/layout/layout";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 import { useSelector } from "react-redux";
@@ -14,6 +13,7 @@ import Docxtemplater from "docxtemplater";
 import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
 import { saveAs } from "file-saver";
+import fs from "fs";
 function loadFile(url, callback) {
   PizZipUtils.getBinaryContent(url, callback);
 }
@@ -56,7 +56,6 @@ function KelolaPermohonanSurat() {
   };
   const [dataPemohonSurat, setdataPemohonSurat] = useState([]);
   const user = useSelector((state) => state.userReducer.value);
-  // console.log(user);
   // handle download surat
   function formatDate() {
     const date = new Date(); // Membuat objek Date saat ini
@@ -83,17 +82,13 @@ function KelolaPermohonanSurat() {
     return formattedDate;
   }
 
+  // generate file docx
   function generateDocument(data) {
-    // return console.log(
-    //   userAdmin.find((item) => item.id_admin === data?.rt_verifikator).username
-    // );
     const docxFilePath = docxTemplates[data?.id_surat];
-
     if (!docxFilePath) {
       console.error("File template for the given id_surat not found.");
       return;
     }
-
     loadFile(docxFilePath, function (error, content) {
       if (error) {
         throw error;
@@ -103,10 +98,8 @@ function KelolaPermohonanSurat() {
         paragraphLoop: true,
         linebreaks: true,
       });
-
       // Di sini Anda bisa menambahkan logika lain sesuai kebutuhan
       const formattedDate = formatDate(); // Mendapatkan tanggal saat ini
-
       doc.render({
         nama: data?.nama,
         jenis_kelamin: data?.jenis_kelamin,
@@ -134,7 +127,9 @@ function KelolaPermohonanSurat() {
         mimeType:
           "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       });
-
+      // fs.write
+      // fs.writeFile
+      // fs.writeFileSync
       // Output the document using Data-URI
       saveAs(out, `${data?.nama}-${data?.nama_surat}.docx`);
     });

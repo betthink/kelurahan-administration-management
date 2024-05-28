@@ -122,7 +122,6 @@ function RegistrasiPenduduk() {
           .padStart(2, "0")}`;
         formDataInstance.append("tanggal_lahir", date);
       }
-
       // Membuat array dari properti yang akan di-append
       const propertiesToAppend = [
         "nama",
