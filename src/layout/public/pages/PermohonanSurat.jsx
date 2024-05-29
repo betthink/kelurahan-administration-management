@@ -1,4 +1,12 @@
-import { Button, Form, Input, Select, message as mes, DatePicker } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Select,
+  message as mes,
+  DatePicker,
+  Space,
+} from "antd";
 import { Content } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
 import { axiosWithMultipart } from "../../../utils/axioswithmultipart";
@@ -28,18 +36,25 @@ const PermohonanSurat = () => {
   };
 
   const navigate = useNavigate();
-  // const [dataForm, setDataForm] = useState({});
   const handlePermohonanPembuatanSurat = async (event) => {
     // console.log(event);
     // return;
     let data;
     if ((openForm == 3) | (openForm == 7)) {
-      const { surat, tanggal_lahir_2nd } = event;
+      const { surat, tanggal_lahir_2nd, waktu_pergi } = event;
       const date = `${tanggal_lahir_2nd.$d.getFullYear()}-${(
         tanggal_lahir_2nd.$d.getMonth() + 1
       )
         .toString()
         .padStart(2, "0")}-${tanggal_lahir_2nd.$d
+        .getDate()
+        .toString()
+        .padStart(2, "0")}`;
+      const datePergi = `${waktu_pergi.$d.getFullYear()}-${(
+        waktu_pergi.$d.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}-${waktu_pergi.$d
         .getDate()
         .toString()
         .padStart(2, "0")}`;
@@ -53,6 +68,7 @@ const PermohonanSurat = () => {
 
         id_penduduk: user.id,
         tanggal_lahir_2nd: date,
+        waktu_pergi: datePergi,
       };
       // console.log(data);
       // return;
@@ -83,6 +99,7 @@ const PermohonanSurat = () => {
         .padStart(2, "0")}`;
       data = {
         ...event,
+        id_surat: surat,
         nik: user.nik,
         nama_surat: jenisSurat.find((item) => item.id_surat === surat)
           .nama_surat,
@@ -99,7 +116,7 @@ const PermohonanSurat = () => {
         data,
       }
     );
-    
+
     // console.log(res.data);
     // return;
     const { message, value } = res.data;
@@ -123,7 +140,7 @@ const PermohonanSurat = () => {
         <Form
           layout="vertical"
           onFinish={handlePermohonanPembuatanSurat}
-          className="w-1/2 h-96 border container py-12   gap-6  mt-20 bg-white  shadow-md  border-gray-300 overflow-y-auto"
+          className="w-1/2 h-96 border container py-12   gap-3 mt-20 bg-white  shadow-md  border-gray-300 overflow-y-auto"
         >
           <Form.Item
             rules={[{ required: true }]}
@@ -151,6 +168,11 @@ const PermohonanSurat = () => {
           </Form.Item>
           {openForm == 3 && (
             <Content className="grid grid-cols-2 gap-4">
+              <Space className="col-span-2 justify-center border">
+                <h3 className="text-xl font-bold">
+                  Data suami / istri yang pergi meninggalkan{" "}
+                </h3>
+              </Space>
               <Form.Item
                 label="Nama"
                 name="nama_lain"
@@ -187,6 +209,7 @@ const PermohonanSurat = () => {
               >
                 <DatePicker className="w-full" />
               </Form.Item>
+
               <Form.Item
                 label="Agama"
                 name="agama_2nd"
@@ -222,6 +245,21 @@ const PermohonanSurat = () => {
                 ]}
               >
                 <Input />
+              </Form.Item>
+              <Form.Item
+                label="Waktu pergi meninggalkan"
+                name="waktu_pergi"
+                rules={[
+                  {
+                    required: true,
+                    message: "Masukkan Waktu pergi",
+                  },
+                ]}
+              >
+                <DatePicker
+                  placeholder="Masukkan Waktu pergi"
+                  className="w-full"
+                />
               </Form.Item>
             </Content>
           )}
@@ -530,6 +568,18 @@ const PermohonanSurat = () => {
                   {
                     required: true,
                     message: "Masukan Pendidikan terakhir",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Nomor akta perceraian"
+                name="nomor_akta_cerai"
+                rules={[
+                  {
+                    required: true,
+                    message: "Masukan Nomor akta perceraian",
                   },
                 ]}
               >

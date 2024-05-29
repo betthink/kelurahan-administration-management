@@ -64,6 +64,21 @@ export default function LihatSuratPage() {
     const formattedDate = `${day} ${monthNames[month - 1]} ${year}`;
     return formattedDate;
   }
+  function getAgeFromBirthdate(birthdate) {
+    const today = new Date();
+    const birthDate = new Date(birthdate);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
+  }
   function generateDocument(data) {
     // console.log(data);
     // return;
@@ -132,6 +147,10 @@ export default function LihatSuratPage() {
         kota: data?.kota,
         provinsi: data?.provinsi,
         waktu_cerai: data?.waktu_cerai,
+        umur: getAgeFromBirthdate(data?.tanggal_lahir),
+        umur_lainya: getAgeFromBirthdate(data?.tanggal_lahir_2nd),
+        waktu_pergi: data?.waktu_pergi,
+        nomor_akta_cerai: data?.nomor_akta_cerai,
       });
 
       const out = doc.getZip().generate({
