@@ -11,6 +11,7 @@ export default function ListBelumLunasPage() {
   const dataRoute = location.state;
   const rt = user.rt == "" ? dataRoute.rt : user.rt;
   const [data, setData] = useState([]);
+  const [list, setlist] = useState([]);
   const column = [
     {
       title: "Nama",
@@ -34,13 +35,14 @@ export default function ListBelumLunasPage() {
       ),
     },
   ];
+
   const handleGetListPembayaranBelumLunas = async () => {
     const url = `/administrasikelurahan/src/api/ipl/list-belum-lunas-by-rt.php?rt=${rt}`;
 
     try {
       const response = await axiosInstance.get(url);
       const data = response.data;
-      console.log(data);
+      // console.log(data);
       setData(
         data.map((item, index) => {
           return {
@@ -54,9 +56,25 @@ export default function ListBelumLunasPage() {
     }
   };
   const belumLunas = data?.filter((item) => item.status === "belum lunas");
+  function calculateTimeDifference(dateString) {
+    const moment = require("moment");
+    const date = moment(dateString, "YYYY-MM-DD", true);
+
+    if (!date.isValid()) {
+      return dateString;
+    }
+    const now = moment();
+    const diff = moment.duration(now.diff(date));
+
+    const months = Math.floor(diff.asMonths());
+    const days = Math.floor(diff.asDays() - months * 30);
+
+    return `${months} bulan ${days} hari`;
+  }
   useEffect(() => {
     handleGetListPembayaranBelumLunas();
   }, []);
+
   return (
     <section className="mx-20">
       <Header
@@ -86,8 +104,18 @@ export default function ListBelumLunasPage() {
           renderItem={(item) => (
             <List.Item>
               <Card
+                extra={
+                  <div>
+                    <div className="text-xs">Terakhir membayar</div>
+                    <div className="text-lg text-red-600">
+                      {calculateTimeDifference(item.pembayaran_terakhir)}
+                    </div>
+                  </div>
+                }
                 className=""
-                title={<span className="text-red-600">{item?.status}</span>}
+                title={
+                  <span className="text-red-600 uppercase">{item?.status}</span>
+                }
               >
                 <div className="grid grid-cols-2 ">
                   <div>
@@ -106,7 +134,6 @@ export default function ListBelumLunasPage() {
             </List.Item>
           )}
         />
-        {/* <Table columns={column} dataSource={belumLunas} /> */}
       </Content>
     </section>
   );

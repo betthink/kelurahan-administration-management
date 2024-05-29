@@ -23,6 +23,7 @@
     "formik": "^2.4.3",
     "fs": "^0.0.1-security",
     "mammoth": "^1.7.2",
+    "moment": "^2.30.1",
     "pdf-lib": "^1.17.1",
     "pizzip": "^3.1.7",
     "puppeteer": "^22.10.0",
