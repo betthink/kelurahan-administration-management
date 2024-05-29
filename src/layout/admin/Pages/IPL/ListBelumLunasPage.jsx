@@ -11,30 +11,6 @@ export default function ListBelumLunasPage() {
   const dataRoute = location.state;
   const rt = user.rt == "" ? dataRoute.rt : user.rt;
   const [data, setData] = useState([]);
-  const [list, setlist] = useState([]);
-  const column = [
-    {
-      title: "Nama",
-      width: 100,
-      dataIndex: "user_name",
-      key: "user_name",
-    },
-    {
-      title: "#",
-      width: 100,
-      key: "action",
-      render: (data) => (
-        <Button className="bg-purp text-white hover:bg-white hover:border-purp">
-          <Link
-            state={{ data: data }}
-            to={"/Dashboard/Kelola-IPL/DetailRiwayatPembayaran"}
-          >
-            Lihat Riwayat
-          </Link>
-        </Button>
-      ),
-    },
-  ];
 
   const handleGetListPembayaranBelumLunas = async () => {
     const url = `/administrasikelurahan/src/api/ipl/list-belum-lunas-by-rt.php?rt=${rt}`;

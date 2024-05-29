@@ -17,7 +17,7 @@ import { MdAttachMoney } from "react-icons/md";
 import { formatAngka } from "../../../../utils/formatAngkaUang";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import { monthsData } from "../../utils/monthData";
-
+import moment from "moment";
 export default function LaporanKeuangan() {
   const { Column, ColumnGroup } = Table;
   const tableRef = useRef(null);
@@ -385,13 +385,17 @@ export default function LaporanKeuangan() {
                 key="waktu_verifikasi"
                 filters={[
                   ...dataRiwayatTransaksi
-                    .map((item) => item.waktu_verifikasi)
+                    .map((item) =>
+                      moment(item.waktu_verifikasi).format("YYYY-MM")
+                    )
                     .filter(
                       (value, index, self) => self.indexOf(value) === index
                     )
                     .map((waktu) => ({ text: waktu, value: waktu })),
                 ]}
-                onFilter={(value, record) => record.waktu_verifikasi === value}
+                onFilter={(value, record) =>
+                  moment(record.waktu_verifikasi).format("YYYY-MM") === value
+                }
               />
               <Column
                 title="Jenis Transaksi"

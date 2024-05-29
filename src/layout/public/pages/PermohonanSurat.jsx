@@ -73,6 +73,7 @@ const PermohonanSurat = () => {
       // console.log(data);
       // return;
     } else if (
+      (openForm == 1) |
       (openForm == 4) |
       ((openForm == 5) |
         ((openForm == 6) | ((openForm == 8) | (openForm == 9))))
