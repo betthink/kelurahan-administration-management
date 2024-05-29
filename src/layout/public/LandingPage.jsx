@@ -12,15 +12,15 @@ function LandingPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogin = async () => {
-    const { nama, nik } = formik.values;
+    const { nik, password } = formik.values;
     try {
       const res = await axiosWithMultipart(
         "/administrasikelurahan/src/auth/authLoginPenduduk.php",
         {
           method: "post",
           data: {
-            nama,
-            password: nik,
+            nik,
+            password,
           },
         }
       );
@@ -51,17 +51,17 @@ function LandingPage() {
   };
   const formik = useFormik({
     initialValues: {
-      nama: "",
       nik: "",
+      password: "",
     },
     onSubmit: handleLogin,
     validationSchema: yup.object().shape({
-      nama: yup.string().required().min(1),
       nik: yup
         .string()
-        // .required()
-        // .min(16)
-        // .matches(/^[0-9]+$/, "NIK hanya boleh berisi angka"),
+        .required("NIK harus diisi")
+        .min(16, "Minimal karakter NIK adalah 16")
+        .matches(/^[0-9]+$/, "NIK hanya boleh berisi angka"),
+      password: yup.string().required("Password harus diisi"),
     }),
   });
   // functions
@@ -81,44 +81,20 @@ function LandingPage() {
             onFinish={formik.handleSubmit}
             className="w-full md:w-1/2 py-10"
           >
-            <Form.Item
-              name="nama"
-              rules={[
-                {
-                  required: true,
-                  message: "Nama tidak boleh kosong",
-                },
-              ]}
-            >
+            <Form.Item name="nik">
               <Input
-                minLength={1}
-                name="nama"
+                minLength={16}
+                name="nik"
                 onChange={handleChange}
                 className=" py-3   border"
-                placeholder="Masukkan Nama"
+                placeholder="Masukkan NIK"
               />
             </Form.Item>
-            <Form.Item
-              name="nik"
-              rules={[
-                {
-                  // required: true,
-                  // message: "NIK atau password tidak boleh kosong",
-                },
-                // {
-                //   min: 16,
-                //   message: "NIK minimal setidaknya 16 characters",
-                // },
-                // {
-                //   pattern: /^[0-9]+$/,
-                //   message: "NIK hanya boleh berisi angka",
-                // },
-              ]}
-            >
-              <Input 
+            <Form.Item name="password">
+              <Input
                 // maxLength={17}
-                value={''}
-                name="nik"
+                value={""}
+                name="password"
                 onChange={handleChange}
                 className="py-3  border"
                 placeholder="Masukkan NIK / password"

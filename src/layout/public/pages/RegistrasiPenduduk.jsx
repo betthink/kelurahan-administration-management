@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { axiosInstance } from "../../../utils/axiosInstance";
 import { Header } from "antd/es/layout/layout";
+import ButtonGroup from "antd/es/button/button-group";
 function RegistrasiPenduduk() {
   // variables
   const [loading, setLoading] = useState(false);
@@ -190,6 +191,7 @@ function RegistrasiPenduduk() {
       console.error("Error:", error);
       mes.error("Terjadi kesalahan saat menambahkan data penduduk");
     }
+    Modal.destroyAll();
   };
 
   // is COnfirm
@@ -197,7 +199,22 @@ function RegistrasiPenduduk() {
     Modal.confirm({
       title: "Tambahkan Data Penduduk?",
       content: "Anda yakin ingin menambahkan data penduduk?",
-      onOk: onFinish, // Jika tombol OK ditekan, lanjutkan dengan onFinish
+      // onOk: onFinish,
+      footer: [
+        <ButtonGroup className="flex ml-6 py-6">
+          <Button key="cancel" onClick={() => Modal.destroyAll()}>
+            Batal
+          </Button>
+          <Button
+            key="submit"
+            type="primary"
+            onClick={onFinish}
+            className="bg-success text-white"
+          >
+            Submit
+          </Button>
+        </ButtonGroup>,
+      ],
     });
   };
   const handleGetLembaga = async () => {
