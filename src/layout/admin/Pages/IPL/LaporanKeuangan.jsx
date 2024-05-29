@@ -5,10 +5,6 @@ import {
   Form,
   Input,
   message as mes,
-  List,
-  Avatar,
-  Skeleton,
-  Divider,
   Table,
 } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
@@ -20,10 +16,10 @@ import { useSelector } from "react-redux";
 import { MdAttachMoney } from "react-icons/md";
 import { formatAngka } from "../../../../utils/formatAngkaUang";
 import { DownloadTableExcel } from "react-export-table-to-excel";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { monthsData } from "../../utils/monthData";
 
 export default function LaporanKeuangan() {
+  const { Column, ColumnGroup } = Table;
   const tableRef = useRef(null);
   const [dataPemasukan, setdataPemasukan] = useState(0);
   const [dataPengeluaran, setdataPengeluaran] = useState(0);
@@ -174,20 +170,6 @@ export default function LaporanKeuangan() {
         </span>
       ),
     },
-    // {
-    //   title: "Waktu Pembayaran",
-    //   dataIndex: "waktu_pembayaran",
-    //   key: "waktu_pembayaran",
-    //   filters: yearFilters,
-    //   onFilter: (value, record) => {
-    //     const [recordYear, recordMonth] = record.waktu_pembayaran.split("-");
-    //     return (
-    //       recordYear === value.substring(0, 4) &&
-    //       recordMonth === value.substring(5)
-    //     ); // Lakukan pengecekan apakah tahun dan bulan cocok dengan nilai yang dipilih
-    //   },
-    //   render: (value) => <span className={!value? 'text-red-400' : ''}>{value ? value: 'Pengeluaran'}</span>,
-    // },
     {
       title: "Waktu verifikasi",
       dataIndex: "waktu_verifikasi",
@@ -289,7 +271,6 @@ export default function LaporanKeuangan() {
 
         <div className="flex gap-6 justify-between items-center">
           <span className="text-blusky">RT</span>
-
           <span className="text-green-600 font-bold text-xl">
             {dataLoc ? dataLoc.rt : rt}
           </span>
@@ -318,7 +299,6 @@ export default function LaporanKeuangan() {
             </div>
           ))}
         </div>
-
         {/* history */}
         <div className="my-4 w-fit ">
           <DownloadTableExcel
@@ -342,12 +322,104 @@ export default function LaporanKeuangan() {
           }}
         >
           <Table
-            pagination={false}
             ref={tableRef}
+            pagination={false}
+            summary={() => (
+              <>
+                <Table.Summary.Row>
+                  <Table.Summary.Cell colSpan={4}>
+                    <span className="text-lg font-bold"></span>
+                  </Table.Summary.Cell>
+                </Table.Summary.Row>
+                <Table.Summary.Row>
+                  <Table.Summary.Cell colSpan={4}>
+                    <span className="text-lg font-bold"></span>
+                  </Table.Summary.Cell>
+                </Table.Summary.Row>
+                <Table.Summary.Row>
+                  <Table.Summary.Cell colSpan={3}>
+                    <span className="text-lg font-bold text-right">Saldo</span>
+                  </Table.Summary.Cell>
+                  <Table.Summary.Cell colSpan={1} className="">
+                    <span className="text-lg font-bold text-green-500">
+                      Rp{totalSisa}
+                    </span>
+                  </Table.Summary.Cell>
+                </Table.Summary.Row>
+              </>
+            )}
             bordered
             dataSource={dataRiwayatTransaksi}
-            columns={columns}
-          />
+          >
+            <ColumnGroup
+              title={() => (
+                <div className="text-lg text-left font-bold underline ">
+                  Laporan keuangan Iuran
+                </div>
+              )}
+            >
+              <Column
+                title="Nama"
+                dataIndex="nama"
+                key="nama"
+                filters={[
+                  { text: "Admin", value: null },
+                  ...dataRiwayatTransaksi
+                    .map((item) => item.nama)
+                    .filter(
+                      (value, index, self) =>
+                        value && self.indexOf(value) === index
+                    )
+                    .map((nama) => ({ text: nama, value: nama })),
+                ]}
+                onFilter={(value, record) => record.nama === value}
+                render={(nama) => (
+                  <span className={!nama ? "text-blue-600" : "text-purple-600"}>
+                    {nama ? nama : "Admin"}
+                  </span>
+                )}
+              />
+              <Column
+                title="Waktu verifikasi"
+                dataIndex="waktu_verifikasi"
+                key="waktu_verifikasi"
+                filters={[
+                  ...dataRiwayatTransaksi
+                    .map((item) => item.waktu_verifikasi)
+                    .filter(
+                      (value, index, self) => self.indexOf(value) === index
+                    )
+                    .map((waktu) => ({ text: waktu, value: waktu })),
+                ]}
+                onFilter={(value, record) => record.waktu_verifikasi === value}
+              />
+              <Column
+                title="Jenis Transaksi"
+                dataIndex="jenis_transaksi"
+                key="jenis_transaksi"
+                filters={[
+                  { text: "Pengeluaran", value: "pengeluaran" },
+                  { text: "Pemasukan", value: "pemasukan" },
+                ]}
+                onFilter={(value, record) => record.jenis_transaksi === value}
+              />
+              <Column
+                title="Jumlah"
+                key="jumlah_transaksi"
+                render={(item, record) => (
+                  <span
+                    className={`${
+                      record.jenis_transaksi === "pengeluaran"
+                        ? "text-red-600"
+                        : "text-green-600"
+                    } text-right`}
+                  >
+                    Rp.{formatAngka(record.jumlah_transaksi)}
+                  </span>
+                )}
+              />
+            </ColumnGroup>
+          </Table>
         </div>
       </Content>
       <>
