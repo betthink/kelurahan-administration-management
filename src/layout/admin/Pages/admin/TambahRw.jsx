@@ -1,47 +1,80 @@
-import { Breadcrumb, Button, Form, Input, Modal, Select, Space, message as mes } from 'antd';
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
-import { axiosWithMultipart } from '../../../../utils/axioswithmultipart';
+import {
+  Breadcrumb,
+  Button,
+  Form,
+  Input,
+  Modal,
+  Select,
+  Space,
+  message as mes,
+} from "antd";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
+import { axiosInstance } from "../../../../utils/axiosInstance";
 
 function TambahRw() {
-    const  [dataRW, setDataRW] = useState([])
-    const optionsRW = ["001", "002", "003", "004", "005"];
-      const navigate = useNavigate();
-     const handleAddRW = async () => {
-       const url = `/administrasikelurahan/src/post/addAccountRW.php`;
-       try {
-         const response = await axiosWithMultipart(url, {
-           method: "post",
-           data: dataRW,
-         });
-         const { value, message } = response.data;
-         if (value === 1) {
-           mes.success(message);
-           navigate("/Dashboard/Kelola-Admin");
-         } else {
-           mes.error(message);
-         }
-       } catch (error) {
-         console.log(error);
-         throw error;
-       }
-     };
-   
-    //  modal
-     const [isModalOpen, setIsModalOpen] = useState(false);
-     const showModal = () => {
-       setIsModalOpen(true);
-     };
-     const handleOk = async () => {
-       await handleAddRW();
-       setIsModalOpen(false);
-     };
-     const handleCancel = () => {
-       setIsModalOpen(false);
-     };
-       const handleDataRW = (e) => {
-         setDataRW(e);
-       };
+   const [dataLembaga, setdataLembaga] = useState([]);
+  const [dataRW, setDataRW] = useState([]);
+  const optionsRW = ["001", "002", "003", "004", "005"];
+  const navigate = useNavigate();
+  async function handleGetLembaga() {
+    const url = `/administrasikelurahan/src/api/lembaga/fetch_all_lembaga.php`;
+    try {
+      const res = await axiosInstance.get(url);
+      const { data, status } = res;
+      if (status === 200) {
+        setdataLembaga(
+          data.map((item, index) => {
+            return {
+              ...item,
+              key: parseInt(index),
+            };
+          })
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const handleAddRW = async () => {
+    const url = `/administrasikelurahan/src/post/addAccountRW.php`;
+    try {
+      const response = await axiosWithMultipart(url, {
+        method: "post",
+        data: dataRW,
+      });
+      const { value, message } = response.data;
+      if (value === 1) {
+        mes.success(message);
+        navigate("/Dashboard/Kelola-Admin");
+      } else {
+        mes.error(message);
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  //  modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = async () => {
+    await handleAddRW();
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const handleDataRW = (e) => {
+    setDataRW(e);
+  };
+  useEffect(()=> {
+    handleGetLembaga()
+  }, [])
   return (
     <section className="">
       <Breadcrumb
@@ -132,9 +165,9 @@ function TambahRw() {
               ]}
             >
               <Select placeholder="Pilih RW ">
-                {optionsRW.map((item, i) => (
-                  <Select.Option key={i} value={item}>
-                    {item}
+                {dataLembaga.map((item, i) => (
+                  <Select.Option key={i} value={item.rw}>
+                    {item.rw}
                   </Select.Option>
                 ))}
               </Select>
@@ -205,4 +238,4 @@ function TambahRw() {
   );
 }
 
-export default TambahRw
+export default TambahRw;

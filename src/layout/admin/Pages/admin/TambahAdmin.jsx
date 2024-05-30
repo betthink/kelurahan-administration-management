@@ -11,8 +11,10 @@ import {
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
+import { axiosInstance } from "../../../../utils/axiosInstance";
 export default function TambahAdmin() {
   const [dataNewAdmin, setdataNewAdmin] = useState({});
+  const [dataLembaga, setdataLembaga] = useState([]);
   const optionsRW = ["001", "002", "003", "004", "005"];
   const optionsRT = [
     "001",
@@ -26,10 +28,30 @@ export default function TambahAdmin() {
     "009",
     "010",
   ];
+
   const navigate = useNavigate();
   const handleSetDataAdmin = (e) => {
     setdataNewAdmin(e);
   };
+  async function handleGetLembaga() {
+    const url = `/administrasikelurahan/src/api/lembaga/fetch_all_lembaga.php`;
+    try {
+      const res = await axiosInstance.get(url);
+      const { data, status } = res;
+      if (status === 200) {
+        setdataLembaga(
+          data.map((item, index) => {
+            return {
+              ...item,
+              key: parseInt(index),
+            };
+          })
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   const handleAddAdmin = async () => {
     const url = `/administrasikelurahan/src/post/addAccountAdmin.php`;
     try {
@@ -61,9 +83,9 @@ export default function TambahAdmin() {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
   useEffect(() => {
-  }, [dataNewAdmin]);
+    handleGetLembaga();
+  }, []);
   return (
     <div className="mx-20">
       {/* path */}
@@ -150,9 +172,9 @@ export default function TambahAdmin() {
               ]}
             >
               <Select placeholder="Pilih RT ">
-                {optionsRT.map((item, i) => (
-                  <Select.Option key={i} value={item}>
-                    {item}
+                {dataLembaga?.map((item, i) => (
+                  <Select.Option key={i} value={item.rt}>
+                    {item.rt}
                   </Select.Option>
                 ))}
               </Select>
@@ -176,9 +198,9 @@ export default function TambahAdmin() {
               ]}
             >
               <Select placeholder="Pilih RW ">
-                {optionsRW.map((item, i) => (
-                  <Select.Option key={i} value={item}>
-                    {item}
+                {dataLembaga.map((item, i) => (
+                  <Select.Option key={i} value={item?.rw}>
+                    {item?.rw}
                   </Select.Option>
                 ))}
               </Select>
