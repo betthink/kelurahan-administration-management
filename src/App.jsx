@@ -39,6 +39,8 @@ import ProfilePage from "./layout/public/pages/ProfilePage";
 import VerifikasiPembayaranPublic from "./layout/public/pages/VerifikasiPembayaranPublic";
 import VerifikasiPembayaranTransfer from "./layout/admin/Pages/IPL/VerifikasiPembayaranTransfer";
 import FormInputData from "./layout/admin/Pages/penduduk/FormInputData";
+import KelolaLembaga from "./layout/admin/Pages/lembaga/KelolaLembaga";
+import TambahLembaga from "./layout/admin/Pages/lembaga/TambahLembaga";
 
 const App = () => {
   const user = useSelector((state) => state.userReducer.value);
@@ -137,6 +139,8 @@ const App = () => {
             path="Kelola-IPL/Verifikasi-Pembayaran-Transfer"
             element={<VerifikasiPembayaranTransfer />}
           />
+          <Route path="/Dashboard/Kelola-Lembaga" element={<KelolaLembaga />} />
+          <Route path="/Dashboard/Tambah-Lembaga" element={<TambahLembaga />} />
         </Route>
         <Route path="/Kelola-surat/pdf" element={<PdfViewer />} />
 

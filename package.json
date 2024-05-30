@@ -16,6 +16,8 @@
     "antd": "^5.8.4",
     "axios": "^1.4.0",
     "chart.js": "^4.4.1",
+    "convertapi": "^1.14.0",
+    "convertapi-js": "^1.0.8",
     "docx-pdf": "^0.0.1",
     "docxtemplater": "^3.39.1",
     "faker": "^6.6.6",

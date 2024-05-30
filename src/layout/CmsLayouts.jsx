@@ -69,7 +69,6 @@ const CmsLayouts = () => {
        getItem(i, i),
      ])
    ),
-   // Perbaiki logika kondisi agar sesuai dengan penulisan yang benar
    ...(user.role === "super_admin"
      ? [
          getItem(
@@ -78,12 +77,12 @@ const CmsLayouts = () => {
            <TeamOutlined />,
            [getItem("a", "7"), getItem("b", "9")]
          ),
-        //  getItem(
-        //    <Link to={"/Dashboard/Kelola-RW"}>Kelola RW</Link>,
-        //    "sub4",
-        //    <TeamOutlined />,
-        //    [getItem("a", "8"), getItem("b", "10")]
-        //  ),
+         getItem(
+           <Link to={"/Dashboard/Kelola-Lembaga"}>Kelola Lembaga</Link>,
+           "sub4",
+           <TeamOutlined />,
+           [getItem("a", "8"), getItem("b", "10")]
+         ),
        ]
      : []),
  ];

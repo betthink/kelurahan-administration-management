@@ -7,13 +7,14 @@ import { useSelector } from "react-redux";
 import { MdDownload } from "react-icons/md";
 import ModalCofirmPersetujuan from "./components/ModalCofirmPersetujuan";
 import ModalConfirmTTDRW from "./components/ModalConfirmTTDRW";
-
+  //  import { PDFDocument } from "pdf-lib";
 // lib docx
 import Docxtemplater from "docxtemplater";
 import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
 import { saveAs } from "file-saver";
-import fs from "fs";
+import ConvertApi from "convertapi-js";
+// import ConvertApi from "convertapi";
 function loadFile(url, callback) {
   PizZipUtils.getBinaryContent(url, callback);
 }
@@ -32,6 +33,7 @@ const docxTemplates = {
 // components
 function KelolaPermohonanSurat() {
   // atributes modal
+  const [dataReady, setDataReady] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalConfirmSurat, setisModalConfirmSurat] = useState(false);
   const [isMOdalConfirmRW, setisMOdalConfirmRW] = useState(false);
@@ -97,89 +99,120 @@ function KelolaPermohonanSurat() {
     return age;
   }
   // generate file docx
-  function generateDocument(data) {
-    const docxFilePath = docxTemplates[data?.id_surat];
-    if (!docxFilePath) {
-      console.error("File template for the given id_surat not found.");
+
+async function generateDocument(data) {
+  try {
+    // Pastikan userAdmin sudah di-load
+    if (!userAdmin || userAdmin.length === 0) {
+      console.error("Data userAdmin belum tersedia.");
       return;
     }
-    loadFile(docxFilePath, function (error, content) {
-      if (error) {
-        throw error;
-      }
-      const zip = new PizZip(content);
-      const doc = new Docxtemplater(zip, {
-        paragraphLoop: true,
-        linebreaks: true,
-      });
-      // Di sini Anda bisa menambahkan logika lain sesuai kebutuhan
-      const formattedDate = formatDate(); // Mendapatkan tanggal saat ini
-      doc.render({
-        nama: data?.nama,
-        jenis_kelamin: data?.jenis_kelamin,
-        tempatlahir: data?.tempat_lahir,
-        tanggal_lahir: data?.tanggal_lahir,
-        status_diri: data?.status_diri,
-        agama: data?.agama,
-        pekerjaan: data?.pekerjaan,
-        noktp: data?.nomor_telp,
-        nokk: data?.no_kk,
-        alamat: data?.alamat,
-        rt: data?.rt,
-        rw: data?.rw,
-        now: formattedDate,
-        adminrt: userAdmin.find(
-          (item) => item.id_admin === data?.rt_verifikator
-        ).username,
-        adminrw: userAdmin.find(
-          (item) => item.id_admin === data?.rw_verifikator
-        )?.username,
 
-        nama_lain: data?.nama_lain,
-        tempat_lahir_2nd: data?.tempat_lahir_2nd,
-        tanggal_lahir_2nd: data?.tanggal_lahir_2nd,
-        agama_2nd: data?.agama_2nd,
-        pendidikan_terakhir: data?.pendidikan_terakhir,
-        pekerjaan_2nd: data?.pekerjaan_2nd,
-        alamat_pekerjaan: data?.alamat_pekerjaan,
-        letak_object_tanah: data?.letak_object_tanah,
-        suku: data?.suku,
-        bangsa: data?.bangsa,
-        jenis_usaha: data?.jenis_usaha,
-        nama_anak: data?.nama_anak,
-        jurusan_anak: data?.jurusan_anak,
-        penghasilan_kotor: data?.penghasilan_kotor,
-        pengeluaran: data?.pengeluaran,
-        nim: data?.nim,
-        penghasilan_bersih: data?.penghasilan_bersih,
-        nama_ayah: data?.nama_ayah,
-        nama_ibu: data?.nama_ibu,
-        pekerjaan_ayah: data?.pekerjaan_ayah,
-        pekerjaan_ibu: data?.pekerjaan_ibu,
-        jalan: data?.jalan,
-        kecamatan: data?.kecamatan,
-        kota: data?.kota,
-        provinsi: data?.provinsi,
-        waktu_cerai: data?.waktu_cerai,
-        umur: getAgeFromBirthdate(data?.tanggal_lahir),
-        umur_lainya: getAgeFromBirthdate(data?.tanggal_lahir_2nd),
-        waktu_pergi: data?.waktu_pergi,
-        nomor_akta_cerai: data?.nomor_akta_cerai,
-      });
+    const docxFilePath = docxTemplates[data?.id_surat];
+    if (!docxFilePath) {
+      console.error(
+        "File template untuk id_surat yang diberikan tidak ditemukan."
+      );
+      return;
+    }
 
-      const out = doc.getZip().generate({
-        type: "blob",
-        mimeType:
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    const content = await new Promise((resolve, reject) => {
+      loadFile(docxFilePath, (error, content) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(content);
+        }
       });
-      // fs.write
-      // fs.writeFile
-      // fs.writeFileSync
-      // Output the document using Data-URI
-      saveAs(out, `${data?.nama}-${data?.nama_surat}.docx`);
     });
-  }
 
+    const zip = new PizZip(content);
+    const doc = new Docxtemplater(zip, {
+      paragraphLoop: true,
+      linebreaks: true,
+    });
+
+    const formattedDate = formatDate(); // Mendapatkan tanggal saat ini
+    const rtAdmin = userAdmin?.find(
+      (item) => item.id_admin === data?.rt_verifikator
+    )?.username;
+    const rwAdmin = userAdmin?.find(
+      (item) => item.id_admin === data?.rw_verifikator
+    )?.username;
+
+    doc.render({
+      nama: data?.nama,
+      jenis_kelamin: data?.jenis_kelamin,
+      tempat_lahir: data?.tempat_lahir,
+      tanggal_lahir: data?.tanggal_lahir,
+      status_diri: data?.status_diri,
+      agama: data?.agama,
+      pekerjaan: data?.pekerjaan,
+      noktp: data?.nomor_telp,
+      nokk: data?.no_kk,
+      alamat: data?.alamat,
+      rt: data?.rt,
+      rw: data?.rw,
+      now: formattedDate,
+      adminrt: rtAdmin,
+      adminrw: rwAdmin || "Data admin RW tidak tersedia",
+      nama_lain: data?.nama_lain,
+      tempat_lahir_2nd: data?.tempat_lahir_2nd,
+      tanggal_lahir_2nd: data?.tanggal_lahir_2nd,
+      agama_2nd: data?.agama_2nd,
+      pendidikan_terakhir: data?.pendidikan_terakhir,
+      pekerjaan_2nd: data?.pekerjaan_2nd,
+      alamat_pekerjaan: data?.alamat_pekerjaan,
+      letak_object_tanah: data?.letak_object_tanah,
+      suku: data?.suku,
+      bangsa: data?.bangsa,
+      jenis_usaha: data?.jenis_usaha,
+      nama_anak: data?.nama_anak,
+      jurusan_anak: data?.jurusan_anak,
+      penghasilan_kotor: data?.penghasilan_kotor,
+      pengeluaran: data?.pengeluaran,
+      nim: data?.nim,
+      penghasilan_bersih: data?.penghasilan_bersih,
+      nama_ayah: data?.nama_ayah,
+      nama_ibu: data?.nama_ibu,
+      pekerjaan_ayah: data?.pekerjaan_ayah,
+      pekerjaan_ibu: data?.pekerjaan_ibu,
+      jalan: data?.jalan,
+      kecamatan: data?.kecamatan,
+      kota: data?.kota,
+      provinsi: data?.provinsi,
+      waktu_cerai: data?.waktu_cerai,
+      umur: getAgeFromBirthdate(data?.tanggal_lahir),
+      umur_lainnya: getAgeFromBirthdate(data?.tanggal_lahir_2nd),
+      waktu_pergi: data?.waktu_pergi,
+      nomor_akta_cerai: data?.nomor_akta_cerai,
+    });
+
+    const out = doc.getZip().generate({
+      type: "blob",
+      mimeType:
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    });
+
+    const fileName = `${data?.nama}-${data?.nama_surat}.docx`;
+    saveAs(out, fileName);
+
+    // Konversi DOCX ke PDF menggunakan ConvertAPI
+    const convertApi = ConvertApi.auth({ secret: "your-convertapi-secret" });
+    const result = await convertApi.convert(
+      "pdf",
+      {
+        File: out,
+      },
+      "docx"
+    );
+
+    const pdfBlob = await result.file.toBlob();
+    saveAs(pdfBlob, "output.pdf");
+  } catch (error) {
+    console.error("Error generating document:", error);
+  }
+}
   // Panggil fungsi generateDocument dengan nama file yang diinginkan
 
   // column ------------------------------
@@ -304,14 +337,22 @@ function KelolaPermohonanSurat() {
       const response = await axiosInstance.get(url);
       const data = response.data;
       setuserAdmin(data);
-      // console.log(data);
     } catch (error) {
       throw error;
     }
   };
   useEffect(() => {
-    handleGetDataPermohonanSurat();
-    handleGetAdmin();
+    const fetchData = async () => {
+      try {
+        await handleGetDataPermohonanSurat();
+        await handleGetAdmin();
+        setDataReady(true);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
   }, []);
   return (
     <div className="mx-20">
@@ -340,24 +381,19 @@ function KelolaPermohonanSurat() {
       {/* modal */}
       <>
         <Modal
-          key={dataDownload?.key}
+          // key={dataDownload?.key}
           title="Apakah  data sudah sesuai? "
           open={isModalOpen}
           onCancel={handleCancel}
           footer={[
             <Button
-              // disabled={
-              //   dataDownload?.rt_verifikator === null ||
-              //   dataDownload?.rw_verifikator === null
-              // }
+              key="download"
               onClick={() => generateDocument(dataDownload)}
               block
+              disabled={!dataReady}
               className="bg-green-600 px-4 text-white mt-6 hover:bg-white hover:border flex justify-center items-center"
             >
               Unduh
-              {/* <Link state={{ data: dataDownload }} to="/Kelola-surat/pdf">
-                Lihat surat
-              </Link> */}
             </Button>,
           ]}
         >
