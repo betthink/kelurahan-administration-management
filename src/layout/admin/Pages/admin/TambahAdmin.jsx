@@ -14,45 +14,45 @@ import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 export default function TambahAdmin() {
   const [dataNewAdmin, setdataNewAdmin] = useState({});
-  const [dataLembaga, setdataLembaga] = useState([]);
-  const optionsRW = ["001", "002", "003", "004", "005"];
-  const optionsRT = [
-    "001",
-    "002",
-    "003",
-    "004",
-    "005",
-    "006",
-    "007",
-    "008",
-    "009",
-    "010",
-  ];
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rts, setrts] = useState([]);
+  const [rws, setrws] = useState([]);
 
   const navigate = useNavigate();
   const handleSetDataAdmin = (e) => {
     setdataNewAdmin(e);
   };
-  async function handleGetLembaga() {
-    const url = `/administrasikelurahan/src/api/lembaga/fetch_all_lembaga.php`;
-    try {
-      const res = await axiosInstance.get(url);
-      const { data, status } = res;
-      if (status === 200) {
-        setdataLembaga(
-          data.map((item, index) => {
-            return {
-              ...item,
-              key: parseInt(index),
-            };
-          })
-        );
-      }
-    } catch (error) {
-      console.log(error);
+  async function handleGetRT() {
+    const url = `/administrasikelurahan/src/api/lembaga/data-rt.php`;
+    const res = await axiosInstance.get(url);
+    const { data, status } = res;
+    if (status === 200) {
+      setrts(
+        data.map((item, index) => {
+          return {
+            ...item,
+            key: parseInt(index),
+          };
+        })
+      );
     }
   }
-  const handleAddAdmin = async () => {
+  async function handleGetRW() {
+    const url = `/administrasikelurahan/src/api/lembaga/data-rw.php`;
+    const res = await axiosInstance.get(url);
+    const { data, status } = res;
+    if (status === 200) {
+      setrws(
+        data.map((item, index) => {
+          return {
+            ...item,
+            key: parseInt(index),
+          };
+        })
+      );
+    }
+  }
+  async function handleAddAdmin() {
     const url = `/administrasikelurahan/src/post/addAccountAdmin.php`;
     try {
       const response = await axiosWithMultipart(url, {
@@ -70,9 +70,8 @@ export default function TambahAdmin() {
       console.log(error);
       throw error;
     }
-  };
+  }
   // modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -84,11 +83,11 @@ export default function TambahAdmin() {
     setIsModalOpen(false);
   };
   useEffect(() => {
-    handleGetLembaga();
+    handleGetRT();
+    handleGetRW();
   }, []);
   return (
     <div className="mx-20">
-      {/* path */}
       <Breadcrumb
         items={[
           { title: "Admin" },
@@ -100,7 +99,6 @@ export default function TambahAdmin() {
         }}
       />
       <div className="h-full self-center flex  p-6 bg-white">
-        {/* form */}
         <Form
           onFinish={handleSetDataAdmin}
           layout="vertical"
@@ -172,7 +170,7 @@ export default function TambahAdmin() {
               ]}
             >
               <Select placeholder="Pilih RT ">
-                {dataLembaga?.map((item, i) => (
+                {rts?.map((item, i) => (
                   <Select.Option key={i} value={item.rt}>
                     {item.rt}
                   </Select.Option>
@@ -198,7 +196,7 @@ export default function TambahAdmin() {
               ]}
             >
               <Select placeholder="Pilih RW ">
-                {dataLembaga.map((item, i) => (
+                {rws.map((item, i) => (
                   <Select.Option key={i} value={item?.rw}>
                     {item?.rw}
                   </Select.Option>

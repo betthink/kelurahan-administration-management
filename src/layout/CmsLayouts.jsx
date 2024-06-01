@@ -6,6 +6,9 @@ import {
   PieChartOutlined,
   TeamOutlined,
   UserOutlined,
+  ApartmentOutlined,
+  MehOutlined,
+  TabletOutlined,
 } from "@ant-design/icons";
 import { PiBookThin } from "react-icons/pi";
 import { Avatar, Button, Dropdown, Layout, Menu, Space } from "antd";
@@ -53,7 +56,7 @@ const CmsLayouts = () => {
     {
       link: "/Dashboard/kelola-Surat",
       title: "Kelola surat",
-      icon: UserOutlined,
+      icon: TabletOutlined,
     },
 
     // {
@@ -74,13 +77,13 @@ const CmsLayouts = () => {
          getItem(
            <Link to={"/Dashboard/Kelola-Admin"}>Kelola Admin</Link>,
            "sub3",
-           <TeamOutlined />,
+           <MehOutlined />,
            [getItem("a", "7"), getItem("b", "9")]
          ),
          getItem(
            <Link to={"/Dashboard/Kelola-Lembaga"}>Kelola Lembaga</Link>,
            "sub4",
-           <TeamOutlined />,
+           <ApartmentOutlined />,
            [getItem("a", "8"), getItem("b", "10")]
          ),
        ]

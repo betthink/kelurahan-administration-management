@@ -6,10 +6,8 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function SuperAdminView({ redirect, titlelink }) {
-  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const user = useSelector((state) => state.userReducer.value);
-  // console.log(user);
   const handleGetLembaga = async () => {
     const url =
       user.role === "adminRW"
@@ -27,7 +25,6 @@ export default function SuperAdminView({ redirect, titlelink }) {
     }
   };
   useEffect(() => {
-    // loadMoreData();
     handleGetLembaga();
   }, []);
   return (
@@ -66,6 +63,6 @@ export default function SuperAdminView({ redirect, titlelink }) {
           )}
         />
       </div>
-    </Content>
+    </Content>  
   );
 }

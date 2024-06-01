@@ -1,7 +1,6 @@
 // library
 import React, { useEffect, useState } from "react";
 import {
-  Breadcrumb,
   Button,
   DatePicker,
   Form,
@@ -16,12 +15,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { axiosInstance } from "../../../utils/axiosInstance";
-import { Header } from "antd/es/layout/layout";
 import ButtonGroup from "antd/es/button/button-group";
 function RegistrasiPenduduk() {
   // variables
-  const [loading, setLoading] = useState(false);
-  const [dataLembaga, setDataLembaga] = useState([]);
+  const [rts, setrts] = useState([]);
+  const [rws, setrws] = useState([]);
   const [formDataArray, setFormDataArray] = useState([
     {
       nama: "",
@@ -42,12 +40,7 @@ function RegistrasiPenduduk() {
       rw: null,
     },
   ]);
-  // const [formData, setFormData] = useState([{}]);
   const navigate = useNavigate();
-  const user = useSelector((state) => state.userReducer.value);
-  const location = useLocation();
-  const dataRoute = location.state;
-  // console.log(user);
   // functions
 
   const agamaOption = [
@@ -58,8 +51,6 @@ function RegistrasiPenduduk() {
     "Budha",
     "Lain-Lain",
   ];
-
-  // handle new form
   const handleAddForm = () => {
     // Menambahkan formulir baru ke dalam formData
     setFormDataArray([
@@ -95,7 +86,6 @@ function RegistrasiPenduduk() {
     setFormDataArray(updatedFormData);
   };
 
-  // on finish
   const onFinish = async () => {
     const formData = formDataArray.map((formDataItem, index) => {
       const formDataInstance = new FormData();
@@ -148,8 +138,6 @@ function RegistrasiPenduduk() {
       });
       return formDataInstance;
     });
-    // console.log(formData);
-    // return;
     try {
       const responses = await Promise.all(
         formData.map(async (formDataItem) => {
@@ -193,8 +181,6 @@ function RegistrasiPenduduk() {
     }
     Modal.destroyAll();
   };
-
-  // is COnfirm
   const onFinishWithConfirmation = () => {
     Modal.confirm({
       title: "Tambahkan Data Penduduk?",
@@ -217,24 +203,39 @@ function RegistrasiPenduduk() {
       ],
     });
   };
-  const handleGetLembaga = async () => {
-    const url = `/administrasikelurahan/src/api/lembaga/fetch_all_lembaga.php`;
-    if (loading) {
-      return;
+  async function handleGetRT() {
+    const url = `/administrasikelurahan/src/api/lembaga/data-rt.php`;
+    const res = await axiosInstance.get(url);
+    const { data, status } = res;
+    if (status === 200) {
+      setrts(
+        data.map((item, index) => {
+          return {
+            ...item,
+            key: parseInt(index),
+          };
+        })
+      );
     }
-    setLoading(true);
-    try {
-      const response = await axiosInstance.get(url);
-      const data = response.data;
-      if (response.status === 200) {
-        setDataLembaga(data);
-      }
-    } catch (error) {
-      throw error;
+  }
+  async function handleGetRW() {
+    const url = `/administrasikelurahan/src/api/lembaga/data-rw.php`;
+    const res = await axiosInstance.get(url);
+    const { data, status } = res;
+    if (status === 200) {
+      setrws(
+        data.map((item, index) => {
+          return {
+            ...item,
+            key: parseInt(index),
+          };
+        })
+      );
     }
-  };
+  }
   useEffect(() => {
-    handleGetLembaga();
+    handleGetRT();
+    handleGetRW();
   }, []);
   return (
     <div className="mx-20">
@@ -593,7 +594,7 @@ function RegistrasiPenduduk() {
                           setFormDataArray(updatedFormData);
                         }}
                       >
-                        {dataLembaga.map((item, i) => (
+                        {rts.map((item, i) => (
                           <Select.Option key={i} value={item.rt}>
                             {item.rt}
                           </Select.Option>
@@ -619,9 +620,9 @@ function RegistrasiPenduduk() {
                           setFormDataArray(updatedFormData);
                         }}
                       >
-                        {["001", "002", "003", "004", "005"].map((item, i) => (
-                          <Select.Option key={i} value={item}>
-                            {item}
+                        {rws.map((item, i) => (
+                          <Select.Option key={i} value={item.rw}>
+                            {item.rw}
                           </Select.Option>
                         ))}
                       </Select>

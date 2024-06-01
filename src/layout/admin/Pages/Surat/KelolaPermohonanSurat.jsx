@@ -7,13 +7,14 @@ import { useSelector } from "react-redux";
 import { MdDownload } from "react-icons/md";
 import ModalCofirmPersetujuan from "./components/ModalCofirmPersetujuan";
 import ModalConfirmTTDRW from "./components/ModalConfirmTTDRW";
-  //  import { PDFDocument } from "pdf-lib";
+//  import { PDFDocument } from "pdf-lib";
 // lib docx
 import Docxtemplater from "docxtemplater";
 import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
 import { saveAs } from "file-saver";
 import ConvertApi from "convertapi-js";
+import { Link } from "react-router-dom";
 // import ConvertApi from "convertapi";
 function loadFile(url, callback) {
   PizZipUtils.getBinaryContent(url, callback);
@@ -39,9 +40,11 @@ function KelolaPermohonanSurat() {
   const [isMOdalConfirmRW, setisMOdalConfirmRW] = useState(false);
   const [dataConfirm, setdataConfirm] = useState(false);
   const [userAdmin, setuserAdmin] = useState([]);
-  const [dataDownload, setdataDownload] = useState(false);
+  const [dataDownload, setdataDownload] = useState({});
+  const [dataSurat, setDataSurat] = useState({});
+  const [dataPemohonSurat, setdataPemohonSurat] = useState([]);
+  const user = useSelector((state) => state.userReducer.value);
   const isConfirmDownload = (data) => {
-    // console.log(data);
     setIsModalOpen(true);
     setdataDownload(data);
   };
@@ -56,8 +59,12 @@ function KelolaPermohonanSurat() {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const [dataPemohonSurat, setdataPemohonSurat] = useState([]);
-  const user = useSelector((state) => state.userReducer.value);
+  const rtAdmin = userAdmin?.find(
+    (item) => item.id_admin === dataDownload?.rt_verifikator
+  )?.username;
+  const rwAdmin = userAdmin?.find(
+    (item) => item.id_admin === dataDownload?.rw_verifikator
+  )?.username;
   // handle download surat
   function formatDate() {
     const date = new Date(); // Membuat objek Date saat ini
@@ -100,122 +107,100 @@ function KelolaPermohonanSurat() {
   }
   // generate file docx
 
-async function generateDocument(data) {
-  try {
-    // Pastikan userAdmin sudah di-load
-    if (!userAdmin || userAdmin.length === 0) {
-      console.error("Data userAdmin belum tersedia.");
-      return;
-    }
+  async function generateDocument(data) {
+    try {
+      // Pastikan userAdmin sudah di-load
+      if (!userAdmin || userAdmin.length === 0) {
+        console.error("Data userAdmin belum tersedia.");
+        return;
+      }
 
-    const docxFilePath = docxTemplates[data?.id_surat];
-    if (!docxFilePath) {
-      console.error(
-        "File template untuk id_surat yang diberikan tidak ditemukan."
-      );
-      return;
-    }
+      const docxFilePath = docxTemplates[data?.id_surat];
+      if (!docxFilePath) {
+        console.error(
+          "File template untuk id_surat yang diberikan tidak ditemukan."
+        );
+        return;
+      }
 
-    const content = await new Promise((resolve, reject) => {
-      loadFile(docxFilePath, (error, content) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(content);
-        }
+      const content = await new Promise((resolve, reject) => {
+        loadFile(docxFilePath, (error, content) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(content);
+          }
+        });
       });
-    });
 
-    const zip = new PizZip(content);
-    const doc = new Docxtemplater(zip, {
-      paragraphLoop: true,
-      linebreaks: true,
-    });
+      const zip = new PizZip(content);
+      const doc = new Docxtemplater(zip, {
+        paragraphLoop: true,
+        linebreaks: true,
+      });
 
-    const formattedDate = formatDate(); // Mendapatkan tanggal saat ini
-    const rtAdmin = userAdmin?.find(
-      (item) => item.id_admin === data?.rt_verifikator
-    )?.username;
-    const rwAdmin = userAdmin?.find(
-      (item) => item.id_admin === data?.rw_verifikator
-    )?.username;
+      const formattedDate = formatDate(); // Mendapatkan tanggal saat ini
 
-    doc.render({
-      nama: data?.nama,
-      jenis_kelamin: data?.jenis_kelamin,
-      tempat_lahir: data?.tempat_lahir,
-      tanggal_lahir: data?.tanggal_lahir,
-      status_diri: data?.status_diri,
-      agama: data?.agama,
-      pekerjaan: data?.pekerjaan,
-      noktp: data?.nomor_telp,
-      nokk: data?.no_kk,
-      alamat: data?.alamat,
-      rt: data?.rt,
-      rw: data?.rw,
-      now: formattedDate,
-      adminrt: rtAdmin,
-      adminrw: rwAdmin || "Data admin RW tidak tersedia",
-      nama_lain: data?.nama_lain,
-      tempat_lahir_2nd: data?.tempat_lahir_2nd,
-      tanggal_lahir_2nd: data?.tanggal_lahir_2nd,
-      agama_2nd: data?.agama_2nd,
-      pendidikan_terakhir: data?.pendidikan_terakhir,
-      pekerjaan_2nd: data?.pekerjaan_2nd,
-      alamat_pekerjaan: data?.alamat_pekerjaan,
-      letak_object_tanah: data?.letak_object_tanah,
-      suku: data?.suku,
-      bangsa: data?.bangsa,
-      jenis_usaha: data?.jenis_usaha,
-      nama_anak: data?.nama_anak,
-      jurusan_anak: data?.jurusan_anak,
-      penghasilan_kotor: data?.penghasilan_kotor,
-      pengeluaran: data?.pengeluaran,
-      nim: data?.nim,
-      penghasilan_bersih: data?.penghasilan_bersih,
-      nama_ayah: data?.nama_ayah,
-      nama_ibu: data?.nama_ibu,
-      pekerjaan_ayah: data?.pekerjaan_ayah,
-      pekerjaan_ibu: data?.pekerjaan_ibu,
-      jalan: data?.jalan,
-      kecamatan: data?.kecamatan,
-      kota: data?.kota,
-      provinsi: data?.provinsi,
-      waktu_cerai: data?.waktu_cerai,
-      umur: getAgeFromBirthdate(data?.tanggal_lahir),
-      umur_lainnya: getAgeFromBirthdate(data?.tanggal_lahir_2nd),
-      waktu_pergi: data?.waktu_pergi,
-      nomor_akta_cerai: data?.nomor_akta_cerai,
-    });
+      doc.render({
+        nama: data?.nama,
+        jenis_kelamin: data?.jenis_kelamin,
+        tempat_lahir: data?.tempat_lahir,
+        tanggal_lahir: data?.tanggal_lahir,
+        status_diri: data?.status_diri,
+        agama: data?.agama,
+        pekerjaan: data?.pekerjaan,
+        noktp: data?.nomor_telp,
+        nokk: data?.no_kk,
+        alamat: data?.alamat,
+        rt: data?.rt,
+        rw: data?.rw,
+        now: formattedDate,
+        adminrt: rtAdmin,
+        adminrw: rwAdmin || "Data admin RW tidak tersedia",
+        nama_lain: data?.nama_lain,
+        tempat_lahir_2nd: data?.tempat_lahir_2nd,
+        tanggal_lahir_2nd: data?.tanggal_lahir_2nd,
+        agama_2nd: data?.agama_2nd,
+        pendidikan_terakhir: data?.pendidikan_terakhir,
+        pekerjaan_2nd: data?.pekerjaan_2nd,
+        alamat_pekerjaan: data?.alamat_pekerjaan,
+        letak_object_tanah: data?.letak_object_tanah,
+        suku: data?.suku,
+        bangsa: data?.bangsa,
+        jenis_usaha: data?.jenis_usaha,
+        nama_anak: data?.nama_anak,
+        jurusan_anak: data?.jurusan_anak,
+        penghasilan_kotor: data?.penghasilan_kotor,
+        pengeluaran: data?.pengeluaran,
+        nim: data?.nim,
+        penghasilan_bersih: data?.penghasilan_bersih,
+        nama_ayah: data?.nama_ayah,
+        nama_ibu: data?.nama_ibu,
+        pekerjaan_ayah: data?.pekerjaan_ayah,
+        pekerjaan_ibu: data?.pekerjaan_ibu,
+        jalan: data?.jalan,
+        kecamatan: data?.kecamatan,
+        kota: data?.kota,
+        provinsi: data?.provinsi,
+        waktu_cerai: data?.waktu_cerai,
+        umur: getAgeFromBirthdate(data?.tanggal_lahir),
+        umur_lainnya: getAgeFromBirthdate(data?.tanggal_lahir_2nd),
+        waktu_pergi: data?.waktu_pergi,
+        nomor_akta_cerai: data?.nomor_akta_cerai,
+      });
 
-    const out = doc.getZip().generate({
-      type: "blob",
-      mimeType:
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    });
+      const out = doc.getZip().generate({
+        type: "blob",
+        mimeType:
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      });
 
-    const fileName = `${data?.nama}-${data?.nama_surat}.docx`;
-    saveAs(out, fileName);
-
-    // Konversi DOCX ke PDF menggunakan ConvertAPI
-    const convertApi = ConvertApi.auth({ secret: "your-convertapi-secret" });
-    const result = await convertApi.convert(
-      "pdf",
-      {
-        File: out,
-      },
-      "docx"
-    );
-
-    const pdfBlob = await result.file.toBlob();
-    saveAs(pdfBlob, "output.pdf");
-  } catch (error) {
-    console.error("Error generating document:", error);
+      const fileName = `${data?.nama}-${data?.nama_surat}.docx`;
+      saveAs(out, fileName);
+    } catch (error) {
+      console.error("Error generating document:", error);
+    }
   }
-}
-  // Panggil fungsi generateDocument dengan nama file yang diinginkan
-
-  // column ------------------------------
   const columnPermohonanSurat = [
     {
       title: "Nama Pemohon",
@@ -308,8 +293,6 @@ async function generateDocument(data) {
       ),
     },
   ];
-  // functions
-
   const handleGetDataPermohonanSurat = async () => {
     const url =
       user.role === "admin"
@@ -317,15 +300,14 @@ async function generateDocument(data) {
         : user.role == "adminRW"
         ? `/administrasikelurahan/src/api/fetchDataPermohonanSuratJoinPendudukByRW.php?rw=${user.rw}`
         : `/administrasikelurahan/src/api/fetchDataPermohonanSuratJoinPenduduk.php`;
-
     try {
       const response = await axiosInstance.get(url);
-      // console.log(response.data);
       setdataPemohonSurat(
         response.data.map((item, index) => {
           return { ...item, key: parseInt(index) };
         })
       );
+      setDataReady(true)
     } catch (error) {
       throw error;
     }
@@ -341,19 +323,75 @@ async function generateDocument(data) {
       throw error;
     }
   };
+  // data surat
+  const formattedDate = formatDate();
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await handleGetDataPermohonanSurat();
-        await handleGetAdmin();
-        setDataReady(true);
-      } catch (error) {
-        console.error(error);
-      }
+    const updatedDataSurat = {
+      id_surat: dataDownload?.id_surat,
+      nama: dataDownload?.nama,
+      jenis_kelamin: dataDownload?.jenis_kelamin,
+      tempat_lahir: dataDownload?.tempat_lahir,
+      tanggal_lahir: dataDownload?.tanggal_lahir,
+      status_diri: dataDownload?.status_diri,
+      agama: dataDownload?.agama,
+      pekerjaan: dataDownload?.pekerjaan,
+      noktp: dataDownload?.nomor_telp,
+      nokk: dataDownload?.no_kk,
+      alamat: dataDownload?.alamat,
+      rt: dataDownload?.rt,
+      rw: dataDownload?.rw,
+      now: formattedDate,
+      adminrt: rtAdmin,
+      adminrw: rwAdmin || "rw belum verifikasi",
+      nama_lain: dataDownload?.nama_lain,
+      tempat_lahir_2nd: dataDownload?.tempat_lahir_2nd,
+      tanggal_lahir_2nd: dataDownload?.tanggal_lahir_2nd,
+      agama_2nd: dataDownload?.agama_2nd,
+      pendidikan_terakhir: dataDownload?.pendidikan_terakhir,
+      pekerjaan_2nd: dataDownload?.pekerjaan_2nd,
+      alamat_pekerjaan: dataDownload?.alamat_pekerjaan,
+      letak_object_tanah: dataDownload?.letak_object_tanah,
+      suku: dataDownload?.suku,
+      bangsa: dataDownload?.bangsa,
+      jenis_usaha: dataDownload?.jenis_usaha,
+      nama_anak: dataDownload?.nama_anak,
+      jurusan_anak: dataDownload?.jurusan_anak,
+      penghasilan_kotor: dataDownload?.penghasilan_kotor,
+      pengeluaran: dataDownload?.pengeluaran,
+      nim: dataDownload?.nim,
+      penghasilan_bersih: dataDownload?.penghasilan_bersih,
+      nama_ayah: dataDownload?.nama_ayah,
+      nama_ibu: dataDownload?.nama_ibu,
+      pekerjaan_ayah: dataDownload?.pekerjaan_ayah,
+      pekerjaan_ibu: dataDownload?.pekerjaan_ibu,
+      jalan: dataDownload?.jalan,
+      kecamatan: dataDownload?.kecamatan,
+      kota: dataDownload?.kota,
+      provinsi: dataDownload?.provinsi,
+      waktu_cerai: dataDownload?.waktu_cerai,
+      umur: getAgeFromBirthdate(dataDownload?.tanggal_lahir),
+      umur_lainnya: getAgeFromBirthdate(dataDownload?.tanggal_lahir_2nd),
+      waktu_pergi: dataDownload?.waktu_pergi,
+      nomor_akta_cerai: dataDownload?.nomor_akta_cerai,
     };
-
-    fetchData();
-  }, []);
+    setDataSurat(updatedDataSurat);
+  }, [dataDownload, formattedDate]);
+useEffect(()=> {
+handleGetDataPermohonanSurat()
+handleGetAdmin()
+},[] )
+  const urlSurat = {
+    1: "/surat-domisili/pdf",
+    2: "/surat-sktm/pdf",
+    3: "/surat-pernyataan-gaib/pdf",
+    4: "/surat-pernyataan-tidak-ada-bangunan/pdf",
+    5: "/surat-keterangan-belum-menikah/pdf",
+    6: "/surat-skkb/pdf",
+    7: "/surat-pernyataan-penghasil/pdf",
+    8: "/surat-beda-nama/pdf",
+    9: "/surat-sktm-siswa/pdf",
+    10: "/surat-pernyataan-janda-duda/pdf",
+  };
   return (
     <div className="mx-20">
       <Header
@@ -394,6 +432,16 @@ async function generateDocument(data) {
               className="bg-green-600 px-4 text-white mt-6 hover:bg-white hover:border flex justify-center items-center"
             >
               Unduh
+            </Button>,
+            <Button
+              key="lihat"
+              block
+              disabled={!dataReady}
+              className="bg-blue-600 px-4 text-white mt-6 hover:bg-white hover:border flex justify-center items-center"
+            >
+              <Link to={urlSurat[dataDownload.id_surat]} state={dataSurat}>
+                Lihat
+              </Link>
             </Button>,
           ]}
         >

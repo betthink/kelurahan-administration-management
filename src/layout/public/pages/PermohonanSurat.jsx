@@ -37,10 +37,8 @@ const PermohonanSurat = () => {
 
   const navigate = useNavigate();
   const handlePermohonanPembuatanSurat = async (event) => {
-    // console.log(event);
-    // return;
     let data;
-    if ((openForm == 3) | (openForm == 7)) {
+    if (openForm == 3) {
       const { surat, tanggal_lahir_2nd, waktu_pergi } = event;
       const date = `${tanggal_lahir_2nd.$d.getFullYear()}-${(
         tanggal_lahir_2nd.$d.getMonth() + 1
@@ -72,8 +70,31 @@ const PermohonanSurat = () => {
       };
       // console.log(data);
       // return;
+    } else if (openForm == 7) {
+      const { surat, tanggal_lahir_2nd } = event;
+      const date = `${tanggal_lahir_2nd.$d.getFullYear()}-${(
+        tanggal_lahir_2nd.$d.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}-${tanggal_lahir_2nd.$d
+        .getDate()
+        .toString()
+        .padStart(2, "0")}`;
+
+      data = {
+        ...event,
+        id_surat: surat,
+        nik: user.nik,
+        nama_surat: jenisSurat.find((item) => item.id_surat == surat)
+          .nama_surat,
+        id_penduduk: user.id,
+        tanggal_lahir_2nd: date,
+      };
+      // console.log(data);
+      // return;
     } else if (
       (openForm == 1) |
+      (openForm == 2) |
       (openForm == 4) |
       ((openForm == 5) |
         ((openForm == 6) | ((openForm == 8) | (openForm == 9))))
@@ -87,7 +108,6 @@ const PermohonanSurat = () => {
           .nama_surat,
         id_penduduk: user.id,
       };
-      // console.log(data);
     } else if (openForm == 10) {
       const { surat, waktu_cerai } = event;
       const date = `${waktu_cerai.$d.getFullYear()}-${(

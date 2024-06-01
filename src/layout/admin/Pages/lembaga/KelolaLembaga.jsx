@@ -10,12 +10,8 @@ import { useSelector } from "react-redux";
 
 const KelolaLembaga = () => {
   const [dataLembaga, setdataLembaga] = useState([]);
-  const [isOpen, setIsopen] = useState(false);
   const [isOpenModal, setisOpenModal] = useState(false);
   const user = useSelector((state) => state.userReducer.value);
-  function handleOpenModal(id) {
-    setIsopen(true);
-  }
   function handleOpenTambahPeserta() {
     setisOpenModal(true);
   }
@@ -41,22 +37,18 @@ const KelolaLembaga = () => {
 
   async function handleDeleteLembaga(id) {
     const url = `/administrasikelurahan/src/delete/delete-lembaga.php`;
-    try {
-      const res = await axiosWithMultipart(url, {
-        method: "post",
-        data: {
-          id,
-        },
-      });
-      const { data, status } = res;
-      if (status === 200) {
-       await mes.info(data.message);
-        window.location.reload();
-      } else {
-        mes.error(data.message);
-      }
-    } catch (error) {
-      console.log(error);
+    const res = await axiosWithMultipart(url, {
+      method: "post",
+      data: {
+        id,
+      },
+    });
+    const { data, status } = res;
+    if (status === 200) {
+      await mes.info(data.message);
+      window.location.reload();
+    } else {
+      mes.error(data.message);
     }
   }
   const columns = [
@@ -75,6 +67,11 @@ const KelolaLembaga = () => {
       key: "action",
       render: (data) => (
         <ButtonGroup className="flex gap-1 ">
+          <Button className="px-3 bg-success text-white">
+            <Link to={"/Dashboard/Edit-Lembaga"} state={{ data }}>
+              Edit
+            </Link>
+          </Button>
           <Button
             onClick={() => handleDeleteLembaga(data?.id)}
             className="px-3 bg-danger text-white"

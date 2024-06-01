@@ -14,30 +14,26 @@ import { axiosWithMultipart } from "../../../../utils/axioswithmultipart";
 import { axiosInstance } from "../../../../utils/axiosInstance";
 
 function TambahRw() {
-   const [dataLembaga, setdataLembaga] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [dataRW, setDataRW] = useState([]);
-  const optionsRW = ["001", "002", "003", "004", "005"];
+  const [rws, setrws] = useState([]);
   const navigate = useNavigate();
-  async function handleGetLembaga() {
-    const url = `/administrasikelurahan/src/api/lembaga/fetch_all_lembaga.php`;
-    try {
-      const res = await axiosInstance.get(url);
-      const { data, status } = res;
-      if (status === 200) {
-        setdataLembaga(
-          data.map((item, index) => {
-            return {
-              ...item,
-              key: parseInt(index),
-            };
-          })
-        );
-      }
-    } catch (error) {
-      console.log(error);
+  async function handleGetRW() {
+    const url = `/administrasikelurahan/src/api/lembaga/data-rw.php`;
+    const res = await axiosInstance.get(url);
+    const { data, status } = res;
+    if (status === 200) {
+      setrws(
+        data.map((item, index) => {
+          return {
+            ...item,
+            key: parseInt(index),
+          };
+        })
+      );
     }
   }
-  const handleAddRW = async () => {
+  async function handleCreate() {
     const url = `/administrasikelurahan/src/post/addAccountRW.php`;
     try {
       const response = await axiosWithMultipart(url, {
@@ -55,15 +51,12 @@ function TambahRw() {
       console.log(error);
       throw error;
     }
-  };
-
-  //  modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  }
   const showModal = () => {
     setIsModalOpen(true);
   };
   const handleOk = async () => {
-    await handleAddRW();
+    await handleCreate();
     setIsModalOpen(false);
   };
   const handleCancel = () => {
@@ -72,9 +65,9 @@ function TambahRw() {
   const handleDataRW = (e) => {
     setDataRW(e);
   };
-  useEffect(()=> {
-    handleGetLembaga()
-  }, [])
+  useEffect(() => {
+    handleGetRW();
+  }, []);
   return (
     <section className="">
       <Breadcrumb
@@ -165,7 +158,7 @@ function TambahRw() {
               ]}
             >
               <Select placeholder="Pilih RW ">
-                {dataLembaga.map((item, i) => (
+                {rws.map((item, i) => (
                   <Select.Option key={i} value={item.rw}>
                     {item.rw}
                   </Select.Option>

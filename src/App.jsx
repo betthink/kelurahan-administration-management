@@ -41,6 +41,17 @@ import VerifikasiPembayaranTransfer from "./layout/admin/Pages/IPL/VerifikasiPem
 import FormInputData from "./layout/admin/Pages/penduduk/FormInputData";
 import KelolaLembaga from "./layout/admin/Pages/lembaga/KelolaLembaga";
 import TambahLembaga from "./layout/admin/Pages/lembaga/TambahLembaga";
+import EditLembaga from "./layout/admin/Pages/lembaga/EditLembaga";
+import PdfDomisili from "./layout/admin/Pages/Surat/Pages/PdfDomisili";
+import PdfSKTM from "./layout/admin/Pages/Surat/Pages/PdfSKTM";
+import PdfPernyataanGaib from "./layout/admin/Pages/Surat/Pages/PdfPernyataanGaib";
+import PdfPernyataanTidakAdaBangunan from "./layout/admin/Pages/Surat/Pages/PdfPernyataanTidakAdaBangunan";
+import PdfKeteranganBelumMenikah from "./layout/admin/Pages/Surat/Pages/PdfKeteranganBelumMenikah";
+import PdfSKKB from "./layout/admin/Pages/Surat/Pages/PdfSKKB";
+import PdfPernyataanPenghasilan from "./layout/admin/Pages/Surat/Pages/PdfPernyataanPenghasilan";
+import PdfSKTMSiswa from "./layout/admin/Pages/Surat/Pages/PdfSKTMSiswa";
+import PdfJandaDuda from "./layout/admin/Pages/Surat/Pages/PdfJandaDuda";
+import PdfBedaNama from "./layout/admin/Pages/Surat/Pages/PdfBedaNama";
 
 const App = () => {
   const user = useSelector((state) => state.userReducer.value);
@@ -141,10 +152,35 @@ const App = () => {
           />
           <Route path="/Dashboard/Kelola-Lembaga" element={<KelolaLembaga />} />
           <Route path="/Dashboard/Tambah-Lembaga" element={<TambahLembaga />} />
+          <Route path="/Dashboard/Edit-Lembaga" element={<EditLembaga />} />
         </Route>
         <Route path="/Kelola-surat/pdf" element={<PdfViewer />} />
+        <Route path="/surat-domisili/pdf" element={<PdfDomisili />} />
+        <Route path="/surat-sktm/pdf" element={<PdfSKTM />} />
 
-        {/* <Route path="/Kelola-surat/pdf" element={<PdfViewer />} /> */}
+        <Route
+          path="/surat-pernyataan-gaib/pdf"
+          element={<PdfPernyataanGaib />}
+        />
+        <Route
+          path="/surat-pernyataan-tidak-ada-bangunan/pdf"
+          element={<PdfPernyataanTidakAdaBangunan />}
+        />
+        <Route
+          path="/surat-keterangan-belum-menikah/pdf"
+          element={<PdfKeteranganBelumMenikah />}
+        />
+        <Route path="/surat-skkb/pdf" element={<PdfSKKB />} />
+        <Route
+          path="/surat-pernyataan-penghasil/pdf"
+          element={<PdfPernyataanPenghasilan />}
+        />
+        <Route path="/surat-sktm-siswa/pdf" element={<PdfSKTMSiswa />} />
+        <Route
+          path="/surat-pernyataan-janda-duda/pdf"
+          element={<PdfJandaDuda />}
+        />
+        <Route path="/surat-beda-nama/pdf" element={<PdfBedaNama />} />
       </Routes>
     </>
   );
