@@ -424,15 +424,15 @@ handleGetAdmin()
           open={isModalOpen}
           onCancel={handleCancel}
           footer={[
-            <Button
-              key="download"
-              onClick={() => generateDocument(dataDownload)}
-              block
-              disabled={!dataReady}
-              className="bg-green-600 px-4 text-white mt-6 hover:bg-white hover:border flex justify-center items-center"
-            >
-              Unduh
-            </Button>,
+            // <Button
+            //   key="download"
+            //   onClick={() => generateDocument(dataDownload)}
+            //   block
+            //   disabled={!dataReady}
+            //   className="bg-green-600 px-4 text-white mt-6 hover:bg-white hover:border flex justify-center items-center"
+            // >
+            //   Unduh
+            // </Button>,
             <Button
               key="lihat"
               block

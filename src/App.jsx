@@ -154,7 +154,6 @@ const App = () => {
           <Route path="/Dashboard/Tambah-Lembaga" element={<TambahLembaga />} />
           <Route path="/Dashboard/Edit-Lembaga" element={<EditLembaga />} />
         </Route>
-        <Route path="/Kelola-surat/pdf" element={<PdfViewer />} />
         <Route path="/surat-domisili/pdf" element={<PdfDomisili />} />
         <Route path="/surat-sktm/pdf" element={<PdfSKTM />} />
 
@@ -181,6 +180,7 @@ const App = () => {
           element={<PdfJandaDuda />}
         />
         <Route path="/surat-beda-nama/pdf" element={<PdfBedaNama />} />
+        <Route path="/Kelola-surat/pdf" element={<PdfViewer />} />
       </Routes>
     </>
   );

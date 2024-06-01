@@ -36,7 +36,6 @@ export default function LihatSuratPage() {
     const url = `/administrasikelurahan/src/api/surat/surat-by-user.php?id_user=${user.id}`;
     const response = await axiosInstance.get(url);
     const data = response.data;
-    // console.log(data);
     if (response.status === 200) {
       setdatapermohonanSurat(data);
     }
@@ -176,6 +175,77 @@ export default function LihatSuratPage() {
       throw error;
     }
   };
+  const formattedDate = formatDate();
+
+  const urlSurat = {
+    1: "/surat-domisili/pdf",
+    2: "/surat-sktm/pdf",
+    3: "/surat-pernyataan-gaib/pdf",
+    4: "/surat-pernyataan-tidak-ada-bangunan/pdf",
+    5: "/surat-keterangan-belum-menikah/pdf",
+    6: "/surat-skkb/pdf",
+    7: "/surat-pernyataan-penghasil/pdf",
+    8: "/surat-beda-nama/pdf",
+    9: "/surat-sktm-siswa/pdf",
+    10: "/surat-pernyataan-janda-duda/pdf",
+  };
+  function datasurat(datas) {
+    const rtAdmin = userAdmin?.find(
+      (item) => item.id_admin === datas?.rt_verifikator
+    )?.username;
+    const rwAdmin = userAdmin?.find(
+      (item) => item.id_admin === datas?.rw_verifikator
+    )?.username;
+    const data = {
+      id_surat: datas?.id_surat,
+      nama: datas?.nama,
+      jenis_kelamin: datas?.jenis_kelamin,
+      tempat_lahir: datas?.tempat_lahir,
+      tanggal_lahir: datas?.tanggal_lahir,
+      status_diri: datas?.status_diri,
+      agama: datas?.agama,
+      pekerjaan: datas?.pekerjaan,
+      noktp: datas?.nomor_telp,
+      nokk: datas?.no_kk,
+      alamat: datas?.alamat,
+      rt: datas?.rt,
+      rw: datas?.rw,
+      now: formattedDate,
+      adminrt: rtAdmin,
+      adminrw: rwAdmin || "rw belum verifikasi",
+      nama_lain: datas?.nama_lain,
+      tempat_lahir_2nd: datas?.tempat_lahir_2nd,
+      tanggal_lahir_2nd: datas?.tanggal_lahir_2nd,
+      agama_2nd: datas?.agama_2nd,
+      pendidikan_terakhir: datas?.pendidikan_terakhir,
+      pekerjaan_2nd: datas?.pekerjaan_2nd,
+      alamat_pekerjaan: datas?.alamat_pekerjaan,
+      letak_object_tanah: datas?.letak_object_tanah,
+      suku: datas?.suku,
+      bangsa: datas?.bangsa,
+      jenis_usaha: datas?.jenis_usaha,
+      nama_anak: datas?.nama_anak,
+      jurusan_anak: datas?.jurusan_anak,
+      penghasilan_kotor: datas?.penghasilan_kotor,
+      pengeluaran: datas?.pengeluaran,
+      nim: datas?.nim,
+      penghasilan_bersih: datas?.penghasilan_bersih,
+      nama_ayah: datas?.nama_ayah,
+      nama_ibu: datas?.nama_ibu,
+      pekerjaan_ayah: datas?.pekerjaan_ayah,
+      pekerjaan_ibu: datas?.pekerjaan_ibu,
+      jalan: datas?.jalan,
+      kecamatan: datas?.kecamatan,
+      kota: datas?.kota,
+      provinsi: datas?.provinsi,
+      waktu_cerai: datas?.waktu_cerai,
+      umur: getAgeFromBirthdate(datas?.tanggal_lahir),
+      umur_lainnya: getAgeFromBirthdate(datas?.tanggal_lahir_2nd),
+      waktu_pergi: datas?.waktu_pergi,
+      nomor_akta_cerai: datas?.nomor_akta_cerai,
+    };
+    return data;
+  }
   useEffect(() => {
     handleGetAllPermohonan();
     handleGetAdmin();
@@ -203,16 +273,18 @@ export default function LihatSuratPage() {
                   <div className="flex justify-between ">
                     <span>{item.tanggal_permohonan}</span>
                     <Button
-                      onClick={() => generateDocument(item)}
+                      // onClick={() => generateDocument(item)}
                       disabled={
                         item.status_permohonan && item.persetujuan_rw !== "1"
                       }
                       className="bg-green-600 text-white hover:bg-white !hover:border-green-600 !hover:text-green-600"
                     >
-                      unduh
-                      {/* <Link state={{ data: item }} to="/Kelola-surat/pdf">
+                      <Link
+                        state={datasurat(item)}
+                        to={urlSurat[item.id_surat]}
+                      >
                         Lihat
-                      </Link> */}
+                      </Link>
                     </Button>
                   </div>
                 </Card>
