@@ -180,7 +180,7 @@ const App = () => {
           element={<PdfJandaDuda />}
         />
         <Route path="/surat-beda-nama/pdf" element={<PdfBedaNama />} />
-        <Route path="/Kelola-surat/pdf" element={<PdfViewer />} />
+        {/* <Route path="/Kelola-surat/pdf" element={<PdfViewer />} /> */}
       </Routes>
     </>
   );
