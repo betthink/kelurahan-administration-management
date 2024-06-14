@@ -63,8 +63,6 @@ export default function LaporanKeuangan() {
       throw error;
     }
   };
-  //   let totalPemasukan = dataPemasukan;
-  //   let totalPengeluaran = dataPengeluaran[0]?.total_jumlah_pengeluaran;
   let totalSisa = dataPemasukan - dataPengeluaran;
   const totalPemasukan = formatAngka(dataPemasukan);
   const totalPengeluaran = formatAngka(dataPengeluaran);
@@ -150,75 +148,19 @@ export default function LaporanKeuangan() {
     })),
   }));
   // atributes history
-  const columns = [
-    {
-      title: "Nama",
-      dataIndex: "nama",
-      key: "nama",
-      filters: [
-        {
-          text: "Admin",
-          value: null,
-        },
-      ],
-      onFilter: (value, record) => {
-        return record.nama === value;
-      },
-      render: (nama) => (
-        <span className={!nama ? "text-blue-600" : "text-purple-600"}>
-          {nama ? nama : "Admin"}
-        </span>
-      ),
-    },
-    {
-      title: "Waktu verifikasi",
-      dataIndex: "waktu_verifikasi",
-      key: "waktu_verifikasi",
-      filters: yearFilters,
-      onFilter: (value, record) => {
-        const [recordYear, recordMonth] = record.waktu_verifikasi.split("-");
-        return (
-          recordYear === value.substring(0, 4) &&
-          recordMonth === value.substring(5)
-        ); // Lakukan pengecekan apakah tahun dan bulan cocok dengan nilai yang dipilih
-      },
-    },
-    {
-      title: "Jenis transaksi",
-      dataIndex: "jenis_transaksi",
-      key: "jenis_transaksi",
-    },
-    {
-      title: "Jumlah",
-      key: "jumlah_transaksi",
-      filters: [
-        {
-          text: "Pengeluaran",
-          value: "pengeluaran",
-        },
-        {
-          text: "Pemasukan",
-          value: "pemasukan",
-        },
-      ],
-      onFilter: (value, record) => {
-        return record.jenis_transaksi === value;
-      },
 
-      render: (item) => {
-        return (
-          <span
-            className={`${
-              item.jenis_transaksi === "pengeluaran"
-                ? "text-red-600"
-                : "text-green-600"
-            } text-right`}
-          >
-            Rp.{item && formatAngka(item.jumlah_transaksi)}
-          </span>
-        );
-      },
-    },
+  const yearMonthFilters = [
+    ...dataRiwayatTransaksi
+      .map((item) => moment(item.waktu_verifikasi).format("YYYY-MM"))
+      .filter((value, index, self) => self.indexOf(value) === index)
+      .map((waktu) => ({ text: waktu, value: waktu })),
+  ];
+
+  const monthDayFilters = [
+    ...dataRiwayatTransaksi
+      .map((item) => moment(item.waktu_verifikasi).format("MM-DD"))
+      .filter((value, index, self) => self.indexOf(value) === index)
+      .map((waktu) => ({ text: waktu, value: waktu })),
   ];
   const [loading, setLoading] = useState(false);
   const handleGetRiwayatTransaksi = async () => {
@@ -233,7 +175,7 @@ export default function LaporanKeuangan() {
         key: index.toString(),
       };
     });
-
+console.log(res);
     if (response.status === 200) {
       setdataRiwayatTransaksi(res);
       setLoading(false);
@@ -380,22 +322,33 @@ export default function LaporanKeuangan() {
                 )}
               />
               <Column
-                title="Waktu verifikasi"
+                title="Waktu Transaksi"
                 dataIndex="waktu_verifikasi"
                 key="waktu_verifikasi"
                 filters={[
-                  ...dataRiwayatTransaksi
-                    .map((item) =>
-                      moment(item.waktu_verifikasi).format("YYYY-MM")
-                    )
-                    .filter(
-                      (value, index, self) => self.indexOf(value) === index
-                    )
-                    .map((waktu) => ({ text: waktu, value: waktu })),
+                  {
+                    text: "Per Tahun - Bulan",
+                    value: "yearMonth",
+                    children: yearMonthFilters,
+                  },
+                  {
+                    text: "Per Bulan - Tanggal",
+                    value: "monthDay",
+                    children: monthDayFilters,
+                  },
                 ]}
-                onFilter={(value, record) =>
-                  moment(record.waktu_verifikasi).format("YYYY-MM") === value
-                }
+                onFilter={(value, record) => {
+                  const formattedYearMonth = moment(
+                    record.waktu_verifikasi
+                  ).format("YYYY-MM");
+                  const formattedMonthDay = moment(
+                    record.waktu_verifikasi
+                  ).format("MM-DD");
+                  return (
+                    value === formattedYearMonth || value === formattedMonthDay
+                  );
+                }}
+                render={(text) => moment(text).format("YYYY-MM-DD")}
               />
               <Column
                 title="Jenis Transaksi"

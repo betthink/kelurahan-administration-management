@@ -87,6 +87,15 @@ function RegistrasiPenduduk() {
   };
 
   const onFinish = async () => {
+    // Validasi untuk memastikan NIK tidak duplikat
+    const nikSet = new Set();
+    for (let i = 0; i < formDataArray.length; i++) {
+      if (nikSet.has(formDataArray[i].nik)) {
+        mes.error(`NIK ${formDataArray[i].nik} sudah ada di form lain`);
+        return;
+      }
+      nikSet.add(formDataArray[i].nik);
+    }
     const formData = formDataArray.map((formDataItem, index) => {
       const formDataInstance = new FormData();
       const noKkDefault =
@@ -162,18 +171,23 @@ function RegistrasiPenduduk() {
           }
         })
       );
-      // console.log(responses);
+
       let isSuccess = false;
+      let pesan = "";
+
       responses.forEach(({ value, message }) => {
         if (value === 1) {
           isSuccess = true; // Set variabel isSuccess menjadi true jika ada data yang berhasil ditambahkan
+        } else {
+          pesan = message; // Set pesan dengan pesan kesalahan terakhir
         }
       });
+
       if (isSuccess) {
         mes.success("Data berhasil ditambahkan");
         navigate("/Landingpage"); // Menampilkan pesan sukses sekali saja jika ada setidaknya satu data yang berhasil ditambahkan
       } else {
-        mes.error("Tidak ada data yang berhasil ditambahkan"); // Menampilkan pesan kesalahan jika tidak ada data yang berhasil ditambahkan
+        mes.error(pesan); // Menampilkan pesan kesalahan jika tidak ada data yang berhasil ditambahkan
       }
     } catch (error) {
       console.error("Error:", error);
@@ -259,6 +273,7 @@ function RegistrasiPenduduk() {
           {formDataArray.map((_, index) => (
             <React.Fragment key={index}>
               <Form.Item
+                required
                 className={`${index !== 0 ? "mt-6  flex flex-row gap-3" : ""} `}
               >
                 <span className="font-bold text-lg">
@@ -282,6 +297,7 @@ function RegistrasiPenduduk() {
                 }`}
               >
                 <Form.Item
+                  required
                   rules={[
                     {
                       required: true,
@@ -300,6 +316,7 @@ function RegistrasiPenduduk() {
                   />
                 </Form.Item>
                 <Form.Item
+                  required
                   key={`nik_${index}`}
                   // name={`nik_${index}`}
                   label="NIK"
@@ -331,6 +348,7 @@ function RegistrasiPenduduk() {
                 </Form.Item>
                 {index === 0 && (
                   <Form.Item
+                    required
                     key={`noKK${index}`}
                     label="No. KK"
                     rules={[
@@ -366,10 +384,11 @@ function RegistrasiPenduduk() {
                   </Form.Item>
                 )}
                 <Form.Item
+                  required
                   rules={[
                     {
                       required: true,
-                      message: "Nomor KK tidak boleh kosong",
+                      message: "Alamat tidak boleh kosong",
                     },
                   ]}
                   key={`alamat_${index}`}

@@ -11,7 +11,7 @@ import {
   Space,
   message as mes,
 } from "antd";
-import { Link,  useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 // components
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -51,35 +51,6 @@ function TambahPenduduk() {
     "Budha",
     "Lain-Lain",
   ];
-  // const handleAddPenduduk = async () => {
-  //   try {
-  //     // console.log(dataEntry);
-  //     // return;
-  //     const response = await axiosWithMultipart(
-  //       "/administrasikelurahan/src/post/penduduk/tambahpenduduk.php",
-  //       {
-  //         method: "post",
-  //         data:
-  //           user?.role === "admin"
-  //             // ? { ...dataEntry, rt: user.rt, rw: user.rw }
-  //             // : { ...dataEntry, rt: dataRoute?.rt, rw: dataRoute?.rw },
-  //       }
-  //     );
-  //     const { value, message } = response.data;
-  //     // console.log(response.data);
-  //     if (value === 1) {
-  //       mes.success(message);
-  //       navigate("/Dashboard/Kelola-Penduduk");
-  //     } else {
-  //       mes.error(message);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     throw error;
-  //   }
-  // };
-
-  // new onFInish
 
   // handle new form
   const handleAddForm = () => {
@@ -117,6 +88,15 @@ function TambahPenduduk() {
 
   // on finish
   const onFinish = async () => {
+    // Validasi untuk memastikan NIK tidak duplikat
+    const nikSet = new Set();
+    for (let i = 0; i < formDataArray.length; i++) {
+      if (nikSet.has(formDataArray[i].nik)) {
+        mes.error(`NIK ${formDataArray[i].nik} sudah ada di form lain`);
+        return;
+      }
+      nikSet.add(formDataArray[i].nik);
+    }
     const formData = formDataArray.map((formDataItem, index) => {
       const formDataInstance = new FormData();
       const noKkDefault =
@@ -170,8 +150,6 @@ function TambahPenduduk() {
       });
       return formDataInstance;
     });
-    // console.log(formData);
-    // return;
     try {
       const responses = await Promise.all(
         formData.map(async (formDataItem) => {
@@ -198,16 +176,21 @@ function TambahPenduduk() {
       );
       // console.log(responses);
       let isSuccess = false;
+      let pesan = "";
+
       responses.forEach(({ value, message }) => {
         if (value === 1) {
           isSuccess = true; // Set variabel isSuccess menjadi true jika ada data yang berhasil ditambahkan
+        } else {
+          pesan = message; // Set pesan dengan pesan kesalahan terakhir
         }
       });
+
       if (isSuccess) {
         mes.success("Data berhasil ditambahkan");
         navigate("/Dashboard/Kelola-Penduduk"); // Menampilkan pesan sukses sekali saja jika ada setidaknya satu data yang berhasil ditambahkan
       } else {
-        mes.error("Tidak ada data yang berhasil ditambahkan"); // Menampilkan pesan kesalahan jika tidak ada data yang berhasil ditambahkan
+        mes.error(pesan); // Menampilkan pesan kesalahan jika tidak ada data yang berhasil ditambahkan
       }
     } catch (error) {
       console.error("Error:", error);
@@ -279,6 +262,7 @@ function TambahPenduduk() {
                 }`}
               >
                 <Form.Item
+                  required
                   rules={[
                     {
                       required: true,
@@ -297,6 +281,7 @@ function TambahPenduduk() {
                   />
                 </Form.Item>
                 <Form.Item
+                  required
                   key={`nik_${index}`}
                   // name={`nik_${index}`}
                   label="NIK"
@@ -328,6 +313,7 @@ function TambahPenduduk() {
                 </Form.Item>
                 {index === 0 && (
                   <Form.Item
+                    required
                     key={`noKK${index}`}
                     label="No. KK"
                     rules={[
@@ -363,6 +349,7 @@ function TambahPenduduk() {
                   </Form.Item>
                 )}
                 <Form.Item
+                  required
                   rules={[
                     {
                       required: true,
