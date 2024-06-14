@@ -18,175 +18,223 @@ import { formatAngka } from "../../../../utils/formatAngkaUang";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import { monthsData } from "../../utils/monthData";
 import moment from "moment";
+
 export default function LaporanKeuangan() {
-  const { Column, ColumnGroup } = Table;
-  const tableRef = useRef(null);
-  const [dataPemasukan, setdataPemasukan] = useState(0);
-  const [dataPengeluaran, setdataPengeluaran] = useState(0);
-  const [dataRiwayatTransaksi, setdataRiwayatTransaksi] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const user = useSelector((state) => state.userReducer.value);
-  const location = useLocation();
-  const dataLoc = location.state;
-  const rt = user.rt === "" ? dataLoc.rt : user.rt;
+const { Column, ColumnGroup } = Table;
+const tableRef = useRef(null);
+const [dataPemasukan, setDataPemasukan] = useState(0);
+const [dataPengeluaran, setDataPengeluaran] = useState(0);
+const [dataRiwayatTransaksi, setDataRiwayatTransaksi] = useState([]);
+const [filteredData, setFilteredData] = useState([]);
+const [isModalOpen, setIsModalOpen] = useState(false);
+const [loading, setLoading] = useState(false);
+const user = useSelector((state) => state.userReducer.value);
+const location = useLocation();
+const dataLoc = location.state;
+const rt = user.rt === "" ? dataLoc.rt : user.rt;
 
-  //   handle modal
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+const showModal = () => {
+  setIsModalOpen(true);
+};
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  //   get data keuangan
-  const handleGetPemasukan = async () => {
-    const url = `/administrasikelurahan/src/api/ipl/total-pemasukan-keuangan-by-rt.php?rt=${rt}`;
-    try {
-      const response = await axiosInstance.get(url);
-      const data = response.data[0].total_jumlah_pembayaran || 0;
-      if (response.status === 200) {
-        setdataPemasukan(data);
-      }
-    } catch (error) {
-      throw error;
-    }
-  };
-  const handleGetpengeluaran = async () => {
-    const url = `/administrasikelurahan/src/api/ipl/total-pengeluaran-keuangan-by-rt.php?rt=${rt}`;
-    try {
-      const response = await axiosInstance.get(url);
-      const data = response.data[0].total_jumlah_pengeluaran || 0;
-      if (response.status === 200) {
-        setdataPengeluaran(data);
-      }
-    } catch (error) {
-      throw error;
-    }
-  };
-  let totalSisa = dataPemasukan - dataPengeluaran;
-  const totalPemasukan = formatAngka(dataPemasukan);
-  const totalPengeluaran = formatAngka(dataPengeluaran);
-  totalSisa = formatAngka(totalSisa);
-  //   form handler
+const handleCancel = () => {
+  setIsModalOpen(false);
+};
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
-
-  //   card items
-  const cardData = [
-    {
-      icon: <MdAttachMoney size={28} />,
-      bgColor: "bg-gradient-to-l from-green-300 to-green-400",
-      text: (
-        <span>
-          Total pemasukan Rp.
-          {totalPemasukan}
-        </span>
-      ),
-    },
-    {
-      icon: <MdAttachMoney size={28} />,
-      bgColor: "bg-gradient-to-l from-red-500 to-red-400",
-      text: (
-        <span>
-          Total pengeluaran Rp.
-          {totalPengeluaran}
-        </span>
-      ),
-    },
-    {
-      icon: <MdAttachMoney size={28} />,
-      bgColor: "bg-gradient-to-r from-primary_blue to-cyan-400",
-      text: (
-        <span>
-          Sisa Keuangan Rp.
-          {totalSisa}
-        </span>
-      ),
-    },
-  ];
-  //   handle kirim pemasukan
-  const handleKirimPengeluaran = async (v) => {
-    const url =
-      "/administrasikelurahan/src/post/ipl/tambah-transaksi-pengeluaran.php";
-    try {
-      const response = await axiosWithMultipart({
-        method: "post",
-        data: {
-          verifikator: user.username,
-          rt: user.rt,
-          jumlah_transaksi: v.jumlah_transaksi,
-        },
-        url,
-      });
-      const data = response.data;
-      console.log(data);
-      const { value, message } = data;
-      if (value === 1) {
-        mes.success(message);
-        window.location.reload();
-      }
-    } catch (error) {
-      throw error;
-    }
-  };
-  // Buat variabel untuk menyimpan data tahun unik dari kolom "Waktu Verifikasi" =====================
-  const uniqueYears = [
-    ...new Set(
-      dataRiwayatTransaksi.map((item) => item.waktu_verifikasi.split("-")[0])
-    ),
-  ];
-
-  // Buat filter berdasarkan tahun
-  const yearFilters = uniqueYears.map((year) => ({
-    text: year,
-    value: year,
-    children: monthsData.map((month) => ({
-      text: month.text,
-      value: `${year}-${month.value}`, // Gabungkan tahun dan bulan menjadi satu string
-    })),
-  }));
-  // atributes history
-
-  const yearMonthFilters = [
-    ...dataRiwayatTransaksi
-      .map((item) => moment(item.waktu_verifikasi).format("YYYY-MM"))
-      .filter((value, index, self) => self.indexOf(value) === index)
-      .map((waktu) => ({ text: waktu, value: waktu })),
-  ];
-
-  const monthDayFilters = [
-    ...dataRiwayatTransaksi
-      .map((item) => moment(item.waktu_verifikasi).format("MM-DD"))
-      .filter((value, index, self) => self.indexOf(value) === index)
-      .map((waktu) => ({ text: waktu, value: waktu })),
-  ];
-  const [loading, setLoading] = useState(false);
-  const handleGetRiwayatTransaksi = async () => {
-    if (loading) {
-      return;
-    }
-    const url = `/administrasikelurahan/src/api/ipl/riwayat-transaksi-keuangan-ipl-by-rt.php?rt=${rt}`;
+const handleGetPemasukan = async () => {
+  const url = `/administrasikelurahan/src/api/ipl/total-pemasukan-keuangan-by-rt.php?rt=${rt}`;
+  try {
     const response = await axiosInstance.get(url);
-    const res = response.data.map((item, index) => {
-      return {
-        ...item,
-        key: index.toString(),
-      };
-    });
-console.log(res);
+    const data = response.data[0].total_jumlah_pembayaran || 0;
     if (response.status === 200) {
-      setdataRiwayatTransaksi(res);
-      setLoading(false);
+      setDataPemasukan(data);
     }
-  };
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-  useEffect(() => {
-    handleGetPemasukan();
-    handleGetpengeluaran();
-    handleGetRiwayatTransaksi();
-  }, []);
+const handleGetPengeluaran = async () => {
+  const url = `/administrasikelurahan/src/api/ipl/total-pengeluaran-keuangan-by-rt.php?rt=${rt}`;
+  try {
+    const response = await axiosInstance.get(url);
+    const data = response.data[0].total_jumlah_pengeluaran || 0;
+    if (response.status === 200) {
+      setDataPengeluaran(data);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const totalSisa = formatAngka(dataPemasukan - dataPengeluaran);
+const totalPemasukan = formatAngka(dataPemasukan);
+const totalPengeluaran = formatAngka(dataPengeluaran);
+
+const calculateFilteredTotals = () => {
+  const pemasukan = filteredData
+    .filter((item) => item.jenis_transaksi === "pemasukan")
+    .reduce((acc, item) => acc + parseFloat(item.jumlah_transaksi), 0);
+  const pengeluaran = filteredData
+    .filter((item) => item.jenis_transaksi === "pengeluaran")
+    .reduce((acc, item) => acc + parseFloat(item.jumlah_transaksi), 0);
+  return {
+    pemasukan: formatAngka(pemasukan),
+    pengeluaran: formatAngka(pengeluaran),
+    sisa: formatAngka(pemasukan - pengeluaran),
+  };
+};
+
+const onFinishFailed = (errorInfo) => {
+  console.log("Failed:", errorInfo);
+};
+
+const cardData = [
+  {
+    icon: <MdAttachMoney size={28} />,
+    bgColor: "bg-gradient-to-l from-green-300 to-green-400",
+    text: (
+      <span>
+        Total pemasukan Rp.
+        {totalPemasukan}
+      </span>
+    ),
+  },
+  {
+    icon: <MdAttachMoney size={28} />,
+    bgColor: "bg-gradient-to-l from-red-500 to-red-400",
+    text: (
+      <span>
+        Total pengeluaran Rp.
+        {totalPengeluaran}
+      </span>
+    ),
+  },
+  {
+    icon: <MdAttachMoney size={28} />,
+    bgColor: "bg-gradient-to-r from-primary_blue to-cyan-400",
+    text: (
+      <span>
+        Sisa Keuangan Rp.
+        {totalSisa}
+      </span>
+    ),
+  },
+];
+
+const handleKirimPengeluaran = async (v) => {
+  const url =
+    "/administrasikelurahan/src/post/ipl/tambah-transaksi-pengeluaran.php";
+  try {
+    const response = await axiosWithMultipart({
+      method: "post",
+      data: {
+        verifikator: user.username,
+        rt: user.rt,
+        jumlah_transaksi: v.jumlah_transaksi,
+      },
+      url,
+    });
+    const data = response.data;
+    const { value, message } = data;
+    if (value === 1) {
+      mes.success(message);
+      window.location.reload();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const uniqueYears = [
+  ...new Set(
+    dataRiwayatTransaksi.map((item) => item.waktu_verifikasi.split("-")[0])
+  ),
+];
+
+const yearFilters = uniqueYears.map((year) => ({
+  text: year,
+  value: year,
+  children: monthsData.map((month) => ({
+    text: month.text,
+    value: `${year}-${month.value}`,
+  })),
+}));
+
+const yearMonthFilters = [
+  ...dataRiwayatTransaksi
+    .map((item) => moment(item.waktu_verifikasi).format("YYYY-MM"))
+    .filter((value, index, self) => self.indexOf(value) === index)
+    .map((waktu) => ({ text: waktu, value: waktu })),
+];
+
+const monthDayFilters = [
+  ...dataRiwayatTransaksi
+    .map((item) => moment(item.waktu_verifikasi).format("MM-DD"))
+    .filter((value, index, self) => self.indexOf(value) === index)
+    .map((waktu) => ({ text: waktu, value: waktu })),
+];
+
+const handleGetRiwayatTransaksi = async () => {
+  if (loading) {
+    return;
+  }
+  setLoading(true);
+  const url = `/administrasikelurahan/src/api/ipl/riwayat-transaksi-keuangan-ipl-by-rt.php?rt=${rt}`;
+  try {
+    const response = await axiosInstance.get(url);
+    const res = response.data.map((item, index) => ({
+      ...item,
+      key: index.toString(),
+    }));
+    if (response.status === 200) {
+      setDataRiwayatTransaksi(res);
+      setFilteredData(res); // Set filteredData with the initial data
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleTableChange = (pagination, filters, sorter) => {
+  const filteredData = dataRiwayatTransaksi.filter((item) => {
+    if (filters.waktu_verifikasi) {
+      const formattedYearMonth = moment(item.waktu_verifikasi).format(
+        "YYYY-MM"
+      );
+      const formattedMonthDay = moment(item.waktu_verifikasi).format("MM-DD");
+      if (
+        !filters.waktu_verifikasi.includes(formattedYearMonth) &&
+        !filters.waktu_verifikasi.includes(formattedMonthDay)
+      ) {
+        return false;
+      }
+    }
+    if (filters.nama && !filters.nama.includes(item.nama)) {
+      return false;
+    }
+    if (
+      filters.jenis_transaksi &&
+      !filters.jenis_transaksi.includes(item.jenis_transaksi)
+    ) {
+      return false;
+    }
+    return true;
+  });
+  setFilteredData(filteredData);
+};
+
+useEffect(() => {
+  handleGetPemasukan();
+  handleGetPengeluaran();
+  handleGetRiwayatTransaksi();
+}, []);
+
+const { pemasukan, pengeluaran, sisa } = calculateFilteredTotals();
+
+
   return (
     <div className=" md:mx-20">
       <Header
@@ -201,16 +249,12 @@ console.log(res);
           items={[
             { title: "Admin" },
             { title: <Link to={"/KelolaIPL"}>Kelola IPL</Link> },
-
-            {
-              title: "Laporan keuangan",
-            },
+            { title: "Laporan keuangan" },
           ]}
           style={{
             margin: "16px 0",
           }}
         />
-
         <div className="flex gap-6 justify-between items-center">
           <span className="text-blusky">RT</span>
           <span className="text-green-600 font-bold text-xl">
@@ -219,7 +263,7 @@ console.log(res);
         </div>
       </Header>
       <Content className="mt-5 bg-white p-10">
-        {user.role === "admin" ? (
+        {user.role === "admin" && (
           <div className="w-full flex justify-between  my-6 ">
             <Button
               onClick={showModal}
@@ -228,8 +272,7 @@ console.log(res);
               Masukkan Pengeluaran
             </Button>
           </div>
-        ) : null}
-
+        )}
         <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-4  md:h-56 lg:h-56 text-secondary">
           {cardData.map((item, i) => (
             <div
@@ -241,7 +284,6 @@ console.log(res);
             </div>
           ))}
         </div>
-        {/* history */}
         <div className="my-4 w-fit ">
           <DownloadTableExcel
             filename="Laporan keuangan"
@@ -265,7 +307,7 @@ console.log(res);
         >
           <Table
             ref={tableRef}
-            pagination={false}
+            onChange={handleTableChange}
             summary={() => (
               <>
                 <Table.Summary.Row>
@@ -284,14 +326,15 @@ console.log(res);
                   </Table.Summary.Cell>
                   <Table.Summary.Cell colSpan={1} className="">
                     <span className="text-lg font-bold text-green-500">
-                      Rp{totalSisa}
+                      Rp{sisa}
                     </span>
                   </Table.Summary.Cell>
                 </Table.Summary.Row>
               </>
             )}
             bordered
-            dataSource={dataRiwayatTransaksi}
+            dataSource={filteredData}
+            loading={loading}
           >
             <ColumnGroup
               title={() => (
@@ -323,8 +366,8 @@ console.log(res);
               />
               <Column
                 title="Waktu Transaksi"
-                dataIndex="waktu_verifikasi"
-                key="waktu_verifikasi"
+                dataIndex="waktu_pembayaran"
+                key="waktu_pembayaran"
                 filters={[
                   {
                     text: "Per Tahun - Bulan",
@@ -339,10 +382,10 @@ console.log(res);
                 ]}
                 onFilter={(value, record) => {
                   const formattedYearMonth = moment(
-                    record.waktu_verifikasi
+                    record.waktu_pembayaran
                   ).format("YYYY-MM");
                   const formattedMonthDay = moment(
-                    record.waktu_verifikasi
+                    record.waktu_pembayaran
                   ).format("MM-DD");
                   return (
                     value === formattedYearMonth || value === formattedMonthDay
@@ -379,43 +422,41 @@ console.log(res);
           </Table>
         </div>
       </Content>
-      <>
-        <Modal
-          title="Masukkan jumlah pengeluaran "
-          open={isModalOpen}
-          onCancel={handleCancel}
-          footer={false}
+      <Modal
+        title="Masukkan jumlah pengeluaran "
+        open={isModalOpen}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <Form
+          layout="vertical"
+          onFinish={handleKirimPengeluaran}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
         >
-          <Form
-            layout="vertical"
-            onFinish={handleKirimPengeluaran}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off"
+          <Form.Item
+            label="Jumlah Transaksi"
+            name="jumlah_transaksi"
+            rules={[
+              {
+                required: true,
+                message: "Masukkan jumlah transaksi!",
+              },
+              {
+                pattern: /^[0-9]*$/,
+                message: "Hanya masukkan angka!",
+              },
+            ]}
           >
-            <Form.Item
-              label="jumlah_transaksi"
-              name="jumlah_transaksi"
-              rules={[
-                {
-                  required: true,
-                  message: "Masukan jumlah transaksi!",
-                },
-                {
-                  pattern: /^[0-9]*$/,
-                  message: "Hanya masukkan angka!",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item>
-              <Button block className="bg-success text-white" htmlType="submit">
-                Masukkan
-              </Button>
-            </Form.Item>
-          </Form>
-        </Modal>
-      </>
+            <Input />
+          </Form.Item>
+          <Form.Item>
+            <Button block className="bg-success text-white" htmlType="submit">
+              Masukkan
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }
