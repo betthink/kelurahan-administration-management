@@ -20,277 +20,270 @@ import { monthsData } from "../../utils/monthData";
 import moment from "moment";
 
 export default function LaporanKeuangan() {
-const { Column, ColumnGroup } = Table;
-const tableRef = useRef(null);
-const [dataPemasukan, setDataPemasukan] = useState(0);
-const [dataPengeluaran, setDataPengeluaran] = useState(0);
-const [dataRiwayatTransaksi, setDataRiwayatTransaksi] = useState([]);
-const [filteredData, setFilteredData] = useState([]);
-const [isModalOpen, setIsModalOpen] = useState(false);
-const [loading, setLoading] = useState(false);
-const user = useSelector((state) => state.userReducer.value);
-const location = useLocation();
-const dataLoc = location.state;
-const rt = user.rt === "" ? dataLoc.rt : user.rt;
+  const { Column, ColumnGroup } = Table;
+  const tableRef = useRef(null);
+  const [dataPemasukan, setDataPemasukan] = useState(0);
+  const [dataPengeluaran, setDataPengeluaran] = useState(0);
+  const [dataRiwayatTransaksi, setDataRiwayatTransaksi] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [filteredPemasukan, setFilteredPemasukan] = useState(0);
+  const [filteredPengeluaran, setFilteredPengeluaran] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const user = useSelector((state) => state.userReducer.value);
+  const location = useLocation();
+  const dataLoc = location.state;
+  const rt = user.rt === "" ? dataLoc.rt : user.rt;
 
-const showModal = () => {
-  setIsModalOpen(true);
-};
-
-const handleCancel = () => {
-  setIsModalOpen(false);
-};
-
-const handleGetPemasukan = async () => {
-  const url = `/administrasikelurahan/src/api/ipl/total-pemasukan-keuangan-by-rt.php?rt=${rt}`;
-  try {
-    const response = await axiosInstance.get(url);
-    const data = response.data[0].total_jumlah_pembayaran || 0;
-    if (response.status === 200) {
-      setDataPemasukan(data);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const handleGetPengeluaran = async () => {
-  const url = `/administrasikelurahan/src/api/ipl/total-pengeluaran-keuangan-by-rt.php?rt=${rt}`;
-  try {
-    const response = await axiosInstance.get(url);
-    const data = response.data[0].total_jumlah_pengeluaran || 0;
-    if (response.status === 200) {
-      setDataPengeluaran(data);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const totalSisa = formatAngka(dataPemasukan - dataPengeluaran);
-const totalPemasukan = formatAngka(dataPemasukan);
-const totalPengeluaran = formatAngka(dataPengeluaran);
-
-const calculateFilteredTotals = () => {
-  const pemasukan = filteredData
-    .filter((item) => item.jenis_transaksi === "pemasukan")
-    .reduce((acc, item) => acc + parseFloat(item.jumlah_transaksi), 0);
-  const pengeluaran = filteredData
-    .filter((item) => item.jenis_transaksi === "pengeluaran")
-    .reduce((acc, item) => acc + parseFloat(item.jumlah_transaksi), 0);
-  return {
-    pemasukan: formatAngka(pemasukan),
-    pengeluaran: formatAngka(pengeluaran),
-    sisa: formatAngka(pemasukan - pengeluaran),
+  const showModal = () => {
+    setIsModalOpen(true);
   };
-};
 
-const onFinishFailed = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
-const cardData = [
-  {
-    icon: <MdAttachMoney size={28} />,
-    bgColor: "bg-gradient-to-l from-green-300 to-green-400",
-    text: (
-      <span>
-        Total pemasukan Rp.
-        {totalPemasukan}
-      </span>
-    ),
-  },
-  {
-    icon: <MdAttachMoney size={28} />,
-    bgColor: "bg-gradient-to-l from-red-500 to-red-400",
-    text: (
-      <span>
-        Total pengeluaran Rp.
-        {totalPengeluaran}
-      </span>
-    ),
-  },
-  {
-    icon: <MdAttachMoney size={28} />,
-    bgColor: "bg-gradient-to-r from-primary_blue to-cyan-400",
-    text: (
-      <span>
-        Sisa Keuangan Rp.
-        {totalSisa}
-      </span>
-    ),
-  },
-];
-
-const handleKirimPengeluaran = async (v) => {
-  const url =
-    "/administrasikelurahan/src/post/ipl/tambah-transaksi-pengeluaran.php";
-  try {
-    const response = await axiosWithMultipart({
-      method: "post",
-      data: {
-        verifikator: user.username,
-        rt: user.rt,
-        jumlah_transaksi: v.jumlah_transaksi,
-      },
-      url,
-    });
-    const data = response.data;
-    const { value, message } = data;
-    if (value === 1) {
-      mes.success(message);
-      window.location.reload();
+  const handleGetPemasukan = async () => {
+    const url = `/administrasikelurahan/src/api/ipl/total-pemasukan-keuangan-by-rt.php?rt=${rt}`;
+    try {
+      const response = await axiosInstance.get(url);
+      const data = response.data[0].total_jumlah_pembayaran || 0;
+      if (response.status === 200) {
+        setDataPemasukan(data);
+      }
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
-  }
-};
+  };
 
-const uniqueYears = [
-  ...new Set(
-    dataRiwayatTransaksi.map((item) => item.waktu_verifikasi.split("-")[0])
-  ),
-];
-
-const yearFilters = uniqueYears.map((year) => ({
-  text: year,
-  value: year,
-  children: monthsData.map((month) => ({
-    text: month.text,
-    value: `${year}-${month.value}`,
-  })),
-}));
-
-const yearMonthFilters = [
-  ...dataRiwayatTransaksi
-    .map((item) => moment(item.waktu_verifikasi).format("YYYY-MM"))
-    .filter((value, index, self) => self.indexOf(value) === index)
-    .map((waktu) => ({ text: waktu, value: waktu })),
-];
-
-const monthDayFilters = [
-  ...dataRiwayatTransaksi
-    .map((item) => moment(item.waktu_verifikasi).format("MM-DD"))
-    .filter((value, index, self) => self.indexOf(value) === index)
-    .map((waktu) => ({ text: waktu, value: waktu })),
-];
-
-const handleGetRiwayatTransaksi = async () => {
-  if (loading) {
-    return;
-  }
-  setLoading(true);
-  const url = `/administrasikelurahan/src/api/ipl/riwayat-transaksi-keuangan-ipl-by-rt.php?rt=${rt}`;
-  try {
-    const response = await axiosInstance.get(url);
-    const res = response.data.map((item, index) => ({
-      ...item,
-      key: index.toString(),
-    }));
-    if (response.status === 200) {
-      setDataRiwayatTransaksi(res);
-      setFilteredData(res); // Set filteredData with the initial data
+  const handleGetPengeluaran = async () => {
+    const url = `/administrasikelurahan/src/api/ipl/total-pengeluaran-keuangan-by-rt.php?rt=${rt}`;
+    try {
+      const response = await axiosInstance.get(url);
+      const data = response.data[0].total_jumlah_pengeluaran || 0;
+      if (response.status === 200) {
+        setDataPengeluaran(data);
+      }
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
-const handleTableChange = (pagination, filters, sorter) => {
-  const filteredData = dataRiwayatTransaksi.filter((item) => {
-    if (filters.waktu_verifikasi) {
-      const formattedYearMonth = moment(item.waktu_verifikasi).format(
-        "YYYY-MM"
-      );
-      const formattedMonthDay = moment(item.waktu_verifikasi).format("MM-DD");
+  const totalSisa = formatAngka(dataPemasukan - dataPengeluaran);
+  const totalPemasukan = formatAngka(dataPemasukan);
+  const totalPengeluaran = formatAngka(dataPengeluaran);
+
+  const calculateFilteredTotals = (data) => {
+    const pemasukan = data
+      .filter((item) => item.jenis_transaksi === "pemasukan")
+      .reduce((acc, item) => acc + parseFloat(item.jumlah_transaksi), 0);
+    const pengeluaran = data
+      .filter((item) => item.jenis_transaksi === "pengeluaran")
+      .reduce((acc, item) => acc + parseFloat(item.jumlah_transaksi), 0);
+    return {
+      pemasukan,
+      pengeluaran,
+      sisa: pemasukan - pengeluaran,
+    };
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
+  const cardData = [
+    {
+      icon: <MdAttachMoney size={28} />,
+      bgColor: "bg-gradient-to-l from-green-300 to-green-400",
+      text: (
+        <span>
+          Total pemasukan Rp.
+          {totalPemasukan}
+        </span>
+      ),
+    },
+    {
+      icon: <MdAttachMoney size={28} />,
+      bgColor: "bg-gradient-to-l from-red-500 to-red-400",
+      text: (
+        <span>
+          Total pengeluaran Rp.
+          {totalPengeluaran}
+        </span>
+      ),
+    },
+    {
+      icon: <MdAttachMoney size={28} />,
+      bgColor: "bg-gradient-to-r from-primary_blue to-cyan-400",
+      text: (
+        <span>
+          Sisa Keuangan Rp.
+          {totalSisa}
+        </span>
+      ),
+    },
+  ];
+
+  const handleKirimPengeluaran = async (v) => {
+    const url =
+      "/administrasikelurahan/src/post/ipl/tambah-transaksi-pengeluaran.php";
+    try {
+      const response = await axiosWithMultipart({
+        method: "post",
+        data: {
+          verifikator: user.username,
+          rt: user.rt,
+          jumlah_transaksi: v.jumlah_transaksi,
+        },
+        url,
+      });
+      const data = response.data;
+      const { value, message } = data;
+      if (value === 1) {
+        mes.success(message);
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const uniqueYears = [
+    ...new Set(
+      dataRiwayatTransaksi.map((item) => item.waktu_pembayaran.split("-")[0])
+    ),
+  ];
+
+  const yearFilters = uniqueYears.map((year) => ({
+    text: year,
+    value: year,
+    children: monthsData.map((month) => ({
+      text: month.text,
+      value: `${year}-${month.value}`,
+    })),
+  }));
+
+  const yearMonthFilters = [
+    ...dataRiwayatTransaksi
+      .map((item) => moment(item.waktu_pembayaran).format("YYYY-MM"))
+      .filter((value, index, self) => self.indexOf(value) === index)
+      .map((waktu) => ({ text: waktu, value: waktu })),
+  ];
+
+  const monthDayFilters = [
+    ...dataRiwayatTransaksi
+      .map((item) => moment(item.waktu_pembayaran).format("MM-DD"))
+      .filter((value, index, self) => self.indexOf(value) === index)
+      .map((waktu) => ({ text: waktu, value: waktu })),
+  ];
+
+  const handleGetRiwayatTransaksi = async () => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    const url = `/administrasikelurahan/src/api/ipl/riwayat-transaksi-keuangan-ipl-by-rt.php?rt=${rt}`;
+    try {
+      const response = await axiosInstance.get(url);
+      const res = response.data.map((item, index) => ({
+        ...item,
+        key: index.toString(),
+      }));
+      if (response.status === 200) {
+        setDataRiwayatTransaksi(res);
+        setFilteredData(res); // Set filteredData with the initial data
+        const { pemasukan, pengeluaran } = calculateFilteredTotals(res);
+        setFilteredPemasukan(pemasukan);
+        setFilteredPengeluaran(pengeluaran);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleTableChange = (pagination, filters, sorter) => {
+    const filteredData = dataRiwayatTransaksi.filter((item) => {
+      if (filters.waktu_pembayaran) {
+        const formattedYearMonth = moment(item.waktu_pembayaran).format(
+          "YYYY-MM"
+        );
+        const formattedMonthDay = moment(item.waktu_pembayaran).format("MM-DD");
+        if (
+          !filters.waktu_pembayaran.includes(formattedYearMonth) &&
+          !filters.waktu_pembayaran.includes(formattedMonthDay)
+        ) {
+          return false;
+        }
+      }
+      if (filters.nama && !filters.nama.includes(item.nama)) {
+        return false;
+      }
       if (
-        !filters.waktu_verifikasi.includes(formattedYearMonth) &&
-        !filters.waktu_verifikasi.includes(formattedMonthDay)
+        filters.jenis_transaksi &&
+        !filters.jenis_transaksi.includes(item.jenis_transaksi)
       ) {
         return false;
       }
-    }
-    if (filters.nama && !filters.nama.includes(item.nama)) {
-      return false;
-    }
-    if (
-      filters.jenis_transaksi &&
-      !filters.jenis_transaksi.includes(item.jenis_transaksi)
-    ) {
-      return false;
-    }
-    return true;
-  });
-  setFilteredData(filteredData);
-};
+      return true;
+    });
+    setFilteredData(filteredData);
+    const { pemasukan, pengeluaran } = calculateFilteredTotals(filteredData);
+    setFilteredPemasukan(pemasukan);
+    setFilteredPengeluaran(pengeluaran);
+  };
 
-useEffect(() => {
-  handleGetPemasukan();
-  handleGetPengeluaran();
-  handleGetRiwayatTransaksi();
-}, []);
+  useEffect(() => {
+    handleGetPemasukan();
+    handleGetPengeluaran();
+    handleGetRiwayatTransaksi();
+  }, []);
 
-const { pemasukan, pengeluaran, sisa } = calculateFilteredTotals();
-
+  const sisa = formatAngka(filteredPemasukan - filteredPengeluaran);
 
   return (
-    <div className=" md:mx-20">
-      <Header
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 99,
-        }}
-        className="hidden header-breadcrump bg-white items-center md:flex mt-5 "
-      >
-        <Breadcrumb
-          items={[
-            { title: "Admin" },
-            { title: <Link to={"/KelolaIPL"}>Kelola IPL</Link> },
-            { title: "Laporan keuangan" },
-          ]}
-          style={{
-            margin: "16px 0",
-          }}
-        />
-        <div className="flex gap-6 justify-between items-center">
-          <span className="text-blusky">RT</span>
-          <span className="text-green-600 font-bold text-xl">
-            {dataLoc ? dataLoc.rt : rt}
-          </span>
+    <div className="p-5">
+      <Header className="p-5 bg-white shadow-md flex justify-between">
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <Link to="/dashboard">Dashboard</Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>Laporan Keuangan</Breadcrumb.Item>
+        </Breadcrumb>
+        <div className="text-2xl font-bold">
+          Laporan Keuangan <span className="text-primary_blue">{user.rt}</span>
         </div>
       </Header>
       <Content className="mt-5 bg-white p-10">
         {user.role === "admin" && (
-          <div className="w-full flex justify-between  my-6 ">
+          <div className="w-full flex justify-between my-6">
             <Button
               onClick={showModal}
-              className="flex  border-green-600 bg-green-400  text-white hover:bg-white  py-4 justify-between items-center "
+              className="flex border-green-600 bg-green-400 text-white hover:bg-white py-4 justify-between items-center"
             >
               Masukkan Pengeluaran
             </Button>
           </div>
         )}
-        <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-4  md:h-56 lg:h-56 text-secondary">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:h-56 lg:h-56 text-secondary">
           {cardData.map((item, i) => (
             <div
               key={i}
-              className={`${item.bgColor} rounded-md p-8 text-lg capitalize flex justify-between `}
+              className={`${item.bgColor} rounded-md p-8 text-lg capitalize flex justify-between`}
             >
               <p className="max-w-[10rem]"> {item.text} </p>
               {item.icon}
             </div>
           ))}
         </div>
-        <div className="my-4 w-fit ">
+        <div className="my-4 w-fit">
           <DownloadTableExcel
             filename="Laporan keuangan"
             sheet="laporan keuangan"
             currentTableRef={tableRef.current}
           >
-            <Button className="flex  border-purple-500 bg-blusky text-white hover:bg-white  py-4 justify-between items-center ">
+            <Button className="flex border-purple-500 bg-blusky text-white hover:bg-white py-4 justify-between items-center">
               Export riwayat
             </Button>
           </DownloadTableExcel>
@@ -311,16 +304,6 @@ const { pemasukan, pengeluaran, sisa } = calculateFilteredTotals();
             summary={() => (
               <>
                 <Table.Summary.Row>
-                  <Table.Summary.Cell colSpan={4}>
-                    <span className="text-lg font-bold"></span>
-                  </Table.Summary.Cell>
-                </Table.Summary.Row>
-                <Table.Summary.Row>
-                  <Table.Summary.Cell colSpan={4}>
-                    <span className="text-lg font-bold"></span>
-                  </Table.Summary.Cell>
-                </Table.Summary.Row>
-                <Table.Summary.Row>
                   <Table.Summary.Cell colSpan={3}>
                     <span className="text-lg font-bold text-right">Saldo</span>
                   </Table.Summary.Cell>
@@ -338,7 +321,7 @@ const { pemasukan, pengeluaran, sisa } = calculateFilteredTotals();
           >
             <ColumnGroup
               title={() => (
-                <div className="text-lg text-left font-bold underline ">
+                <div className="text-lg text-left font-bold underline">
                   Laporan keuangan Iuran
                 </div>
               )}
@@ -423,7 +406,7 @@ const { pemasukan, pengeluaran, sisa } = calculateFilteredTotals();
         </div>
       </Content>
       <Modal
-        title="Masukkan jumlah pengeluaran "
+        title="Masukkan jumlah pengeluaran"
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}
